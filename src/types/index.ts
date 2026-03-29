@@ -31,6 +31,15 @@ export interface MediaItem {
   type?: "image" | "video";
 }
 
+export interface GalleryGridItem {
+  id: string | number;
+  media?: MediaItem;
+  alt: string;
+  aspect?: "square" | "portrait" | "landscape";
+  /** External permalink (e.g. Instagram); opens in a new tab when set. */
+  href?: string;
+}
+
 export type PlaceholderMood = "dark" | "nude" | "smoke" | "champagne";
 
 // ── Cards ───────────────────────────────────────────────────────────────

@@ -78,7 +78,7 @@ export default function SupplyPage() {
               <Rule />
             </div>
             <Heading as="h2" size="2xl" className="max-w-2xl">
-              A glimpse of what's coming.
+              A glimpse of what&apos;s coming.
             </Heading>
             <Subheading className="max-w-lg">
               Every product in Vynl Supply is hand-selected against one standard:
@@ -172,7 +172,7 @@ export default function SupplyPage() {
       <section className="py-20 md:py-24 bg-vynl-black border-t border-white/5">
         <Container className="flex flex-col items-center text-center gap-6">
           <p className="font-display italic text-vynl-champagne-light text-lg md:text-2xl max-w-xl">
-            "Tools that perform. Products you can trust. A shop built by someone who uses them."
+            &ldquo;Tools that perform. Products you can trust. A shop built by someone who uses them.&rdquo;
           </p>
           <p className="text-2xs font-sans text-vynl-gray-600 tracking-ultra-wide uppercase">
             Vynl Supply — Launching Soon

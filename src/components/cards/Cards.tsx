@@ -158,6 +158,7 @@ export function ProductCard({ card, className }: ProductCardProps) {
       <div className="relative overflow-hidden">
         {card.media ? (
           <div className="relative aspect-square overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element -- dynamic product URLs; avoid Image domain config */}
             <img
               src={card.media.src}
               alt={card.media.alt}

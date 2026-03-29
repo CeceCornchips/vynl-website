@@ -268,7 +268,7 @@ export function ContactForm({ className }: { className?: string }) {
       <div className={cn("py-12 flex flex-col gap-4", className)}>
         <div className="w-8 h-px bg-vynl-champagne" />
         <Heading as="h3" size="sm">Thank you.</Heading>
-        <BodyText muted>We've received your message and will be in touch shortly to confirm your booking.</BodyText>
+        <BodyText muted>We&apos;ve received your message and will be in touch shortly to confirm your booking.</BodyText>
       </div>
     );
   }

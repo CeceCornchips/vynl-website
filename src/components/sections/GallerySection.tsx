@@ -1,18 +1,12 @@
 import { cn } from "@/lib/utils";
-import type { SectionMeta } from "@/types";
+import type { GalleryGridItem, SectionMeta } from "@/types";
 import { Container } from "../layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "../ui/Typography";
 import { GalleryGrid } from "../ui/Media";
 
-interface GalleryItem {
-  id: string | number;
-  alt: string;
-  aspect?: "square" | "portrait" | "landscape";
-}
-
 interface GallerySectionProps {
   meta: SectionMeta;
-  items: GalleryItem[];
+  items: GalleryGridItem[];
   columns?: 2 | 3 | 4;
   className?: string;
 }

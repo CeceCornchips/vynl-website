@@ -87,6 +87,86 @@ export const brandPillars: FeatureCardData[] = [
   },
 ];
 
+// ── Nail Services Catalogue ──────────────────────────────────────────────
+
+export const nailServices: ServiceCardData[] = [
+  {
+    id: "ns1",
+    title: "Soak Off Only (No New Set)",
+    description: "Safe removal of Gel X or other nail enhancements.",
+    price: "A$60.00",
+    duration: "50 mins",
+  },
+  {
+    id: "ns2",
+    title: "Gel X Extension",
+    description:
+      "Gel X Extension is a soft gel nail enhancement applied to your natural nail.",
+    price: "Starting from $100",
+    duration: "1 hr",
+  },
+];
+
+export const nailAddOns: ServiceCardData[] = [
+  {
+    id: "ao1",
+    title: "Foreign Soak Off",
+    description:
+      "Add-on removal service for clients who currently have product applied by another salon or technician.",
+    price: "A$30.00",
+    duration: "20 mins",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao2",
+    title: "French Tips",
+    description: "A classic french tip on all nails.",
+    price: "A$20.00",
+    duration: "30 mins",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao3",
+    title: "Full Colour",
+    description: "Full colour finish on all nails.",
+    price: "Price varies",
+    duration: "10 mins",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao4",
+    title: "LVL 1 Nail Art",
+    description: "LVL 1 Nail Art – Simple",
+    price: "+$10–$40",
+    duration: "30 mins",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao5",
+    title: "LVL 2 Nail Art",
+    description: "LVL 2 Nail Art – Detailed",
+    price: "+$50–$100+",
+    duration: "1 hr",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao6",
+    title: "LVL 3 Nail Art",
+    description: "LVL 3 Nail Art – Advanced",
+    price: "+$100–$250+",
+    duration: "1 hr 30 mins",
+    level: "Add-On Only",
+  },
+  {
+    id: "ao7",
+    title: "Soak Off",
+    description: "Add-on soak off service for clients receiving a new set.",
+    price: "A$20.00",
+    duration: "20 mins",
+    level: "Add-On Only",
+  },
+];
+
 // ── Services ────────────────────────────────────────────────────────────
 
 export const services: ServiceCardData[] = [
@@ -338,7 +418,7 @@ export const nailsFAQs: FAQItem[] = [
     id: "n4",
     question: "How do I book an appointment?",
     answer:
-      "Submit a booking request via the contact page or DM us on Instagram. New clients may be asked for a deposit to confirm their appointment.",
+      "All bookings are made online — select your service, choose a time that suits you, and pay your deposit securely through our booking system. You'll receive an instant confirmation. No DMs, no back-and-forth.",
   },
   {
     id: "n5",
@@ -350,7 +430,7 @@ export const nailsFAQs: FAQItem[] = [
     id: "n6",
     question: "Can I bring inspo photos?",
     answer:
-      "Yes, please do. The more reference you bring, the better we can understand your vision. We'll always advise on what translates best to Gel-X before we start.",
+      "Yes — and we love them. Once your booking is confirmed, send your inspo photos to us via Instagram DM at @au.vynl. The more reference the better. We'll always let you know what's achievable in your appointment time before we start.",
   },
 ];
 
@@ -434,8 +514,9 @@ export const footerData: FooterData = {
     {
       heading: "Connect",
       links: [
-        { label: "Instagram", href: "https://instagram.com" },
-        { label: "TikTok", href: "https://tiktok.com" },
+        { label: "Instagram", href: "https://instagram.com/au.vynl" },
+        { label: "Academy Instagram", href: "https://instagram.com/vynlacademy" },
+        { label: "TikTok", href: "https://tiktok.com/@vynlacademy" },
         { label: "Contact", href: "/contact" },
       ],
     },

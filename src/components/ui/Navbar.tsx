@@ -132,7 +132,7 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
 
           <nav className="hidden md:flex items-center gap-10">
             {items.map((item) => (
-              <div key={item.label} className="relative group">
+              <div key={item.label} className="relative group pb-4">
                 <Link
                   href={item.href}
                   className="text-2xs font-sans font-medium tracking-ultra-wide uppercase text-vynl-gray-300 hover:text-vynl-white transition-colors"
@@ -140,7 +140,7 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
                   {item.label}
                 </Link>
                 {item.children && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-52 bg-vynl-black border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 translate-y-2 group-hover:translate-y-0">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 bg-vynl-black border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 translate-y-2 group-hover:translate-y-0">
                     {item.children.map((child) => (
                       <Link
                         key={child.label}

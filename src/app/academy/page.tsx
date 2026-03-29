@@ -105,7 +105,7 @@ export default function AcademyPage() {
           <div className="flex flex-col items-center text-center gap-6 mb-14">
             <div className="flex items-center gap-4 justify-center">
               <Rule />
-              <LabelText>Who it's for</LabelText>
+              <LabelText>Who it&apos;s for</LabelText>
               <Rule />
             </div>
             <Heading as="h2" size="xl" className="max-w-xl">

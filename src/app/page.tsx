@@ -13,8 +13,22 @@ import {
   testimonials,
   academyWaitlistConfig,
 } from "@/data";
+import { fetchBeholdGalleryItems } from "@/lib/behold-feed";
+import type { GalleryGridItem } from "@/types";
 
-export default function HomePage() {
+export const revalidate = 86400;
+
+function homeGalleryPlaceholders(): GalleryGridItem[] {
+  return galleryItems.slice(0, 8).map(({ id, alt, aspect }) => ({
+    id,
+    alt,
+    aspect,
+  }));
+}
+
+export default async function HomePage() {
+  const beholdGallery = await fetchBeholdGalleryItems(8);
+  const galleryGridItems = beholdGallery ?? homeGalleryPlaceholders();
   return (
     <>
       {/* ── Hero ── */}
@@ -26,8 +40,8 @@ export default function HomePage() {
           <div className="flex flex-col items-center text-center gap-6">
             <Rule />
             <blockquote className="font-display italic text-2xl md:text-3xl lg:text-4xl text-vynl-black leading-snug max-w-2xl">
-              "Not a generalist salon. Not a beauty counter. A nail
-              specialist — where detail is the only standard."
+              &ldquo;Not a generalist salon. Not a beauty counter. A nail
+              specialist — where detail is the only standard.&rdquo;
             </blockquote>
             <p className="text-2xs font-sans tracking-ultra-wide uppercase text-vynl-champagne">
               Vynl Studio
@@ -60,7 +74,7 @@ export default function HomePage() {
             "Every set is a collaboration — inspired by you, executed with precision.",
           colorScheme: "dark",
         }}
-        items={galleryItems.slice(0, 8)}
+        items={galleryGridItems}
         columns={4}
       />
 

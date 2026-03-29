@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { MediaItem, PlaceholderMood } from "@/types";
+import type { GalleryGridItem, MediaItem, PlaceholderMood } from "@/types";
 
 // ── Premium MediaPlaceholder ─────────────────────────────────────────────
 // Looks intentional and editorial even without real content.
@@ -140,13 +140,6 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
 
 // ── GalleryGrid ───────────────────────────────────────────────────────────
 
-interface GalleryGridItem {
-  id: string | number;
-  media?: MediaItem;
-  alt: string;
-  aspect?: "square" | "portrait" | "landscape";
-}
-
 interface GalleryGridProps {
   items: GalleryGridItem[];
   className?: string;
@@ -160,42 +153,73 @@ export function GalleryGrid({ items, className, columns = 4 }: GalleryGridProps)
     4: "grid-cols-2 md:grid-cols-4",
   };
 
+  const aspectClass =
+    (item: GalleryGridItem) =>
+      item.aspect === "portrait"
+        ? "aspect-[3/4]"
+        : item.aspect === "landscape"
+          ? "aspect-video"
+          : "aspect-square";
+
   return (
     <div className={cn("grid gap-2 md:gap-3", colsMap[columns], className)}>
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className={cn(
-            "relative overflow-hidden group cursor-pointer",
-            item.aspect === "portrait" ? "aspect-[3/4]" :
-            item.aspect === "landscape" ? "aspect-video" : "aspect-square"
-          )}
-        >
-          {item.media ? (
-            <Image
-              src={item.media.src}
-              alt={item.alt}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes={`(max-width: 768px) 50vw, ${columns === 4 ? "25vw" : "33vw"}`}
-            />
-          ) : (
-            <MediaPlaceholder
-              aspect={item.aspect === "portrait" ? "portrait" : item.aspect ?? "square"}
-              label={item.alt}
-              mood="nude"
-              cropMarks={false}
-              className="w-full h-full absolute inset-0"
-            />
-          )}
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-vynl-black/0 group-hover:bg-vynl-black/25 transition-colors duration-500 flex items-end p-4 opacity-0 group-hover:opacity-100">
-            <span className="text-2xs text-vynl-white font-sans tracking-widest uppercase">
-              {item.alt}
-            </span>
+      {items.map((item) => {
+        const baseShell = cn(
+          "relative block overflow-hidden group cursor-pointer",
+          aspectClass(item)
+        );
+        const linkShell = cn(
+          baseShell,
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-vynl-champagne"
+        );
+
+        const inner = (
+          <>
+            {item.media ? (
+              <Image
+                src={item.media.src}
+                alt={item.alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes={`(max-width: 768px) 50vw, ${columns === 4 ? "25vw" : "33vw"}`}
+              />
+            ) : (
+              <MediaPlaceholder
+                aspect={item.aspect === "portrait" ? "portrait" : item.aspect ?? "square"}
+                label={item.alt}
+                mood="nude"
+                cropMarks={false}
+                className="w-full h-full absolute inset-0"
+              />
+            )}
+            <div className="absolute inset-0 bg-vynl-black/0 group-hover:bg-vynl-black/25 transition-colors duration-500 flex items-end p-4 opacity-0 group-hover:opacity-100 pointer-events-none">
+              <span className="text-2xs text-vynl-white font-sans tracking-widest uppercase line-clamp-3">
+                {item.alt}
+              </span>
+            </div>
+          </>
+        );
+
+        if (item.href) {
+          return (
+            <a
+              key={item.id}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkShell}
+            >
+              {inner}
+            </a>
+          );
+        }
+
+        return (
+          <div key={item.id} className={baseShell}>
+            {inner}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

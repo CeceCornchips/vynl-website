@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { ServicesSection } from "@/components/sections/ServicesSection";
+import { NailCatalogSection } from "@/components/sections/NailCatalogSection";
 import { GallerySection } from "@/components/sections/GallerySection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
@@ -8,7 +8,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { Container } from "@/components/layout/Container";
 import { Heading, Subheading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { MediaPlaceholder } from "@/components/ui/Media";
-import { services, galleryItems, testimonials, nailsFAQs } from "@/data";
+import { galleryItems, testimonials, nailsFAQs, nailServices, nailAddOns } from "@/data";
 
 export const metadata: Metadata = {
   title: "Vynl Nails — Gel-X Extensions & Advanced Nail Art",
@@ -81,16 +81,7 @@ export default function NailsPage() {
       </section>
 
       {/* ── Services ── */}
-      <ServicesSection
-        meta={{
-          label: "Services & Pricing",
-          title: "What we offer.",
-          subtitle: "Every service is built around Gel-X — the only extension system we use.",
-          colorScheme: "smoke",
-        }}
-        services={services}
-        cta={{ label: "Book an Appointment", href: "/contact" }}
-      />
+      <NailCatalogSection nailServices={nailServices} addOns={nailAddOns} />
 
       {/* ── Gallery ── */}
       <GallerySection
@@ -119,7 +110,7 @@ export default function NailsPage() {
         label="Book your set"
         title="Ready to wear"
         titleItalic="your best nails?"
-        subtitle="All services are by appointment only. Submit a booking request and we'll confirm via email."
+        subtitle="All services are by online booking only. Select your service, choose a time, and pay your deposit instantly via Square."
         primaryCTA={{ label: "Request an Appointment", href: "/contact" }}
         variant="black"
       />
