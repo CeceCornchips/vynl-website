@@ -3,7 +3,7 @@ node_modules
 .env*
 .DS_Store
 *.tsbuildinfo
-public/salon/SALON VIDEO.mp4
+public/salon/
 
 # clerk configuration (can include secrets)
 /.clerk/
