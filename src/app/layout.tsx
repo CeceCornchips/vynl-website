@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { MotionProvider } from "@/components/ui/MotionProvider";
@@ -36,18 +37,20 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body
-        className={`${playfair.variable} ${dmSans.variable} antialiased bg-vynl-white font-sans text-vynl-black`}
-      >
-        <MotionProvider>
-          <Navbar logoText="VYNL" items={navItems} cta={navCTA} />
-          <main>
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer data={footerData} />
-        </MotionProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="scroll-smooth">
+        <body
+          className={`${playfair.variable} ${dmSans.variable} antialiased bg-vynl-white font-sans text-vynl-black`}
+        >
+          <MotionProvider>
+            <Navbar logoText="VYNL" items={navItems} cta={navCTA} />
+            <main>
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <Footer data={footerData} />
+          </MotionProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

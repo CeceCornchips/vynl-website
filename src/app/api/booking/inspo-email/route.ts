@@ -23,9 +23,10 @@ type Body = {
   notes?: string;
   skipped?: boolean;
   images?: InspoImage[];
-  /** Square Bookings API booking id when the appointment was created successfully. */
+  /** Vynl booking ID (from /api/bookings/create) */
+  bookingId?: string;
+  /** Legacy Square fields — kept for backward compatibility */
   squareBookingId?: string;
-  /** Square Payments API payment id — used in subject/body when booking id is unavailable. */
   squarePaymentId?: string;
 };
 
@@ -66,18 +67,22 @@ export async function POST(req: NextRequest) {
   const notes = typeof body.notes === "string" ? body.notes.trim() : "";
   const skipped = body.skipped === true;
   const images = Array.isArray(body.images) ? body.images : [];
+  const bookingId =
+    typeof body.bookingId === "string" ? body.bookingId.trim() : "";
   const squareBookingId =
     typeof body.squareBookingId === "string" ? body.squareBookingId.trim() : "";
   const squarePaymentId =
     typeof body.squarePaymentId === "string" ? body.squarePaymentId.trim() : "";
 
+  const refId = bookingId || squareBookingId || squarePaymentId;
+
   if (!clientName || !clientEmail || !serviceName) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  if (!squareBookingId && !squarePaymentId) {
+  if (!refId) {
     return NextResponse.json(
-      { error: "Square booking id or payment id is required." },
+      { error: "A booking ID is required." },
       { status: 400 }
     );
   }
@@ -122,10 +127,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Could not decode images." }, { status: 400 });
   }
 
-  const baseSubject = `New Booking — ${sanitizeSubjectPart(clientName)} — ${sanitizeSubjectPart(serviceName)} — ${sanitizeSubjectPart(appointmentDate || "Date TBD")}`;
-  const subject = squareBookingId
-    ? `${baseSubject} — Ref: ${sanitizeSubjectPart(squareBookingId)}`
-    : `${baseSubject} — Payment Ref: ${sanitizeSubjectPart(squarePaymentId)}`;
+  const baseSubject = `New Vynl Booking — ${sanitizeSubjectPart(clientName)} — ${sanitizeSubjectPart(serviceName)} — ${sanitizeSubjectPart(appointmentDate || "Date TBD")}`;
+  const subject = `${baseSubject} — Ref: ${sanitizeSubjectPart(refId)}`;
 
   const addOnsHtml =
     addOnNames.length > 0
@@ -145,9 +148,8 @@ export async function POST(req: NextRequest) {
 <!DOCTYPE html>
 <html>
 <body style="font-family:system-ui,sans-serif;line-height:1.5;color:#111;">
-  <h2>New booking</h2>
-  ${squareBookingId ? `<p><strong>Square booking ref:</strong> ${escapeHtml(squareBookingId)}</p>` : ""}
-  ${squarePaymentId ? `<p><strong>Square payment ref:</strong> ${escapeHtml(squarePaymentId)}</p>` : ""}
+  <h2>New Vynl Booking</h2>
+  <p><strong>Booking ref:</strong> ${escapeHtml(refId)}</p>
   <p><strong>Name:</strong> ${escapeHtml(clientName)}</p>
   <p><strong>Email:</strong> ${escapeHtml(clientEmail)}</p>
   <p><strong>Phone:</strong> ${clientPhone ? escapeHtml(clientPhone) : "<em>Not provided</em>"}</p>
