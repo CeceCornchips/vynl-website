@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { NavItem, CTALink } from "@/types";
@@ -98,6 +99,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -111,6 +113,8 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  if (pathname === "/gel-x-guide") return null;
 
   return (
     <>
@@ -135,12 +139,14 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
               <div key={item.label} className="relative group pb-4">
                 <Link
                   href={item.href}
-                  className="text-2xs font-sans font-medium tracking-ultra-wide uppercase text-vynl-gray-300 hover:text-vynl-white transition-colors"
+                  className="relative text-2xs font-sans font-medium tracking-ultra-wide uppercase text-vynl-gray-300 hover:text-vynl-white transition-colors duration-300 group/link"
                 >
                   {item.label}
+                  {/* Sliding underline */}
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-vynl-champagne/70 transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
                 </Link>
                 {item.children && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 bg-vynl-black border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 translate-y-2 group-hover:translate-y-0">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 bg-vynl-black border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                     {item.children.map((child) => (
                       <Link
                         key={child.label}

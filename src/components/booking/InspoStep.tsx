@@ -138,7 +138,7 @@ export function InspoStep({
       <div>
         <h2 className="font-display text-2xl text-vynl-black mb-2">Share your inspo</h2>
         <p className="text-sm font-sans text-vynl-gray-500 font-light leading-relaxed">
-          Upload 1–4 photos of nail styles you love — at least one is required before you can pay your
+          Upload 1–4 photos of nail styles you love. At least one is required before you can pay your
           deposit. This helps us prepare before your appointment.
         </p>
       </div>

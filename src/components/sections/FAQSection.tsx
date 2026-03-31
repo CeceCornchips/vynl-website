@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { FAQItem, SectionMeta } from "@/types";
 import { Container } from "../layout/Container";
 import { Heading, Subheading, LabelText, BodyText, Rule } from "../ui/Typography";
+import { EASE, VIEWPORT, staggerContainer, fadeUpVariants } from "@/lib/animations";
 
 interface FAQRowProps {
   item: FAQItem;
@@ -28,33 +30,45 @@ function FAQRow({ item, isOpen, onToggle, dark }: FAQRowProps) {
         >
           {item.question}
         </span>
-        <span
+        <motion.span
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={{ duration: 0.28, ease: EASE }}
           className={cn(
-            "shrink-0 w-7 h-7 flex items-center justify-center border transition-all duration-300",
+            "shrink-0 w-7 h-7 flex items-center justify-center border transition-colors duration-300",
             dark
               ? "border-white/15 text-vynl-gray-400"
               : "border-vynl-gray-200 text-vynl-gray-500",
-            isOpen && "rotate-45 border-vynl-champagne text-vynl-champagne"
+            isOpen && "border-vynl-champagne text-vynl-champagne"
           )}
         >
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M5 1v8M1 5h8" strokeLinecap="square" />
           </svg>
-        </span>
+        </motion.span>
       </button>
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-300 ease-in-out",
-          isOpen ? "max-h-80 pb-6" : "max-h-0"
+
+      {/* Animated accordion panel */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="faq-answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="pb-6">
+              <BodyText
+                size="sm"
+                className={dark ? "text-vynl-gray-400" : "text-vynl-gray-600"}
+              >
+                {item.answer}
+              </BodyText>
+            </div>
+          </motion.div>
         )}
-      >
-        <BodyText
-          size="sm"
-          className={dark ? "text-vynl-gray-400" : "text-vynl-gray-600"}
-        >
-          {item.answer}
-        </BodyText>
-      </div>
+      </AnimatePresence>
     </div>
   );
 }
@@ -78,38 +92,58 @@ export function FAQSection({ meta, items, className }: FAQSectionProps) {
       )}
     >
       <Container size="md">
-        <div className="mb-14 flex flex-col gap-5 items-center text-center">
+        {/* Header */}
+        <motion.div
+          className="mb-14 flex flex-col gap-5 items-center text-center"
+          variants={staggerContainer(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={VIEWPORT}
+        >
           {meta.label && (
-            <div className="flex items-center gap-4 justify-center">
+            <motion.div className="flex items-center gap-4 justify-center" variants={fadeUpVariants}>
               <Rule />
               <LabelText light={isDark}>{meta.label}</LabelText>
               <Rule />
-            </div>
+            </motion.div>
           )}
-          <Heading
-            as="h2"
-            size="xl"
-            className={cn(isDark && "text-vynl-white")}
-          >
-            {meta.title}
-          </Heading>
+          <motion.div variants={fadeUpVariants}>
+            <Heading
+              as="h2"
+              size="xl"
+              className={cn(isDark && "text-vynl-white")}
+            >
+              {meta.title}
+            </Heading>
+          </motion.div>
           {meta.subtitle && (
-            <Subheading className={cn(isDark && "text-vynl-gray-400")}>
-              {meta.subtitle}
-            </Subheading>
+            <motion.div variants={fadeUpVariants}>
+              <Subheading className={cn(isDark && "text-vynl-gray-400")}>
+                {meta.subtitle}
+              </Subheading>
+            </motion.div>
           )}
-        </div>
-        <div className={cn("border-t", isDark ? "border-white/8" : "border-vynl-gray-100")}>
+        </motion.div>
+
+        {/* FAQ rows — staggered reveal */}
+        <motion.div
+          className={cn("border-t", isDark ? "border-white/8" : "border-vynl-gray-100")}
+          variants={staggerContainer(0.07)}
+          initial="hidden"
+          whileInView="show"
+          viewport={VIEWPORT}
+        >
           {items.map((item) => (
-            <FAQRow
-              key={item.id}
-              item={item}
-              isOpen={openId === item.id}
-              onToggle={() => setOpenId(openId === item.id ? null : item.id)}
-              dark={isDark}
-            />
+            <motion.div key={item.id} variants={fadeUpVariants}>
+              <FAQRow
+                item={item}
+                isOpen={openId === item.id}
+                onToggle={() => setOpenId(openId === item.id ? null : item.id)}
+                dark={isDark}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </Container>
     </section>
   );

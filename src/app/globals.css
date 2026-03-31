@@ -55,3 +55,87 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
+
+/* ── Premium animation keyframes ─────────────────────────────────────── */
+
+@keyframes shimmer-slide {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+    opacity: 0;
+  }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% {
+    transform: translateX(350%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.6; }
+  50%       { transform: scaleY(0.35); opacity: 0.15; }
+}
+
+/* ── CTA shimmer sweep ─────────────────────────────────────────────────
+   Add .btn-shimmer to any button that should have the light-sweep effect.
+   Requires the button to have overflow:hidden (added inline below).      */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 65%
+  );
+  animation: shimmer-slide 3.5s ease-in-out infinite;
+  animation-delay: 1.8s;
+  pointer-events: none;
+}
+
+/* ── Supply page: floating ambient blobs ──────────────────────────────
+   Slow organic drift — GPU-only (transform + opacity).               */
+
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%      { transform: translate(48px, -72px) scale(1.12); }
+  70%      { transform: translate(-24px, 28px) scale(0.94); }
+}
+
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  30%      { transform: translate(-56px, 40px) scale(0.9); }
+  65%      { transform: translate(32px, -44px) scale(1.08); }
+}
+
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(20px, 60px) scale(1.06); }
+}
+
+.supply-blob-1 { animation: blob-drift-1 18s ease-in-out infinite; }
+.supply-blob-2 { animation: blob-drift-2 24s ease-in-out infinite; animation-delay: -7s; }
+.supply-blob-3 { animation: blob-drift-3 20s ease-in-out infinite; animation-delay: -13s; }
+
+/* Respect prefers-reduced-motion for all CSS animations */
+@media (prefers-reduced-motion: reduce) {
+  .btn-shimmer::after {
+    animation: none;
+  }
+
+  .scroll-pulse-line {
+    animation: none !important;
+  }
+
+  .supply-blob-1,
+  .supply-blob-2,
+  .supply-blob-3 {
+    animation: none;
+  }
+}

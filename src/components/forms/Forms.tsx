@@ -118,34 +118,60 @@ interface WaitlistFormProps extends WaitlistFormConfig {
 
 export function WaitlistForm({
   title, subtitle, buttonText = "Join the Waitlist",
-  successMessage = "You're on the list. We'll be in touch soon.",
+  successMessage = "You're on the list! We'll be in touch when we launch.",
   placeholder = "Email address",
-  namePlaceholder = "Your name",
-  context, showName = false, className, colorScheme = "light",
+  namePlaceholder = "First name",
+  context, type, showName = false, className, colorScheme = "light",
 }: WaitlistFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string }>({});
 
   const isDark = colorScheme === "dark";
   const isSmoke = colorScheme === "smoke";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError("");
-    if (!email || !email.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+    const errs: { name?: string; email?: string } = {};
+    if (showName && !name.trim()) errs.name = "First name is required.";
+    if (!email || !email.includes("@")) errs.email = "Please enter a valid email address.";
+    if (Object.keys(errs).length) { setFieldErrors(errs); return; }
+    setFieldErrors({});
     setStatus("loading");
-    // Replace with real API call — Mailchimp / Klaviyo / Formspree / custom
-    await new Promise((res) => setTimeout(res, 900));
-    console.log("[waitlist]", { name, email, context });
-    setStatus("success");
-    setName("");
-    setEmail("");
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), type: type ?? context }),
+      });
+
+      if (res.status === 409) {
+        setStatus("duplicate");
+        return;
+      }
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+      setName("");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
   }
+
+  const inputBase = cn(
+    "w-full border-b bg-transparent px-0 py-3",
+    "text-sm font-sans font-light placeholder:text-current/40",
+    "focus:outline-none transition-colors duration-200",
+    "disabled:opacity-40",
+    isDark
+      ? "border-white/20 text-vynl-white focus:border-vynl-champagne"
+      : "border-vynl-gray-200 text-vynl-black focus:border-vynl-black"
+  );
 
   return (
     <div
@@ -192,31 +218,45 @@ export function WaitlistForm({
         ) : (
           <FormWrapper onSubmit={handleSubmit} className="gap-6">
             {showName && (
-              <input
-                type="text"
-                placeholder={namePlaceholder}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={status === "loading"}
-                className={cn(
-                  "w-full border-b bg-transparent px-0 py-3",
-                  "text-sm font-sans font-light placeholder:text-current/40",
-                  "focus:outline-none transition-colors duration-200",
-                  isDark
-                    ? "border-white/20 text-vynl-white focus:border-vynl-champagne"
-                    : "border-vynl-gray-200 text-vynl-black focus:border-vynl-black"
+              <div className="flex flex-col gap-1.5">
+                <input
+                  type="text"
+                  placeholder={namePlaceholder}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={status === "loading"}
+                  className={cn(inputBase, fieldErrors.name && "border-red-400")}
+                />
+                {fieldErrors.name && (
+                  <p className="text-xs text-red-400 font-sans">{fieldErrors.name}</p>
                 )}
-              />
+              </div>
             )}
-            <EmailInput
-              placeholder={placeholder}
-              value={email}
-              onChange={setEmail}
-              disabled={status === "loading"}
-              error={error}
-              dark={isDark}
-            />
-            {error && <p className="text-xs text-red-400 font-sans -mt-3">{error}</p>}
+            <div className="flex flex-col gap-1.5">
+              <EmailInput
+                placeholder={placeholder}
+                value={email}
+                onChange={setEmail}
+                disabled={status === "loading"}
+                error={fieldErrors.email}
+                dark={isDark}
+              />
+              {fieldErrors.email && (
+                <p className="text-xs text-red-400 font-sans -mt-1">{fieldErrors.email}</p>
+              )}
+            </div>
+
+            {status === "duplicate" && (
+              <p className="text-xs font-sans px-4 py-2.5 border border-vynl-champagne/40 bg-vynl-champagne/5 text-vynl-champagne">
+                You&apos;re already on the waitlist!
+              </p>
+            )}
+            {status === "error" && (
+              <p className="text-xs font-sans text-red-400">
+                Something went wrong. Please try again.
+              </p>
+            )}
+
             <PrimaryButton
               type="submit"
               disabled={status === "loading"}
@@ -227,7 +267,12 @@ export function WaitlistForm({
                   : "bg-vynl-black text-vynl-white hover:bg-vynl-gray-800 mt-2"
               )}
             >
-              {status === "loading" ? "Submitting…" : buttonText}
+              {status === "loading" ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  Submitting…
+                </span>
+              ) : buttonText}
             </PrimaryButton>
           </FormWrapper>
         )}

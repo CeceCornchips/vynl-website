@@ -23,7 +23,7 @@ const sizeMap: Record<ButtonSize, string> = {
 };
 
 const base =
-  "inline-flex items-center justify-center uppercase font-sans font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 rounded-none";
+  "inline-flex items-center justify-center uppercase font-sans font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 rounded-none active:scale-[0.97] active:duration-75";
 
 function Wrap({
   href, external, className, children, disabled, onClick, type = "button",

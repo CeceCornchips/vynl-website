@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { GalleryGridItem, MediaItem, PlaceholderMood } from "@/types";
+import { galleryItemVariants, VIEWPORT } from "@/lib/animations";
 
 // ── Premium MediaPlaceholder ─────────────────────────────────────────────
 // Looks intentional and editorial even without real content.
@@ -123,6 +127,24 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
       />
     );
   }
+
+  if (media.type === "video") {
+    return (
+      <div className={cn("absolute inset-0 overflow-hidden", className)}>
+        <video
+          src={media.src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Dark luxury overlay */}
+        <div className="absolute inset-0 bg-vynl-black/50" />
+      </div>
+    );
+  }
+
   return (
     <div className={cn("absolute inset-0 overflow-hidden", className)}>
       <Image
@@ -144,82 +166,116 @@ interface GalleryGridProps {
   items: GalleryGridItem[];
   className?: string;
   columns?: 2 | 3 | 4;
+  layout?: "grid" | "masonry";
 }
 
-export function GalleryGrid({ items, className, columns = 4 }: GalleryGridProps) {
+const itemAspectClass = (item: GalleryGridItem) =>
+  item.aspect === "portrait"
+    ? "aspect-[3/4]"
+    : item.aspect === "landscape"
+      ? "aspect-video"
+      : "aspect-square";
+
+export function GalleryGrid({ items, className, columns = 4, layout = "grid" }: GalleryGridProps) {
   const colsMap = {
     2: "grid-cols-2",
     3: "grid-cols-2 md:grid-cols-3",
     4: "grid-cols-2 md:grid-cols-4",
   };
 
-  const aspectClass =
-    (item: GalleryGridItem) =>
-      item.aspect === "portrait"
-        ? "aspect-[3/4]"
-        : item.aspect === "landscape"
-          ? "aspect-video"
-          : "aspect-square";
+  const renderItem = (item: GalleryGridItem, key: string, index: number) => {
+    const sizeHint =
+      columns === 4
+        ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        : columns === 3
+          ? "(max-width: 640px) 50vw, 33vw"
+          : "50vw";
+
+    const inner = (
+      <>
+        {item.media ? (
+          <Image
+            src={item.media.src}
+            alt={item.alt}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+            sizes={sizeHint}
+          />
+        ) : (
+          <MediaPlaceholder
+            aspect={item.aspect === "portrait" ? "portrait" : item.aspect ?? "square"}
+            label={item.alt}
+            mood="nude"
+            cropMarks={false}
+            className="w-full h-full absolute inset-0"
+          />
+        )}
+        {/* Hover overlay: dims + adds subtle ring */}
+        <div className="absolute inset-0 bg-vynl-black/0 group-hover:bg-vynl-black/20 transition-colors duration-500 pointer-events-none ring-inset ring-0 group-hover:ring-1 group-hover:ring-white/10" />
+      </>
+    );
+
+    const shellBase = cn(
+      "relative overflow-hidden group",
+      itemAspectClass(item),
+      "transition-shadow duration-500 hover:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.35)]"
+    );
+    const shellLink = cn(
+      shellBase,
+      "block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-vynl-champagne"
+    );
+
+    const shell = item.href ? (
+      <a key={key} href={item.href} target="_blank" rel="noopener noreferrer" className={shellLink}>
+        {inner}
+      </a>
+    ) : (
+      <div key={key} className={shellBase}>{inner}</div>
+    );
+
+    return (
+      <motion.div
+        key={`motion-${key}`}
+        variants={galleryItemVariants}
+        custom={index}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-40px" }}
+      >
+        {shell}
+      </motion.div>
+    );
+  };
+
+  if (layout === "masonry") {
+    const buildCols = (n: number) =>
+      Array.from({ length: n }, (_, ci) => items.filter((_, j) => j % n === ci));
+
+    return (
+      <div className={cn("w-full", className)}>
+        {/* Mobile — 2 columns, 2 px gap */}
+        <div className="flex gap-0.5 md:hidden">
+          {buildCols(2).map((col, ci) => (
+            <div key={`m${ci}`} className="flex-1 flex flex-col gap-0.5 min-w-0">
+              {col.map((item) => renderItem(item, `m${ci}-${item.id}`, items.indexOf(item)))}
+            </div>
+          ))}
+        </div>
+        {/* md+ — configured columns, 4 px gap */}
+        <div className="hidden md:flex gap-1">
+          {buildCols(columns).map((col, ci) => (
+            <div key={`d${ci}`} className="flex-1 flex flex-col gap-1 min-w-0">
+              {col.map((item) => renderItem(item, `d${ci}-${item.id}`, items.indexOf(item)))}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("grid gap-2 md:gap-3", colsMap[columns], className)}>
-      {items.map((item) => {
-        const baseShell = cn(
-          "relative block overflow-hidden group cursor-pointer",
-          aspectClass(item)
-        );
-        const linkShell = cn(
-          baseShell,
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-vynl-champagne"
-        );
-
-        const inner = (
-          <>
-            {item.media ? (
-              <Image
-                src={item.media.src}
-                alt={item.alt}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes={`(max-width: 768px) 50vw, ${columns === 4 ? "25vw" : "33vw"}`}
-              />
-            ) : (
-              <MediaPlaceholder
-                aspect={item.aspect === "portrait" ? "portrait" : item.aspect ?? "square"}
-                label={item.alt}
-                mood="nude"
-                cropMarks={false}
-                className="w-full h-full absolute inset-0"
-              />
-            )}
-            <div className="absolute inset-0 bg-vynl-black/0 group-hover:bg-vynl-black/25 transition-colors duration-500 flex items-end p-4 opacity-0 group-hover:opacity-100 pointer-events-none">
-              <span className="text-2xs text-vynl-white font-sans tracking-widest uppercase line-clamp-3">
-                {item.alt}
-              </span>
-            </div>
-          </>
-        );
-
-        if (item.href) {
-          return (
-            <a
-              key={item.id}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={linkShell}
-            >
-              {inner}
-            </a>
-          );
-        }
-
-        return (
-          <div key={item.id} className={baseShell}>
-            {inner}
-          </div>
-        );
-      })}
+    <div className={cn("grid gap-1 md:gap-1.5", colsMap[columns], className)}>
+      {items.map((item, i) => renderItem(item, String(item.id), i))}
     </div>
   );
 }

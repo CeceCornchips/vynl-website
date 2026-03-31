@@ -122,6 +122,8 @@ export interface WaitlistFormConfig {
   namePlaceholder?: string;
   context?: string;
   showName?: boolean;
+  /** Which waitlist this form submits to — drives the API type field */
+  type?: "academy" | "supply";
 }
 
 export interface ContactFormConfig {

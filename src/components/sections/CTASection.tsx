@@ -1,8 +1,12 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { CTALink } from "@/types";
 import { Container } from "../layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "../ui/Typography";
 import { PrimaryButton, SecondaryButton, GhostButton } from "../ui/Buttons";
+import { EASE, VIEWPORT, staggerContainer, fadeUpVariants } from "@/lib/animations";
 
 interface CTASectionProps {
   label?: string;
@@ -39,69 +43,86 @@ export function CTASection({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(201,169,110,0.08),transparent)] pointer-events-none" />
       )}
 
-      <Container className="relative z-10 flex flex-col items-center text-center gap-8">
-        {label && (
-          <div className="flex items-center gap-4 justify-center">
-            <Rule className={isDark ? "bg-vynl-champagne/40" : undefined} />
-            <LabelText light={isDark}>{label}</LabelText>
-            <Rule className={isDark ? "bg-vynl-champagne/40" : undefined} />
-          </div>
-        )}
-
-        <h2
-          className={cn(
-            "font-display font-medium text-balance tracking-tight max-w-3xl",
-            "text-4xl md:text-5xl lg:text-6xl",
-            isDark ? "text-vynl-white" : "text-vynl-black"
-          )}
+      <Container className="relative z-10">
+        <motion.div
+          className="flex flex-col items-center text-center gap-8"
+          variants={staggerContainer(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={VIEWPORT}
         >
-          {title}{" "}
-          {titleItalic && (
-            <span className={cn("italic", isDark ? "text-vynl-champagne-light" : "text-vynl-champagne-muted")}>
-              {titleItalic}
-            </span>
+          {label && (
+            <motion.div
+              className="flex items-center gap-4 justify-center"
+              variants={fadeUpVariants}
+            >
+              <Rule className={isDark ? "bg-vynl-champagne/40" : undefined} />
+              <LabelText light={isDark}>{label}</LabelText>
+              <Rule className={isDark ? "bg-vynl-champagne/40" : undefined} />
+            </motion.div>
           )}
-        </h2>
 
-        {subtitle && (
-          <Subheading
+          <motion.h2
+            variants={fadeUpVariants}
             className={cn(
-              "max-w-xl",
-              isDark ? "text-vynl-gray-400" : isChampagne ? "text-vynl-gray-700" : "text-vynl-gray-500"
+              "font-display font-medium text-balance tracking-tight max-w-3xl",
+              "text-4xl md:text-5xl lg:text-6xl",
+              isDark ? "text-vynl-white" : "text-vynl-black"
             )}
           >
-            {subtitle}
-          </Subheading>
-        )}
+            {title}{" "}
+            {titleItalic && (
+              <span className={cn("italic", isDark ? "text-vynl-champagne-light" : "text-vynl-champagne-muted")}>
+                {titleItalic}
+              </span>
+            )}
+          </motion.h2>
 
-        {(primaryCTA || secondaryCTA) && (
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
-            {primaryCTA && (
-              <PrimaryButton
-                href={primaryCTA.href}
-                size="lg"
+          {subtitle && (
+            <motion.div variants={fadeUpVariants}>
+              <Subheading
                 className={cn(
-                  isDark && "bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none",
-                  isChampagne && "bg-vynl-black text-vynl-white"
+                  "max-w-xl",
+                  isDark ? "text-vynl-gray-400" : isChampagne ? "text-vynl-gray-700" : "text-vynl-gray-500"
                 )}
               >
-                {primaryCTA.label}
-              </PrimaryButton>
-            )}
-            {secondaryCTA && (
-              <GhostButton
-                href={secondaryCTA.href}
-                size="lg"
-                className={cn(
-                  isDark && "text-vynl-white border-white/20 hover:border-white/50",
-                  !isDark && "text-vynl-black border-vynl-black/20 hover:border-vynl-black/60"
-                )}
-              >
-                {secondaryCTA.label}
-              </GhostButton>
-            )}
-          </div>
-        )}
+                {subtitle}
+              </Subheading>
+            </motion.div>
+          )}
+
+          {(primaryCTA || secondaryCTA) && (
+            <motion.div
+              className="flex flex-col sm:flex-row items-center gap-4 mt-2"
+              variants={fadeUpVariants}
+            >
+              {primaryCTA && (
+                <PrimaryButton
+                  href={primaryCTA.href}
+                  size="lg"
+                  className={cn(
+                    isDark && "bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none",
+                    isChampagne && "bg-vynl-black text-vynl-white"
+                  )}
+                >
+                  {primaryCTA.label}
+                </PrimaryButton>
+              )}
+              {secondaryCTA && (
+                <GhostButton
+                  href={secondaryCTA.href}
+                  size="lg"
+                  className={cn(
+                    isDark && "text-vynl-white border-white/20 hover:border-white/50",
+                    !isDark && "text-vynl-black border-vynl-black/20 hover:border-vynl-black/60"
+                  )}
+                >
+                  {secondaryCTA.label}
+                </GhostButton>
+              )}
+            </motion.div>
+          )}
+        </motion.div>
       </Container>
     </section>
   );

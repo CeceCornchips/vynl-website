@@ -1,184 +1,115 @@
 import type { Metadata } from "next";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/layout/Container";
-import { Grid } from "@/components/layout/Grid";
-import { Heading, Subheading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
-import { PrimaryButton } from "@/components/ui/Buttons";
-import { MediaPlaceholder } from "@/components/ui/Media";
-import { WaitlistForm } from "@/components/forms/Forms";
-import { ProductCard } from "@/components/cards/Cards";
-import { supplyProducts, shopWaitlistConfig } from "@/data";
+import { SupplyNotifyForm } from "@/components/forms/SupplyNotifyForm";
 
 export const metadata: Metadata = {
   title: "Vynl Supply — Coming Soon",
   description:
-    "Vynl Supply is a premium nail tools and products shop launching soon. Gel-X kits, brushes, nail art tools — curated by a working nail artist. Join the waitlist.",
+    "Carefully curated nail supplies and tools, built for serious nail artists. Coming soon to Vynl — join the list for early access.",
 };
 
 export default function SupplyPage() {
   return (
-    <>
-      {/* ── Hero: Full-screen coming soon ── */}
-      <section className="relative min-h-screen flex items-center justify-center bg-vynl-black overflow-hidden">
-        {/* Subtle radial gradient */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(201,169,110,0.07),transparent)] pointer-events-none" />
-        {/* Grid texture */}
+    <div className="relative min-h-screen bg-vynl-black overflow-hidden flex flex-col">
+
+      {/* ── Ambient background blobs ──────────────────────────────────────── */}
+      <div className="pointer-events-none select-none" aria-hidden="true">
+        {/* Top-left warm glow */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="supply-blob-1 absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.12]"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
+            background: "radial-gradient(circle, rgba(201,169,110,1) 0%, transparent 70%)",
+            filter: "blur(72px)",
           }}
         />
+        {/* Bottom-right warm glow */}
+        <div
+          className="supply-blob-2 absolute -bottom-60 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.08]"
+          style={{
+            background: "radial-gradient(circle, rgba(201,169,110,1) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+        {/* Centre accent — very subtle */}
+        <div
+          className="supply-blob-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.04]"
+          style={{
+            background: "radial-gradient(circle, rgba(255,240,200,1) 0%, transparent 65%)",
+            filter: "blur(60px)",
+          }}
+        />
+        {/* Fine grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+          }}
+        />
+      </div>
 
-        <Container className="relative z-10 flex flex-col items-center text-center gap-8 py-40">
-          {/* Drop badge */}
-          <span className="inline-flex items-center gap-2 border border-vynl-champagne/30 bg-vynl-champagne/5 px-5 py-2">
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <Container className="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-0 py-40">
+
+        {/* Badge */}
+        <AnimatedSection delay={0.05}>
+          <div className="inline-flex items-center gap-2.5 border border-vynl-champagne/25 bg-vynl-champagne/5 px-5 py-2 mb-10">
             <span className="w-1.5 h-1.5 rounded-full bg-vynl-champagne animate-pulse" />
             <span className="text-2xs font-sans text-vynl-champagne tracking-ultra-wide uppercase">
-              Launching Soon
+              Coming Soon
             </span>
-          </span>
+          </div>
+        </AnimatedSection>
 
-          <h1 className="font-display font-medium text-vynl-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tighter text-balance">
-            Vynl Supply
+        {/* Main headline */}
+        <AnimatedSection delay={0.1}>
+          <h1 className="font-display font-medium text-vynl-white tracking-tighter leading-[0.92] text-balance mb-0">
+            <span className="block text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
+              Supply
+            </span>
+            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic text-vynl-champagne-light mt-1">
+              Drop.
+            </span>
           </h1>
+        </AnimatedSection>
 
-          <p className="font-display italic text-vynl-champagne-light text-xl md:text-2xl">
-            Premium tools for artists who take their craft seriously.
+        {/* Divider rule */}
+        <AnimatedSection delay={0.18}>
+          <div className="w-12 h-px bg-vynl-champagne/40 my-10" />
+        </AnimatedSection>
+
+        {/* Subtext */}
+        <AnimatedSection delay={0.22}>
+          <p className="text-base md:text-lg font-sans font-light text-vynl-gray-400 max-w-sm leading-relaxed mb-12">
+            Carefully curated nail supplies and tools,
+            built by a working nail artist.{" "}
+            <span className="text-vynl-gray-300">Coming soon to Vynl.</span>
           </p>
+        </AnimatedSection>
 
-          <Subheading className="text-vynl-gray-400 max-w-lg">
-            Professional-grade Gel-X kits, brushes, and nail art tools — curated by a
-            working nail artist, not a bulk supplier.
-          </Subheading>
-
-          <PrimaryButton
-            href="#waitlist"
-            size="lg"
-            className="bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none mt-4"
-          >
-            Join the Waitlist
-          </PrimaryButton>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-            <div className="w-px h-12 bg-gradient-to-b from-vynl-gray-600 to-transparent" />
+        {/* Email capture */}
+        <AnimatedSection delay={0.3} className="w-full max-w-md">
+          <div className="flex flex-col gap-3">
+            <SupplyNotifyForm />
+            <p className="text-2xs font-sans text-vynl-gray-700 tracking-widest">
+              No spam. Just an alert when the drop happens.
+            </p>
           </div>
-        </Container>
-      </section>
+        </AnimatedSection>
 
-      {/* ── Product teasers ── */}
-      <section className="py-24 md:py-32 bg-vynl-smoke">
-        <Container>
-          <div className="mb-16 flex flex-col items-center text-center gap-5">
-            <div className="flex items-center gap-4 justify-center">
-              <Rule />
-              <LabelText>Product Preview</LabelText>
-              <Rule />
-            </div>
-            <Heading as="h2" size="2xl" className="max-w-2xl">
-              A glimpse of what&apos;s coming.
-            </Heading>
-            <Subheading className="max-w-lg">
-              Every product in Vynl Supply is hand-selected against one standard:
-              is this what a serious nail artist actually needs?
-            </Subheading>
-          </div>
-          <Grid cols={3} gap="lg">
-            {supplyProducts.map((p) => (
-              <ProductCard key={p.id} card={p} />
-            ))}
-          </Grid>
-        </Container>
-      </section>
+      </Container>
 
-      {/* ── Brand positioning ── */}
-      <section className="py-24 md:py-32 bg-vynl-black">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="flex flex-col gap-8">
-              <div className="flex items-center gap-4">
-                <Rule />
-                <LabelText>Why Vynl Supply</LabelText>
-              </div>
-              <Heading as="h2" size="2xl" className="text-vynl-white max-w-lg">
-                Built by an artist. <span className="italic text-vynl-champagne-light">Not a supplier.</span>
-              </Heading>
-              <div className="flex flex-col gap-6 pt-2">
-                {[
-                  {
-                    title: "Tested in real sets",
-                    body: "Every product is used in our studio first. If it doesn't perform there, it doesn't make the shop.",
-                  },
-                  {
-                    title: "No filler. No bulk.",
-                    body: "We curate tightly. A small selection of exceptional tools is better than 500 mediocre options.",
-                  },
-                  {
-                    title: "Made for serious nail techs",
-                    body: "Whether you're in your first set or your thousandth — Vynl Supply is designed for artists who give a damn.",
-                  },
-                ].map(({ title, body }) => (
-                  <div key={title} className="flex items-start gap-5">
-                    <span className="shrink-0 w-px h-14 bg-vynl-champagne/30 mt-1" />
-                    <div className="flex flex-col gap-1.5">
-                      <Heading as="h3" size="xs" className="text-vynl-white">{title}</Heading>
-                      <BodyText size="sm" className="text-vynl-gray-500">{body}</BodyText>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Placeholder brand visual */}
-            <div className="grid grid-cols-2 gap-3">
-              {["Product shot", "Packaging", "Lifestyle", "Brand visual"].map((label) => (
-                <MediaPlaceholder
-                  key={label}
-                  aspect="square"
-                  label={label}
-                  mood="dark"
-                  cropMarks={false}
-                />
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* ── Waitlist ── */}
-      <section id="waitlist" className="py-24 md:py-32 bg-vynl-white">
-        <Container size="sm">
-          <div className="flex flex-col items-center text-center gap-5 mb-12">
-            <div className="flex items-center gap-4 justify-center">
-              <Rule />
-              <LabelText>Early Access</LabelText>
-              <Rule />
-            </div>
-            <Heading as="h2" size="xl" className="max-w-lg">
-              Be first to shop the drop.
-            </Heading>
-            <Subheading className="max-w-md">
-              Waitlist members get exclusive early access, launch-day pricing, and
-              first pick before we open to the public.
-            </Subheading>
-          </div>
-          <WaitlistForm {...shopWaitlistConfig} colorScheme="smoke" />
-        </Container>
-      </section>
-
-      {/* ── Final CTA ── */}
-      <section className="py-20 md:py-24 bg-vynl-black border-t border-white/5">
-        <Container className="flex flex-col items-center text-center gap-6">
-          <p className="font-display italic text-vynl-champagne-light text-lg md:text-2xl max-w-xl">
-            &ldquo;Tools that perform. Products you can trust. A shop built by someone who uses them.&rdquo;
+      {/* ── Bottom tag ───────────────────────────────────────────────────── */}
+      <AnimatedSection delay={0.4}>
+        <footer className="relative z-10 py-8 border-t border-white/5">
+          <p className="text-center text-2xs font-sans text-vynl-gray-700 tracking-ultra-wide uppercase">
+            Vynl Supply · Tools built for artists who give a damn
           </p>
-          <p className="text-2xs font-sans text-vynl-gray-600 tracking-ultra-wide uppercase">
-            Vynl Supply — Launching Soon
-          </p>
-        </Container>
-      </section>
-    </>
+        </footer>
+      </AnimatedSection>
+
+    </div>
   );
 }

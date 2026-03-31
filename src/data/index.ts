@@ -9,6 +9,7 @@ import type {
   FooterData,
   HeroSectionData,
   WaitlistFormConfig,
+  GalleryGridItem,
 } from "@/types";
 
 // ── Navigation ──────────────────────────────────────────────────────────
@@ -49,10 +50,11 @@ export const heroData: HeroSectionData = {
   title: "Gel-X artistry,",
   titleItalic: "refined.",
   subtitle:
-    "Advanced Gel-X extensions and intricate nail art for those who demand detail. Not a salon — a specialist.",
+    "Advanced Gel-X extensions and intricate nail art for those who demand detail. Not a salon. A specialist.",
   primaryCTA: { label: "Book an Appointment", href: "/contact", variant: "primary" },
   secondaryCTA: { label: "View Services", href: "/nails", variant: "ghost" },
   colorScheme: "dark",
+  media: { src: "/salon/SALON%20VIDEO.mp4", alt: "Vynl Studio", type: "video" },
 };
 
 // ── Brand Pillars (Home) ─────────────────────────────────────────────────
@@ -64,7 +66,7 @@ export const brandPillars: FeatureCardData[] = [
     tag: "Studio",
     title: "Vynl Nails",
     description:
-      "Gel-X extensions and advanced nail art — exclusively. Precision in every set, detail in every stroke.",
+      "Gel-X extensions and advanced nail art, exclusively. Precision in every set, detail in every stroke.",
     cta: { label: "View Services", href: "/nails" },
   },
   {
@@ -174,7 +176,7 @@ export const services: ServiceCardData[] = [
     id: "s1",
     title: "Gel-X Builder Set",
     description:
-      "A full set of Gel-X extensions in your chosen shape and length. Finished with a plain colour or classic French — no nail art.",
+      "A full set of Gel-X extensions in your chosen shape and length. Finished with a plain colour or classic French. No nail art.",
     price: "From $65",
     duration: "90 min",
     level: "Foundation",
@@ -238,57 +240,58 @@ export const academyModules: FeatureCardData[] = [
   {
     id: "m1",
     icon: "01",
-    title: "Gel-X Mastery",
+    title: "Gel-X Application Mastery",
     description:
-      "Master the Gel-X system from scratch — prep, sizing, application, cure, and finishing for a flawless result every time.",
+      "The complete technical foundation. Prep protocols, sizing, extend gel application, flash and full cure, finishing, and anti-lifting techniques used by top professionals.",
   },
   {
     id: "m2",
     icon: "02",
-    title: "Nail Art Fundamentals",
+    title: "Nail Art Foundations",
     description:
-      "Core techniques including brush control, liner art, negative space, colour theory, and blending.",
+      "Build real brush control. Colour theory, liner work, negative space, blending, and the fundamental techniques that make advanced art possible.",
   },
   {
     id: "m3",
     icon: "03",
-    title: "Advanced Nail Art",
+    title: "Advanced Nail Art & Design",
     description:
-      "3D sculpted elements, intricate hand-painted work, layering techniques, and complex multi-step finishes.",
+      "Sculpted 3D elements, intricate hand-painted work, multi-step layered finishes, and the complex techniques that set your work apart.",
   },
   {
     id: "m4",
     icon: "04",
-    title: "Content Creation",
+    title: "Content & Portfolio Creation",
     description:
-      "Photograph and film your nail work to build a portfolio that attracts premium clients on social media.",
+      "Shoot and film your sets like a professional. Lighting, angles, editing, and a content strategy that turns your work into your best marketing tool.",
   },
   {
     id: "m5",
     icon: "05",
-    title: "Pricing & Clients",
+    title: "Pricing, Clients & Boundaries",
     description:
-      "Charge your worth. Learn how to price confidently, handle client communication, and set professional boundaries.",
+      "Charge what your work is worth. Pricing strategy, client communication frameworks, handling difficult situations, and protecting your time professionally.",
   },
   {
     id: "m6",
     icon: "06",
     title: "Building Your Nail Brand",
     description:
-      "From nail tech to brand. Naming, positioning, social strategy, booking systems, and scaling your business.",
+      "The business module. Brand identity, positioning, social media strategy, booking systems, and the roadmap to a scalable nail business.",
   },
 ];
 
 export const academyWaitlistConfig: WaitlistFormConfig = {
-  title: "Join the Academy Waitlist",
+  title: "Vynl Academy Waitlist",
   subtitle:
-    "Be first in line when enrollment opens — with exclusive early access and founding member pricing.",
-  buttonText: "Reserve My Spot",
-  successMessage: "You're on the list. We'll be in touch before enrollment opens.",
+    "Be first in line when enrollment opens, with exclusive early access and founding member pricing.",
+  buttonText: "Join the Waitlist",
+  successMessage: "You're on the list! We'll be in touch when we launch.",
   placeholder: "Email address",
-  namePlaceholder: "Your name",
+  namePlaceholder: "First name",
   context: "academy",
   showName: true,
+  type: "academy",
 };
 
 // ── Supply Shop ──────────────────────────────────────────────────────────
@@ -312,7 +315,7 @@ export const supplyProducts: ProductCardData[] = [
   },
   {
     id: "sp3",
-    title: "Gel-X Tips — Almond",
+    title: "Gel-X Tips: Almond",
     description: "Soft gel tips in the almond shape. Natural-looking, flexible, and lightweight.",
     badge: "Coming Soon",
     category: "Nail Tips",
@@ -328,7 +331,7 @@ export const supplyProducts: ProductCardData[] = [
   },
   {
     id: "sp5",
-    title: "Builder Gel — Nude Collection",
+    title: "Builder Gel: Nude Collection",
     description: "A set of 6 nude builder gel shades from sheer blush to deep mocha.",
     badge: "Coming Soon",
     category: "Gels",
@@ -337,7 +340,7 @@ export const supplyProducts: ProductCardData[] = [
   {
     id: "sp6",
     title: "Artist Accessory Kit",
-    description: "Curated accessories for the working nail tech — clips, forms, plates, and more.",
+    description: "Curated accessories for the working nail tech: clips, forms, plates, and more.",
     badge: "Coming Soon",
     category: "Accessories",
     inStock: false,
@@ -345,15 +348,16 @@ export const supplyProducts: ProductCardData[] = [
 ];
 
 export const shopWaitlistConfig: WaitlistFormConfig = {
-  title: "Get Early Access",
+  title: "Vynl Supply Store Waitlist",
   subtitle:
-    "Be first to shop the Vynl Supply launch — exclusive preview pricing, early drops, and pro bundles.",
-  buttonText: "Join the Launch List",
-  successMessage: "You're on the list. Expect an exclusive preview before launch day.",
+    "Be first to shop the Vynl Supply launch: exclusive preview pricing, early drops, and pro bundles.",
+  buttonText: "Join the Waitlist",
+  successMessage: "You're on the list! We'll be in touch when we launch.",
   placeholder: "Email address",
-  namePlaceholder: "Your name",
+  namePlaceholder: "First name",
   context: "shop",
   showName: true,
+  type: "supply",
 };
 
 // ── Testimonials ─────────────────────────────────────────────────────────
@@ -362,7 +366,7 @@ export const testimonials: TestimonialCardData[] = [
   {
     id: "t1",
     quote:
-      "My nails have never looked this good. The detail in the nail art is genuinely unreal — I get comments on them everywhere I go.",
+      "My nails have never looked this good. The detail in the nail art is genuinely unreal. I get comments on them everywhere I go.",
     author: "Amara J.",
     role: "Regular Client",
     rating: 5,
@@ -370,7 +374,7 @@ export const testimonials: TestimonialCardData[] = [
   {
     id: "t2",
     quote:
-      "I left Vynl Academy completely transformed. My technique, my pricing, my confidence — all of it elevated.",
+      "I left Vynl Academy completely transformed. My technique, my pricing, my confidence. All of it elevated.",
     author: "Priya M.",
     role: "Academy Graduate",
     rating: 5,
@@ -418,19 +422,19 @@ export const nailsFAQs: FAQItem[] = [
     id: "n4",
     question: "How do I book an appointment?",
     answer:
-      "All bookings are made online — select your service, choose a time that suits you, and pay your deposit securely through our booking system. You'll receive an instant confirmation. No DMs, no back-and-forth.",
+      "All bookings are made online. Select your service, choose a time that suits you, and pay your deposit securely through our booking system. You'll receive an instant confirmation. No DMs, no back-and-forth.",
   },
   {
     id: "n5",
     question: "Do you accept walk-ins?",
     answer:
-      "No — all appointments are by booking only. This ensures every client receives the full, unhurried experience that our work deserves.",
+      "No, all appointments are by booking only. This ensures every client receives the full, unhurried experience that our work deserves.",
   },
   {
     id: "n6",
     question: "Can I bring inspo photos?",
     answer:
-      "Yes — and we love them. Once your booking is confirmed, send your inspo photos to us via Instagram DM at @au.vynl. The more reference the better. We'll always let you know what's achievable in your appointment time before we start.",
+      "Yes, and we love them. Once your booking is confirmed, send your inspo photos to us via Instagram DM at @au.vynl. The more reference the better. We'll always let you know what's achievable in your appointment time before we start.",
   },
 ];
 
@@ -439,19 +443,19 @@ export const academyFAQs: FAQItem[] = [
     id: "a1",
     question: "When does enrollment open?",
     answer:
-      "We're currently building the first cohort. Join the waitlist and you'll be the first to know — before any public announcement.",
+      "We're currently building the first cohort. Join the waitlist and you'll be the first to know, before any public announcement.",
   },
   {
     id: "a2",
     question: "Is this for complete beginners?",
     answer:
-      "Yes. We designed the academy to take you from zero — no experience required. We also have advanced modules for practising nail techs who want to level up their technique, art, and business.",
+      "Yes. We designed the academy to take you from zero. No experience required. We also have advanced modules for practising nail techs who want to level up their technique, art, and business.",
   },
   {
     id: "a3",
     question: "Is the course online or in-person?",
     answer:
-      "Format details will be released to waitlist members first. We're designing an experience that works for both — high-quality video content and hands-on workshops.",
+      "Format details will be released to waitlist members first. We're designing an experience that works for both: high-quality video content and hands-on workshops.",
   },
   {
     id: "a4",
@@ -463,22 +467,57 @@ export const academyFAQs: FAQItem[] = [
     id: "a5",
     question: "Will I need tools and products?",
     answer:
-      "Yes. A detailed kit list is included with enrollment. We'll guide you on exactly what to get — and when Vynl Supply launches, you'll be able to get everything in one place.",
+      "Yes. A detailed kit list is included with enrollment. We'll guide you on exactly what to get. When Vynl Supply launches, you'll be able to get everything in one place.",
   },
 ];
 
 // ── Gallery ──────────────────────────────────────────────────────────────
 
-export const galleryItems = [
-  { id: "g1", alt: "Gel-X almond set with hand-painted florals", aspect: "portrait" as const },
-  { id: "g2", alt: "Abstract gel art, negative space design", aspect: "portrait" as const },
-  { id: "g3", alt: "French Gel-X with chrome accent", aspect: "portrait" as const },
-  { id: "g4", alt: "3D sculpted rose detail set", aspect: "portrait" as const },
-  { id: "g5", alt: "Nude and black marble design", aspect: "portrait" as const },
-  { id: "g6", alt: "Intricate lace nail art set", aspect: "portrait" as const },
-  { id: "g7", alt: "Soft glitter ombre Gel-X", aspect: "portrait" as const },
-  { id: "g8", alt: "Custom hand-painted portrait nails", aspect: "portrait" as const },
+// Images reordered so squares are evenly spread across columns:
+// — 3-col (nails page): col 0 = 4 sq, col 1 = 4 sq, col 2 = 3 sq
+// — 4-col (home page, first 12): exactly 1 sq per column
+const _rawGallery: Array<{ file: string; alt: string; aspect: GalleryGridItem["aspect"] }> = [
+  { file: "IMG_0621.JPG", alt: "Gel-X nail set", aspect: "square" },   // 0  → col0
+  { file: "IMG_0512.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 1
+  { file: "IMG_0617.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 2
+  { file: "IMG_0626.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 3
+  { file: "IMG_0705.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 4
+  { file: "IMG_0730.JPG", alt: "Gel-X nail set", aspect: "square" },   // 5  → col2
+  { file: "IMG_1019.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 6
+  { file: "IMG_2135.JPG", alt: "Gel-X nail set", aspect: "square" },   // 7  → col1
+  { file: "IMG_1030.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 8
+  { file: "IMG_2249.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 9
+  { file: "IMG_2585.JPG", alt: "Gel-X nail set", aspect: "square" },   // 10 → col1
+  { file: "IMG_2306.jpg", alt: "Gel-X nail set", aspect: "portrait" }, // 11
+  { file: "IMG_2742.JPG", alt: "Gel-X nail set", aspect: "square" },   // 12 → col0
+  { file: "IMG_2607.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 13
+  { file: "IMG_2735.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 14
+  { file: "IMG_2763.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 15
+  { file: "IMG_3115.JPG", alt: "Gel-X nail set", aspect: "square" },   // 16 → col1
+  { file: "IMG_3102.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 17
+  { file: "IMG_3445.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 18
+  { file: "IMG_3446.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 19
+  { file: "IMG_3464.JPG", alt: "Gel-X nail set", aspect: "square" },   // 20 → col2
+  { file: "IMG_3468.JPG", alt: "Gel-X nail set", aspect: "square" },   // 21 → col0
+  { file: "IMG_3465.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 22
+  { file: "IMG_3467.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 23
+  { file: "IMG_3651.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 24
+  { file: "IMG_5043.JPG", alt: "Gel-X nail set", aspect: "square" },   // 25 → col1
+  { file: "IMG_3777.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 26
+  { file: "IMG_5068.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 27
+  { file: "IMG_5238.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 28
+  { file: "IMG_7382.JPG", alt: "Gel-X nail set", aspect: "square" },   // 29 → col2
+  { file: "IMG_9549.JPG", alt: "Gel-X nail set", aspect: "square" },   // 30 → col0
+  { file: "IMG_7764.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 31
+  { file: "IMG_8979.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 32
 ];
+
+export const galleryItems: GalleryGridItem[] = _rawGallery.map((item, i) => ({
+  id: `gallery-${i}`,
+  alt: item.alt,
+  aspect: item.aspect,
+  media: { src: `/images/${item.file}`, alt: item.alt },
+}));
 
 // ── Footer ───────────────────────────────────────────────────────────────
 

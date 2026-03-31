@@ -15,7 +15,7 @@ import {
 } from "@/data";
 
 export const metadata: Metadata = {
-  title: "Vynl Academy — Professional Nail Education",
+  title: "Vynl Academy: Professional Nail Education",
   description:
     "Vynl Academy teaches Gel-X mastery, advanced nail art, content creation, pricing, and brand building. Join the waitlist for the first cohort.",
 };
@@ -30,7 +30,7 @@ export default function AcademyPage() {
           title: "Built for nail artists",
           titleItalic: "ready to elevate.",
           subtitle:
-            "Professional nail education from foundation technique to full brand-building. Not just a course — a transformation.",
+            "Professional nail education from foundation technique to full brand-building. Not just a course. A transformation.",
           primaryCTA: { label: "Join the Waitlist", href: "#waitlist" },
           secondaryCTA: { label: "View Curriculum", href: "#curriculum" },
           colorScheme: "dark",
@@ -53,13 +53,13 @@ export default function AcademyPage() {
               </Heading>
               <div className="flex flex-col gap-5">
                 <BodyText className="text-vynl-gray-600">
-                  Vynl Academy is designed to take you from wherever you are right now — zero
-                  experience or already practising — and bring you to a level where you can
+                  Vynl Academy is designed to take you from wherever you are right now, whether
+                  you&apos;re starting from zero or already practising, to a level where you can
                   charge your worth, attract the right clients, and build a real nail brand.
                 </BodyText>
                 <BodyText className="text-vynl-gray-600">
-                  We cover everything generalist courses leave out: the techniques, yes —
-                  but also the business, the content, the brand, and the confidence.
+                  We cover everything generalist courses leave out: the techniques, yes, but
+                  also the business, the content, the brand, and the confidence.
                 </BodyText>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default function AcademyPage() {
                   "Confident, consistent Gel-X technique",
                   "Charging what your work deserves",
                   "Advanced nail art skills that stand out",
-                  "A brand — not just a service",
+                  "A brand, not just a service",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3 py-2.5 border-b border-white/8 last:border-0">
                     <span className="text-vynl-champagne text-xs mt-0.5">✓</span>
@@ -124,7 +124,7 @@ export default function AcademyPage() {
               },
               {
                 title: "You want to build a brand",
-                body: "You're not just here for the technique — you want to build something real, with your name on it.",
+                body: "You're not just here for the technique. You want to build something real, with your name on it.",
               },
             ].map(({ title, body }) => (
               <div key={title} className="bg-vynl-smoke p-10 flex flex-col gap-4">
@@ -139,10 +139,10 @@ export default function AcademyPage() {
       {/* ── Curriculum + Waitlist ── */}
       <AcademySection
         meta={{
-          label: "Curriculum",
-          title: "Six modules. One transformation.",
+          label: "THE CURRICULUM",
+          title: "Six modules. One complete career.",
           subtitle:
-            "Each module builds on the last — from application foundations to running a fully booked nail brand.",
+            "Everything you need to go from first tip to fully booked — built in the exact order it matters.",
           colorScheme: "dark",
         }}
         modules={academyModules}
@@ -158,6 +158,31 @@ export default function AcademyPage() {
         }}
         testimonials={testimonials.filter((_, i) => i % 2 !== 0)}
       />
+
+      {/* ── Free Guide ── */}
+      <section className="py-16 md:py-20 bg-vynl-white border-t border-vynl-gray-100">
+        <Container size="sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col gap-2 text-center sm:text-left">
+              <LabelText>Free Resource</LabelText>
+              <p className="font-display text-xl text-vynl-black leading-snug">
+                The Gel-X Retention Mastery Guide
+              </p>
+              <p className="text-sm font-sans font-light text-vynl-gray-500 max-w-sm">
+                25 pages covering prep, application, anti-lifting, and the gold standard protocol. Free to download.
+              </p>
+            </div>
+            <a
+              href="/gel-x-guide"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-7 py-3.5 bg-vynl-champagne-light text-vynl-black text-2xs font-sans font-medium tracking-ultra-wide uppercase hover:bg-vynl-nude transition-colors"
+            >
+              Download Free Guide
+            </a>
+          </div>
+        </Container>
+      </section>
 
       {/* ── Final CTA ── */}
       <CTASection

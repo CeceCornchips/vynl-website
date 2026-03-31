@@ -1466,7 +1466,7 @@ function ConfirmationStep({
           Send your inspo photos via Instagram DM.
         </p>
         <p className="text-sm font-sans text-vynl-gray-600 font-light leading-relaxed">
-          The more reference the better — screenshots, saved posts, colour swatches, anything goes.
+          The more reference the better: screenshots, saved posts, colour swatches, anything goes.
           We&apos;ll let you know what&apos;s achievable before your appointment.
         </p>
         <a
