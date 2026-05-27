@@ -144,15 +144,20 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
       <div className={cn("absolute inset-0 overflow-hidden", className)}>
         <video
           ref={videoRef}
-          src={media.src}
           autoPlay
-          loop
           muted
+          loop
           playsInline
+          poster="/hero-poster.jpg"
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
           style={{ transform: "none", willChange: "auto" }}
-        />
+        >
+          <source
+            src="https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev/SALON-VIDEO.mp4"
+            type="video/mp4"
+          />
+        </video>
         {/* Dark luxury overlay */}
         <div className="absolute inset-0 bg-vynl-black/50" />
       </div>

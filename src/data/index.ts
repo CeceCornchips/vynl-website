@@ -54,7 +54,7 @@ export const heroData: HeroSectionData = {
   primaryCTA: { label: "Book an Appointment", href: "/contact", variant: "primary" },
   secondaryCTA: { label: "View Services", href: "/nails", variant: "ghost" },
   colorScheme: "dark",
-  media: { src: "/api/media/salon-video", alt: "Vynl Studio", type: "video" },
+  media: { src: "https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev/SALON-VIDEO.mp4", alt: "Vynl Studio", type: "video" },
 };
 
 // ── Brand Pillars (Home) ─────────────────────────────────────────────────
