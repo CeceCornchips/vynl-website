@@ -284,7 +284,7 @@ export const academyModules: FeatureCardData[] = [
 export const academyWaitlistConfig: WaitlistFormConfig = {
   title: "Vynl Academy Waitlist",
   subtitle:
-    "Be first in line when enrollment opens, with exclusive early access and founding member pricing.",
+    "Sign up now and receive a free course when enrollment opens. Be first in line with exclusive early access and founding member pricing.",
   buttonText: "Join the Waitlist",
   successMessage: "You're on the list! We'll be in touch when we launch.",
   placeholder: "Email address",
@@ -443,31 +443,31 @@ export const academyFAQs: FAQItem[] = [
     id: "a1",
     question: "When does enrollment open?",
     answer:
-      "We're currently building the first cohort. Join the waitlist and you'll be the first to know, before any public announcement.",
+      "We're not announcing a date yet. Join the waitlist and you'll be the first to know.",
   },
   {
     id: "a2",
-    question: "Is this for complete beginners?",
+    question: "What's the free course?",
     answer:
-      "Yes. We designed the academy to take you from zero. No experience required. We also have advanced modules for practising nail techs who want to level up their technique, art, and business.",
+      "Everyone on the waitlist gets access to a free course when we launch. Details will be revealed to waitlist members first.",
   },
   {
     id: "a3",
-    question: "Is the course online or in-person?",
+    question: "Is this for complete beginners?",
     answer:
-      "Format details will be released to waitlist members first. We're designing an experience that works for both: high-quality video content and hands-on workshops.",
+      "Yes. We have courses for all levels — from your very first set to advanced artistry.",
   },
   {
     id: "a4",
-    question: "How much does it cost?",
+    question: "Is the course online or in-person?",
     answer:
-      "Pricing will be released to waitlist members first, with exclusive founding member access. Join the waitlist to secure early-bird pricing.",
+      "Fully online and self-paced so you can learn on your own schedule.",
   },
   {
     id: "a5",
-    question: "Will I need tools and products?",
+    question: "How much does it cost?",
     answer:
-      "Yes. A detailed kit list is included with enrollment. We'll guide you on exactly what to get. When Vynl Supply launches, you'll be able to get everything in one place.",
+      "Pricing will be announced to the waitlist first. Waitlist members get founding member rates.",
   },
 ];
 

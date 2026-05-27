@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { AcademySection } from "@/components/sections/AcademySection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
-import {
-  academyModules,
-  academyWaitlistConfig,
-  testimonials,
-  academyFAQs,
-} from "@/data";
+import { ChampagneButton } from "@/components/ui/Buttons";
+import { WaitlistForm } from "@/components/forms/Forms";
+import { academyWaitlistConfig, academyFAQs } from "@/data";
 
 export const metadata: Metadata = {
   title: "Vynl Academy: Professional Nail Education",
   description:
-    "Vynl Academy teaches Gel-X mastery, advanced nail art, content creation, pricing, and brand building. Join the waitlist for the first cohort.",
+    "Professional nail education from Vynl. Enrollment opening soon — join the waitlist and get a free course when we launch.",
 };
 
 export default function AcademyPage() {
@@ -29,15 +24,15 @@ export default function AcademyPage() {
           title: "Built for nail artists",
           titleItalic: "ready to elevate.",
           subtitle:
-            "Professional nail education from foundation technique to full brand-building. Not just a course. A transformation.",
+            "Professional nail education from Vynl. Enrollment opening soon — join the waitlist now and get a free course when we launch.",
           primaryCTA: { label: "Join the Waitlist", href: "#waitlist" },
-          secondaryCTA: { label: "View Curriculum", href: "#curriculum" },
+          secondaryCTA: { label: "Learn More", href: "#curriculum" },
           colorScheme: "dark",
         }}
         variant="compact"
       />
 
-      {/* ── Transformation ── */}
+      {/* ── The Outcome ── */}
       <section className="py-24 md:py-32 bg-vynl-white">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -52,13 +47,9 @@ export default function AcademyPage() {
               </Heading>
               <div className="flex flex-col gap-5">
                 <BodyText className="text-vynl-gray-600">
-                  Vynl Academy is designed to take you from wherever you are right now, whether
-                  you&apos;re starting from zero or already practising, to a level where you can
-                  charge your worth, attract the right clients, and build a real nail brand.
-                </BodyText>
-                <BodyText className="text-vynl-gray-600">
-                  We cover everything generalist courses leave out: the techniques, yes, but
-                  also the business, the content, the brand, and the confidence.
+                  Vynl Academy is designed to take you from wherever you are right now to a level
+                  where you can charge your worth, attract the right clients, and build a real
+                  nail brand.
                 </BodyText>
               </div>
             </div>
@@ -68,8 +59,8 @@ export default function AcademyPage() {
               <div className="p-8 border-b border-vynl-gray-100">
                 <LabelText className="text-vynl-gray-400 mb-4">Before Vynl Academy</LabelText>
                 {[
-                  "Learning from YouTube tutorials",
-                  "Undercharging and undervaluing",
+                  "Learning from scattered YouTube tutorials",
+                  "Undercharging and undervaluing your work",
                   "Inconsistent technique",
                   "No clear brand identity",
                 ].map((item) => (
@@ -115,7 +106,7 @@ export default function AcademyPage() {
             {[
               {
                 title: "You're brand new",
-                body: "No experience required. We start from the very beginning of Gel-X application and build from there.",
+                body: "No experience required. We start from the very beginning and build from there.",
               },
               {
                 title: "You're already practising",
@@ -135,37 +126,42 @@ export default function AcademyPage() {
         </Container>
       </section>
 
-      {/* ── Curriculum + Waitlist ── */}
-      <AcademySection
-        meta={{
-          label: "THE CURRICULUM",
-          title: "Six modules. One complete career.",
-          subtitle:
-            "Everything you need to go from first tip to fully booked — built in the exact order it matters.",
-          colorScheme: "dark",
-        }}
-        modules={academyModules}
-        waitlistConfig={academyWaitlistConfig}
-      />
+      {/* ── Curriculum ── */}
+      <section id="curriculum" className="py-24 md:py-32 bg-vynl-black">
+        <Container>
+          <div className="flex flex-col items-center text-center gap-8 max-w-2xl mx-auto">
+            <div className="flex items-center gap-4 justify-center">
+              <Rule />
+              <LabelText light>THE CURRICULUM</LabelText>
+              <Rule />
+            </div>
+            <Heading as="h2" size="2xl" className="text-vynl-white">
+              Details coming soon.
+            </Heading>
+            <BodyText className="text-vynl-gray-400">
+              We&apos;re keeping this close to our chest for now. Join the waitlist and be the
+              first to see what&apos;s inside.
+            </BodyText>
+            <ChampagneButton href="#waitlist">Join the Waitlist</ChampagneButton>
+          </div>
+        </Container>
+      </section>
 
-      {/* ── Testimonials ── */}
-      <TestimonialsSection
-        meta={{
-          label: "From Graduates",
-          title: "Real results.",
-          colorScheme: "smoke",
-        }}
-        testimonials={testimonials.filter((_, i) => i % 2 !== 0)}
-      />
+      {/* ── Waitlist ── */}
+      <section id="waitlist" className="py-24 md:py-32 bg-vynl-black border-t border-white/10">
+        <Container>
+          <div className="max-w-lg mx-auto">
+            <WaitlistForm {...academyWaitlistConfig} colorScheme="dark" />
+          </div>
+        </Container>
+      </section>
 
-      {/* TODO: Replace academy page content — new copy coming from Gordon */}
-
-      {/* ── Final CTA ── */}
+      {/* ── Enrollment CTA ── */}
       <CTASection
         label="Enrollment opening soon"
         title="Your nail brand"
         titleItalic="starts here."
-        subtitle="Join the waitlist to secure early access, founding member pricing, and exclusive pre-launch content."
+        subtitle="Join the waitlist to secure your free course, early access, and founding member pricing."
         primaryCTA={{ label: "Join the Waitlist", href: "#waitlist" }}
         variant="black"
       />
