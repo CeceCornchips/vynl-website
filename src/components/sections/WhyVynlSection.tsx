@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "@/components/ui/Typography";
 
@@ -24,19 +22,25 @@ const STATS = [
   { stat: "100%", label: "By Appointment" },
 ];
 
+const FEATURE_STATS = [
+  { value: "Gel-X", label: "Extensions only — no acrylic, no compromise" },
+  { value: "Level 1–3", label: "Nail art tiers for every style" },
+  { value: "100%", label: "By appointment only" },
+];
+
+const statRow = {
+  hidden: { opacity: 0, y: 24, x: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    transition: { duration: 0.78, ease: EASE },
+  },
+};
+
 export function WhyVynlSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Subtle parallax: image drifts slightly upward as you scroll past
-  const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
-
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-vynl-white overflow-hidden">
+    <section className="py-24 md:py-32 bg-vynl-white overflow-hidden">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -99,58 +103,57 @@ export function WhyVynlSection() {
             </motion.div>
           </motion.div>
 
-          {/* ── Image column ── */}
-          <motion.div
-            className="relative w-full max-w-sm ml-auto"
-            initial={{ opacity: 0, x: 56, scale: 0.97 }}
-            whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.1, ease: EASE }}
-          >
-            {/* Portrait reference frame — sets the shared 3/4 shape for all three layers.
-                Rects are anchored at top-left (same as the image) and extended beyond the
-                bottom-right edge via negative right/bottom so they peek from behind without
-                ever overflowing above the top. The section's overflow-hidden clips the bleed. */}
-            <div className="relative w-full aspect-[3/4]">
+          {/* ── Animated stats column ── */}
+          <div className="relative flex flex-col justify-center overflow-hidden rounded-sm">
 
-              {/* Rect 1 — back layer: peeks 12 px right + 12 px below */}
-              <motion.div
-                className="absolute top-0 left-0 -right-3 -bottom-3 bg-vynl-champagne/10 border border-vynl-champagne/30"
-                style={{ zIndex: 0 }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: EASE, delay: 0.4 }}
-              />
+            {/* Slow-looping shimmer background */}
+            <motion.div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+              transition={{ duration: 12, ease: "linear", repeat: Infinity }}
+              style={{
+                background:
+                  "linear-gradient(135deg, transparent 0%, rgba(212,175,120,0.04) 25%, rgba(212,175,120,0.09) 50%, rgba(212,175,120,0.04) 75%, transparent 100%)",
+                backgroundSize: "300% 300%",
+              }}
+            />
 
-              {/* Rect 2 — middle layer: peeks 6 px right + 6 px below */}
-              <motion.div
-                className="absolute top-0 left-0 -right-1.5 -bottom-1.5 bg-vynl-champagne/15 border border-vynl-champagne/40"
-                style={{ zIndex: 1 }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
-              />
+            <motion.div
+              className="relative flex flex-col gap-0 py-2"
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.16, delayChildren: 0.08 } },
+              }}
+            >
+              {FEATURE_STATS.map(({ value, label }) => (
+                <motion.div
+                  key={value}
+                  className="flex flex-col gap-3 pt-7 pb-7"
+                  variants={statRow}
+                >
+                  {/* Thin rule above each stat */}
+                  <div className="w-full h-px bg-vynl-gray-100" />
 
-              {/* Image — top layer: fills the portrait frame exactly */}
-              <div
-                className="absolute inset-0 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.28)]"
-                style={{ zIndex: 2 }}
-              >
-                <motion.div style={{ y: imageY }} className="absolute inset-0 scale-[1.08]">
-                  <Image
-                    src="/images/IMG_8459.PNG"
-                    alt="Gel-X nail art close-up"
-                    fill
-                    className="object-cover object-center"
-                    sizes="(max-width: 1024px) 100vw, 384px"
-                  />
+                  <div className="flex flex-col gap-2">
+                    <span className="font-display italic text-5xl md:text-6xl lg:text-7xl text-vynl-champagne leading-none">
+                      {value}
+                    </span>
+                    <span className="text-2xs font-sans tracking-ultra-wide uppercase text-vynl-gray-400 max-w-xs">
+                      {label}
+                    </span>
+                  </div>
                 </motion.div>
-              </div>
+              ))}
 
-            </div>
-          </motion.div>
+              {/* Closing rule */}
+              <div className="w-full h-px bg-vynl-gray-100" />
+            </motion.div>
+
+          </div>
 
         </div>
       </Container>
