@@ -110,6 +110,7 @@ export function HeroSection({ data, className, variant = "full" }: HeroSectionPr
               {primaryCTA && (
                 <PrimaryButton
                   href={primaryCTA.href}
+                  external={primaryCTA.external}
                   size="lg"
                   className="bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none btn-shimmer"
                 >
@@ -119,6 +120,7 @@ export function HeroSection({ data, className, variant = "full" }: HeroSectionPr
               {secondaryCTA && (
                 <GhostButton
                   href={secondaryCTA.href}
+                  external={secondaryCTA.external}
                   size="lg"
                   className="text-vynl-white border-white/30 hover:border-white/60"
                 >

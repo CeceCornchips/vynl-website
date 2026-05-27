@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const ADMIN_EMAIL = 'vynlau@gmail.com';
@@ -7,7 +7,7 @@ const isAdminRoute = createRouteMatcher(['/admin(.*)', '/api/admin(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isAdminRoute(req)) {
-    const { userId, sessionClaims } = await auth();
+    const { userId } = await auth();
 
     if (!userId) {
       const signInUrl = new URL('/sign-in', req.url);
@@ -15,7 +15,11 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(signInUrl);
     }
 
-    const email = sessionClaims?.email as string | undefined;
+    // Use clerkClient to fetch full user data — sessionClaims may not include email
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const email = user.emailAddresses?.[0]?.emailAddress;
+
     if (email !== ADMIN_EMAIL) {
       return NextResponse.redirect(new URL('/', req.url));
     }

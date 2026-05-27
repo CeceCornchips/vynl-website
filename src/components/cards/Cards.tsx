@@ -135,7 +135,11 @@ export function ServiceCard({ card, className }: ServiceCardProps) {
               {card.duration}
             </span>
           )}
-          <SecondaryButton href="/contact" size="sm">
+          <SecondaryButton
+            href="https://vynl.square.site/s/appointments"
+            external
+            size="sm"
+          >
             Book
           </SecondaryButton>
         </div>

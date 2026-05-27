@@ -99,6 +99,7 @@ export function CTASection({
               {primaryCTA && (
                 <PrimaryButton
                   href={primaryCTA.href}
+                  external={primaryCTA.external}
                   size="lg"
                   className={cn(
                     isDark && "bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none",
@@ -111,6 +112,7 @@ export function CTASection({
               {secondaryCTA && (
                 <GhostButton
                   href={secondaryCTA.href}
+                  external={secondaryCTA.external}
                   size="lg"
                   className={cn(
                     isDark && "text-vynl-white border-white/20 hover:border-white/50",

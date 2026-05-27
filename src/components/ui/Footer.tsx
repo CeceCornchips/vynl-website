@@ -34,12 +34,23 @@ export function Footer({ data, className }: FooterProps) {
               <ul className="flex flex-col gap-3">
                 {group.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-xs font-sans font-light text-vynl-gray-400 hover:text-vynl-champagne transition-colors"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href.startsWith("http") ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-sans font-light text-vynl-gray-400 hover:text-vynl-champagne transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-xs font-sans font-light text-vynl-gray-400 hover:text-vynl-champagne transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

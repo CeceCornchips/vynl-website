@@ -129,7 +129,7 @@ export default function HomePage() {
         title="Your best nails"
         titleItalic="start here."
         subtitle="Book a Gel-X appointment and experience what specialist means."
-        primaryCTA={{ label: "Book an Appointment", href: "/contact" }}
+        primaryCTA={{ label: "Book an Appointment", href: "https://vynl.square.site/s/appointments", external: true }}
         secondaryCTA={{ label: "View Services", href: "/nails" }}
         variant="black"
       />

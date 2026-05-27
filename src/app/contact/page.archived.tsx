@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
-import { PrimaryButton } from "@/components/ui/Buttons";
+import { BookingFlow } from "@/components/booking/BookingFlow";
 
 export const metadata: Metadata = {
   title: "Book an Appointment — Vynl",
   description:
-    "Book your Gel-X nail appointment at Vynl online. Select your service, choose your time, and pay your deposit instantly via Square.",
+      "Book your Gel-X nail appointment at Vynl online. Select your service, choose your time, and pay your deposit instantly via Square.",
 };
-
-const SQUARE_URL = "https://vynl.square.site/s/appointments";
 
 export default function ContactPage() {
   return (
@@ -38,28 +36,9 @@ export default function ContactPage() {
       <section className="py-20 md:py-28 bg-vynl-white">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-16 lg:gap-24">
-            {/* Booking card */}
-            <div className="border border-vynl-gray-100 p-8 md:p-12 flex flex-col gap-10">
-              <div className="flex flex-col gap-4">
-                <Heading as="h2" size="md">Ready to book?</Heading>
-                <BodyText className="text-vynl-gray-600">
-                  Choose your service and time directly through our Square booking
-                  page — your appointment is confirmed instantly with a deposit.
-                </BodyText>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <PrimaryButton
-                  href={SQUARE_URL}
-                  external
-                  fullWidth
-                >
-                  Open Booking Page
-                </PrimaryButton>
-                <p className="text-xs font-sans font-light text-vynl-gray-400 text-center">
-                  You&apos;ll be taken to Square to complete your booking securely.
-                </p>
-              </div>
+            {/* Inline booking flow with Square payment */}
+            <div>
+              <BookingFlow />
             </div>
 
             {/* Sidebar info */}

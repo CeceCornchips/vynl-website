@@ -39,8 +39,9 @@ export const navItems: NavItem[] = [
 
 export const navCTA: CTALink = {
   label: "Book Now",
-  href: "/contact",
+  href: "https://vynl.square.site/s/appointments",
   variant: "primary",
+  external: true,
 };
 
 // ── Hero (Home) ─────────────────────────────────────────────────────────
@@ -51,7 +52,7 @@ export const heroData: HeroSectionData = {
   titleItalic: "refined.",
   subtitle:
     "Advanced Gel-X extensions and intricate nail art for those who demand detail. Not a salon. A specialist.",
-  primaryCTA: { label: "Book an Appointment", href: "/contact", variant: "primary" },
+  primaryCTA: { label: "Book an Appointment", href: "https://vynl.square.site/s/appointments", variant: "primary", external: true },
   secondaryCTA: { label: "View Services", href: "/nails", variant: "ghost" },
   colorScheme: "dark",
   media: { src: "https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev/SALON-VIDEO.mp4", alt: "Vynl Studio", type: "video" },
@@ -530,7 +531,7 @@ export const footerData: FooterData = {
       links: [
         { label: "Services", href: "/nails" },
         { label: "Gallery", href: "/nails#gallery" },
-        { label: "Book Appointment", href: "/contact" },
+        { label: "Book Appointment", href: "https://vynl.square.site/s/appointments" },
         { label: "FAQ", href: "/nails#faq" },
       ],
     },

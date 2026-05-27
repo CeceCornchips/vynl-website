@@ -89,6 +89,7 @@ function MobileMenu({ items, cta, isOpen, onClose }: MobileMenuProps) {
           <div className="px-8 py-8 border-t border-white/10">
             <PrimaryButton
               href={cta.href}
+              external={cta.external}
               fullWidth
               onClick={onClose}
               className="bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude"
@@ -186,6 +187,7 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
             {cta && (
               <PrimaryButton
                 href={cta.href}
+                external={cta.external}
                 size="sm"
                 className="hidden md:inline-flex bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none"
               >
