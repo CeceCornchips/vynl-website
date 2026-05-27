@@ -16,11 +16,6 @@ const fadeUp = {
   }),
 };
 
-const STATS = [
-  { stat: "Gel-X", label: "Extensions Only" },
-  { stat: "Level 1–3", label: "Nail Art Tiers" },
-  { stat: "100%", label: "By Appointment" },
-];
 
 const FEATURE_STATS = [
   { value: "Gel-X", label: "Extensions only — no acrylic, no compromise" },
@@ -79,28 +74,6 @@ export function WhyVynlSection() {
               </Subheading>
             </motion.div>
 
-            {/* Stats grid */}
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4"
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
-              }}
-            >
-              {STATS.map(({ stat, label }) => (
-                <motion.div
-                  key={label}
-                  className="flex flex-col gap-1 border-t border-vynl-gray-100 pt-5"
-                  variants={{
-                    hidden: { opacity: 0, y: 18 },
-                    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
-                  }}
-                >
-                  <span className="font-display text-2xl md:text-3xl text-vynl-black">{stat}</span>
-                  <span className="text-2xs font-sans text-vynl-gray-400 tracking-widest uppercase">{label}</span>
-                </motion.div>
-              ))}
-            </motion.div>
           </motion.div>
 
           {/* ── Animated stats column ── */}
