@@ -1,10 +1,22 @@
+import { auth, currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import { AdminNav } from '@/components/admin-nav';
 import { AdminShell } from '@/components/admin-shell';
 import { sql } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
+const ADMIN_EMAIL = 'vynlau@gmail.com';
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { userId } = await auth();
+  const user = await currentUser();
+  const email = user?.emailAddresses?.[0]?.emailAddress;
+
+  if (!userId || email !== ADMIN_EMAIL) {
+    redirect('/');
+  }
+
   let pendingCount = 0;
   try {
     const rows = await sql`

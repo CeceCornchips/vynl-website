@@ -101,32 +101,54 @@ export function WhyVynlSection() {
 
           {/* ── Image column ── */}
           <motion.div
-            className="relative w-full max-w-sm ml-auto aspect-[3/4]"
+            className="relative w-full max-w-sm ml-auto"
             initial={{ opacity: 0, x: 56, scale: 0.97 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.1, ease: EASE }}
           >
-            {/* Backing rectangle — absolute inset-0 so it matches the outer aspect-[3/4] container exactly */}
-            <motion.div
-              className="absolute inset-0 bg-vynl-champagne/15 border border-vynl-champagne/40"
-              initial={{ opacity: 0, x: 0, y: 0 }}
-              whileInView={{ opacity: 1, x: 18, y: 18 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 1.0, ease: EASE, delay: 0.3 }}
-            />
+            {/* Portrait reference frame — sets the shared 3/4 shape for all three layers.
+                Rects are anchored at top-left (same as the image) and extended beyond the
+                bottom-right edge via negative right/bottom so they peek from behind without
+                ever overflowing above the top. The section's overflow-hidden clips the bleed. */}
+            <div className="relative w-full aspect-[3/4]">
 
-            {/* Cropped portrait frame — same aspect-[3/4] as the outer container */}
-            <div className="absolute inset-0 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.28)]">
-              <motion.div style={{ y: imageY }} className="absolute inset-0 scale-[1.08]">
-                <Image
-                  src="/images/IMG_8459.PNG"
-                  alt="Gel-X nail art close-up"
-                  fill
-                  className="object-cover object-bottom"
-                  sizes="(max-width: 1024px) 100vw, 384px"
-                />
-              </motion.div>
+              {/* Rect 1 — back layer: peeks 12 px right + 12 px below */}
+              <motion.div
+                className="absolute top-0 left-0 -right-3 -bottom-3 bg-vynl-champagne/10 border border-vynl-champagne/30"
+                style={{ zIndex: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.4 }}
+              />
+
+              {/* Rect 2 — middle layer: peeks 6 px right + 6 px below */}
+              <motion.div
+                className="absolute top-0 left-0 -right-1.5 -bottom-1.5 bg-vynl-champagne/15 border border-vynl-champagne/40"
+                style={{ zIndex: 1 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
+              />
+
+              {/* Image — top layer: fills the portrait frame exactly */}
+              <div
+                className="absolute inset-0 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.28)]"
+                style={{ zIndex: 2 }}
+              >
+                <motion.div style={{ y: imageY }} className="absolute inset-0 scale-[1.08]">
+                  <Image
+                    src="/images/IMG_8459.PNG"
+                    alt="Gel-X nail art close-up"
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 384px"
+                  />
+                </motion.div>
+              </div>
+
             </div>
           </motion.div>
 
