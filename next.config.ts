@@ -28,6 +28,7 @@ const cspHeader = isProd
     https://touched-finch-50.clerk.accounts.dev
     https://challenges.cloudflare.com;
   worker-src blob:;
+  media-src 'self' https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev;
 `
   : `default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;`;
 
