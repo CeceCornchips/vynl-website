@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -117,6 +118,16 @@ interface HeroMediaProps {
 }
 
 export function HeroMedia({ media, className, priority = true }: HeroMediaProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      video.play().catch(() => {});
+    }
+  }, []);
+
   if (!media) {
     return (
       <div
@@ -132,12 +143,15 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
     return (
       <div className={cn("absolute inset-0 overflow-hidden", className)}>
         <video
+          ref={videoRef}
           src={media.src}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ transform: "none", willChange: "auto" }}
         />
         {/* Dark luxury overlay */}
         <div className="absolute inset-0 bg-vynl-black/50" />

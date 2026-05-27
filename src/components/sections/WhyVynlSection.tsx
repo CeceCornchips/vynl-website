@@ -22,7 +22,6 @@ const STATS = [
   { stat: "Gel-X", label: "Extensions Only" },
   { stat: "Level 1–3", label: "Nail Art Tiers" },
   { stat: "100%", label: "By Appointment" },
-  { stat: "0", label: "Drills. Ever." },
 ];
 
 export function WhyVynlSection() {
@@ -78,7 +77,7 @@ export function WhyVynlSection() {
 
             {/* Stats grid */}
             <motion.div
-              className="grid grid-cols-2 gap-6 pt-4"
+              className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4"
               variants={{
                 hidden: {},
                 show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
@@ -102,15 +101,13 @@ export function WhyVynlSection() {
 
           {/* ── Image column ── */}
           <motion.div
-            className="relative w-full max-w-sm ml-auto"
+            className="relative w-full max-w-sm ml-auto aspect-[3/4]"
             initial={{ opacity: 0, x: 56, scale: 0.97 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.1, ease: EASE }}
           >
-            {/* Backing: absolute inset-0 = exactly the same size as the image frame.
-                Framer animates x/y from 0→18 so it slides into the offset position
-                rather than using layout-based padding (which caused height mismatches). */}
+            {/* Backing rectangle — absolute inset-0 so it matches the outer aspect-[3/4] container exactly */}
             <motion.div
               className="absolute inset-0 bg-vynl-champagne/15 border border-vynl-champagne/40"
               initial={{ opacity: 0, x: 0, y: 0 }}
@@ -119,8 +116,8 @@ export function WhyVynlSection() {
               transition={{ duration: 1.0, ease: EASE, delay: 0.3 }}
             />
 
-            {/* Cropped portrait frame — shows the nail portion of the image */}
-            <div className="relative aspect-[3/4] overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.28)]">
+            {/* Cropped portrait frame — same aspect-[3/4] as the outer container */}
+            <div className="absolute inset-0 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.28)]">
               <motion.div style={{ y: imageY }} className="absolute inset-0 scale-[1.08]">
                 <Image
                   src="/images/IMG_8459.PNG"

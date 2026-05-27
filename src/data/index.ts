@@ -30,7 +30,7 @@ export const navItems: NavItem[] = [
     label: "Supply",
     href: "/supply",
     children: [
-      { label: "Coming Soon", href: "/supply" },
+      { label: "Coming Soon", href: "/supply", disabled: true },
       { label: "Get Early Access", href: "/supply#waitlist" },
     ],
   },

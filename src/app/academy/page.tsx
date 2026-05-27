@@ -5,8 +5,7 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { Container } from "@/components/layout/Container";
-import { Heading, Subheading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
-import { MediaPlaceholder } from "@/components/ui/Media";
+import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import {
   academyModules,
   academyWaitlistConfig,
@@ -159,30 +158,7 @@ export default function AcademyPage() {
         testimonials={testimonials.filter((_, i) => i % 2 !== 0)}
       />
 
-      {/* ── Free Guide ── */}
-      <section className="py-16 md:py-20 bg-vynl-white border-t border-vynl-gray-100">
-        <Container size="sm">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
-            <div className="flex flex-col gap-2 text-center sm:text-left">
-              <LabelText>Free Resource</LabelText>
-              <p className="font-display text-xl text-vynl-black leading-snug">
-                The Gel-X Retention Mastery Guide
-              </p>
-              <p className="text-sm font-sans font-light text-vynl-gray-500 max-w-sm">
-                25 pages covering prep, application, anti-lifting, and the gold standard protocol. Free to download.
-              </p>
-            </div>
-            <a
-              href="/gel-x-guide"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-7 py-3.5 bg-vynl-champagne-light text-vynl-black text-2xs font-sans font-medium tracking-ultra-wide uppercase hover:bg-vynl-nude transition-colors"
-            >
-              Download Free Guide
-            </a>
-          </div>
-        </Container>
-      </section>
+      {/* TODO: Replace academy page content — new copy coming from Gordon */}
 
       {/* ── Final CTA ── */}
       <CTASection

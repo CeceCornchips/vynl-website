@@ -59,16 +59,26 @@ function MobileMenu({ items, cta, isOpen, onClose }: MobileMenuProps) {
               </Link>
               {item.children && (
                 <div className="pl-4 flex flex-col py-2">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      onClick={onClose}
-                      className="block py-2.5 text-xs font-sans text-vynl-gray-400 hover:text-vynl-champagne transition-colors tracking-widest uppercase"
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
+                  {item.children.map((child) =>
+                    child.disabled ? (
+                      <span
+                        key={child.label}
+                        className="block py-2.5 text-xs font-sans text-vynl-gray-600 italic tracking-widest uppercase cursor-not-allowed select-none"
+                        aria-disabled="true"
+                      >
+                        {child.label}
+                      </span>
+                    ) : (
+                      <Link
+                        key={child.label}
+                        href={child.href}
+                        onClick={onClose}
+                        className="block py-2.5 text-xs font-sans text-vynl-gray-400 hover:text-vynl-champagne transition-colors tracking-widest uppercase"
+                      >
+                        {child.label}
+                      </Link>
+                    )
+                  )}
                 </div>
               )}
             </div>
@@ -147,15 +157,25 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
                 </Link>
                 {item.children && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 bg-vynl-black border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.label}
-                        href={child.href}
-                        className="block px-6 py-3.5 text-2xs font-sans tracking-widest uppercase text-vynl-gray-300 hover:text-vynl-champagne hover:bg-white/5 transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                    {item.children.map((child) =>
+                      child.disabled ? (
+                        <span
+                          key={child.label}
+                          className="block px-6 py-3.5 text-2xs font-sans tracking-widest uppercase text-vynl-gray-600 italic cursor-not-allowed select-none"
+                          aria-disabled="true"
+                        >
+                          {child.label}
+                        </span>
+                      ) : (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          className="block px-6 py-3.5 text-2xs font-sans tracking-widest uppercase text-vynl-gray-300 hover:text-vynl-champagne hover:bg-white/5 transition-colors"
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                 )}
               </div>

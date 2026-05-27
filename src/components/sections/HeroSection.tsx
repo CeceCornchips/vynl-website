@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { HeroSectionData } from "@/types";
 import { Container } from "../layout/Container";
@@ -38,30 +37,18 @@ const textContainer = {
 export function HeroSection({ data, className, variant = "full" }: HeroSectionProps) {
   const { eyebrow, title, titleItalic, subtitle, primaryCTA, secondaryCTA, media } = data;
   const isFull = variant === "full";
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Parallax: track hero scroll progress from top-of-viewport to bottom-of-viewport
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Background drifts upward at ~60% the scroll speed — the parallax illusion
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "-18%"]);
 
   return (
     <section
-      ref={sectionRef}
       className={cn(
         "relative flex items-end overflow-hidden bg-vynl-black",
         isFull ? "min-h-screen" : "min-h-[55vh]",
         className
       )}
     >
-      {/* ── Background: zoom-in on load + parallax on scroll ── */}
+      {/* ── Background: zoom-in on load, no parallax to prevent black gaps ── */}
       <motion.div
         className="absolute inset-0 origin-center"
-        style={{ y: backgroundY }}
         initial={{ scale: 1.12 }}
         animate={{ scale: 1.06 }}
         transition={{ duration: 2.4, ease: EASE }}
