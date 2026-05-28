@@ -12,7 +12,7 @@ export function Footer({ data, className }: FooterProps) {
     <footer className={cn("bg-vynl-black text-vynl-white", className)}>
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Main grid */}
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-[2fr_repeat(4,1fr)] pt-20 pb-16 border-b border-white/8">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-[2fr_repeat(5,1fr)] pt-20 pb-16 border-b border-white/8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 flex flex-col gap-5">
             <span className="font-display text-xl tracking-ultra-wide text-vynl-champagne">

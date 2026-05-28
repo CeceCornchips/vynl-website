@@ -560,9 +560,16 @@ export const footerData: FooterData = {
         { label: "Contact", href: "/contact" },
       ],
     },
+    {
+      heading: "Legal",
+      links: [
+        { label: "Privacy Policy", href: "/privacy-policy" },
+        { label: "Terms & Conditions", href: "/terms" },
+      ],
+    },
   ],
   legal: [
-    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms", href: "/terms" },
   ],
   copyright: `© ${new Date().getFullYear()} Vynl. All rights reserved.`,
