@@ -6,6 +6,8 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { MotionProvider } from "@/components/ui/MotionProvider";
 import { PageTransition } from "@/components/ui/PageTransition";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, nailSalonSchema, websiteSchema } from "@/lib/seo";
 import { navItems, navCTA, footerData } from "@/data";
 
 const playfair = Playfair_Display({
@@ -21,15 +23,52 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500"],
 });
 
+const DEFAULT_TITLE = "Vynl | Gel-X Nail Studio in Cranebrook & Penrith, Sydney";
+const DEFAULT_DESCRIPTION =
+  "Gel-X nail studio in Cranebrook, NSW, minutes from Penrith. Gel-X extensions and advanced nail art only — no acrylics — by appointment. Plus Vynl Academy nail training.";
+
 export const metadata: Metadata = {
-  title: "Vynl — Gel-X Artistry, Refined.",
-  description:
-    "Vynl is a premium nail art studio specialising exclusively in Gel-X extensions and advanced nail art. Plus Vynl Academy for professional nail education and Vynl Supply — coming soon.",
-  keywords: ["Gel-X nails", "nail art", "nail extensions", "Vynl Academy", "nail education", "luxury nails"],
+  // Required for og:image, canonicals and og:url to resolve to absolute URLs.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_TITLE,
+    template: "%s | Vynl",
+  },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: "Vynl",
+  keywords: [
+    "Gel-X nails Cranebrook",
+    "Gel-X nails Penrith",
+    "nail salon Cranebrook",
+    "nail extensions Penrith",
+    "nail art Western Sydney",
+    "nail course Australia",
+    "Vynl Academy",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Vynl — Gel-X Artistry, Refined.",
-    description: "Premium Gel-X specialist. Advanced nail art. Vynl Academy. Supply Shop coming soon.",
     type: "website",
+    locale: "en_AU",
+    siteName: "Vynl",
+    url: SITE_URL,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -38,7 +77,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="scroll-smooth">
+      <html lang="en-AU" className="scroll-smooth">
+        <head>
+          <JsonLd data={nailSalonSchema()} />
+          <JsonLd data={websiteSchema()} />
+        </head>
         <body
           className={`${playfair.variable} ${dmSans.variable} antialiased bg-vynl-white font-sans text-vynl-black`}
         >

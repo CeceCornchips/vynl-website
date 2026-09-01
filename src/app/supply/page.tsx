@@ -3,10 +3,23 @@ import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/layout/Container";
 import { SupplyNotifyForm } from "@/components/forms/SupplyNotifyForm";
 
+const PATH = "/supply";
+const TITLE = "Nail Supplies for Professionals — Coming Soon";
+const DESCRIPTION =
+  "Nail supplies and tools curated by a working nail artist: Gel-X kits, tips, brushes and gels. Coming soon to Vynl Supply — join the list for early access.";
+
 export const metadata: Metadata = {
-  title: "Vynl Supply — Coming Soon",
-  description:
-    "Carefully curated nail supplies and tools, built for serious nail artists. Coming soon to Vynl — join the list for early access.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: PATH },
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: "Vynl",
+    url: PATH,
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function SupplyPage() {

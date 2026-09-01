@@ -6,17 +6,54 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { NailsApproachSection } from "@/components/sections/NailsApproachSection";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema, faqSchema, serviceSchema } from "@/lib/seo";
 import { galleryItems, testimonials, nailsFAQs, nailServices, nailAddOns } from "@/data";
 
+const PATH = "/nails";
+const TITLE = "Gel-X Nails Cranebrook & Penrith | Extensions & Nail Art";
+const DESCRIPTION =
+  "Gel-X nail extensions and advanced nail art in Cranebrook, NSW — minutes from Penrith, Jordan Springs and Glenmore Park. Gel-X only, no acrylics. Book online.";
+
 export const metadata: Metadata = {
-  title: "Vynl Nails: Gel-X Extensions & Advanced Nail Art",
-  description:
-    "Gel-X extensions and advanced nail art at Vynl. We specialise exclusively in Gel-X. No acrylics, no compromises. Book your appointment.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: PATH },
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: "Vynl",
+    url: PATH,
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function NailsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          serviceSchema({
+            name: "Gel-X nail extensions and nail art",
+            description: DESCRIPTION,
+            path: PATH,
+            serviceType: "Gel-X nail extensions",
+            // Catalogue entries use `title`, and prices are display strings.
+            offers: nailServices.map(({ title, description, price }) => ({
+              name: title,
+              description,
+              price,
+            })),
+          }),
+          faqSchema(nailsFAQs),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Gel-X Nails", path: PATH },
+          ]),
+        ]}
+      />
+
       {/* ── Hero ── */}
       <HeroSection
         data={{

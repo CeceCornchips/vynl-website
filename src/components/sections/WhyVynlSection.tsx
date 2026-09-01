@@ -72,6 +72,11 @@ export function WhyVynlSection() {
                 technique, every product, and every process is optimised for one outcome:
                 the most flawless nails possible.
               </Subheading>
+              <Subheading>
+                We work from a private, by-appointment studio in Cranebrook, NSW, a few
+                minutes from Penrith, and see clients from Jordan Springs, Glenmore Park,
+                Emu Plains, St Marys and across Western Sydney.
+              </Subheading>
             </motion.div>
 
           </motion.div>

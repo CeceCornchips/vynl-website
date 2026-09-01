@@ -6,17 +6,48 @@ import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { ChampagneButton } from "@/components/ui/Buttons";
 import { WaitlistForm } from "@/components/forms/Forms";
-import { academyWaitlistConfig, academyFAQs } from "@/data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema, courseSchema, faqSchema } from "@/lib/seo";
+import { academyWaitlistConfig, academyFAQs, academyModules } from "@/data";
+
+const PATH = "/academy";
+const TITLE = "Nail Course Australia | Gel-X Training & Nail Education";
+const DESCRIPTION =
+  "Online nail course for Australian nail artists. Gel-X application, advanced nail art, pricing and brand building from Vynl Academy. Join the waitlist for founding member pricing.";
 
 export const metadata: Metadata = {
-  title: "Vynl Academy: Professional Nail Education",
-  description:
-    "Professional nail education from Vynl. Enrollment opening soon — join the waitlist and get a free course when we launch.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: PATH },
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: "Vynl",
+    url: PATH,
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function AcademyPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          courseSchema({
+            name: "Vynl Academy — Gel-X and nail art training",
+            description: DESCRIPTION,
+            path: PATH,
+            teaches: academyModules.map((module) => module.title),
+          }),
+          faqSchema(academyFAQs),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Academy", path: PATH },
+          ]),
+        ]}
+      />
+
       {/* ── Hero ── */}
       <HeroSection
         data={{

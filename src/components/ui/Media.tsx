@@ -144,6 +144,9 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
       <div className={cn("absolute inset-0 overflow-hidden", className)}>
         <video
           ref={videoRef}
+          // A video element has no alt, so surface the description to assistive
+          // tech instead of letting media.alt sit unused.
+          aria-label={media.alt}
           autoPlay
           muted
           loop

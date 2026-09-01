@@ -55,7 +55,11 @@ export const heroData: HeroSectionData = {
   primaryCTA: { label: "Book an Appointment", href: "https://vynl.square.site/s/appointments", variant: "primary", external: true },
   secondaryCTA: { label: "View Services", href: "/nails", variant: "ghost" },
   colorScheme: "dark",
-  media: { src: "https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev/SALON-VIDEO.mp4", alt: "Vynl Studio", type: "video" },
+  media: {
+    src: "https://pub-151c05ae818f49db8ab6faa898e4aa67.r2.dev/SALON-VIDEO.mp4",
+    alt: "Inside the Vynl nail studio in Cranebrook: a calm neutral room with an arched full-length mirror, olive tree and soft curtained light",
+    type: "video",
+  },
 };
 
 // ── Brand Pillars (Home) ─────────────────────────────────────────────────
@@ -477,40 +481,45 @@ export const academyFAQs: FAQItem[] = [
 // Images reordered so squares are evenly spread across columns:
 // — 3-col (nails page): col 0 = 4 sq, col 1 = 4 sq, col 2 = 3 sq
 // — 4-col (home page, first 12): exactly 1 sq per column
+//
+// Alt text describes the actual set in each photo — colour, shape and
+// technique. Don't reset these to a generic string, and don't work the suburb
+// into every line: repeating "Cranebrook" across 33 images is keyword
+// stuffing, and it makes the gallery worse for anyone using a screen reader.
 const _rawGallery: Array<{ file: string; alt: string; aspect: GalleryGridItem["aspect"] }> = [
-  { file: "IMG_0621.JPG", alt: "Gel-X nail set", aspect: "square" },   // 0  → col0
-  { file: "IMG_0512.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 1
-  { file: "IMG_0617.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 2
-  { file: "IMG_0626.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 3
-  { file: "IMG_0705.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 4
-  { file: "IMG_0730.JPG", alt: "Gel-X nail set", aspect: "square" },   // 5  → col2
-  { file: "IMG_1019.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 6
-  { file: "IMG_2135.JPG", alt: "Gel-X nail set", aspect: "square" },   // 7  → col1
-  { file: "IMG_1030.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 8
-  { file: "IMG_2249.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 9
-  { file: "IMG_2585.JPG", alt: "Gel-X nail set", aspect: "square" },   // 10 → col1
-  { file: "IMG_2306.jpg", alt: "Gel-X nail set", aspect: "portrait" }, // 11
-  { file: "IMG_2742.JPG", alt: "Gel-X nail set", aspect: "square" },   // 12 → col0
-  { file: "IMG_2607.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 13
-  { file: "IMG_2735.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 14
-  { file: "IMG_2763.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 15
-  { file: "IMG_3115.JPG", alt: "Gel-X nail set", aspect: "square" },   // 16 → col1
-  { file: "IMG_3102.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 17
-  { file: "IMG_3445.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 18
-  { file: "IMG_3446.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 19
-  { file: "IMG_3464.JPG", alt: "Gel-X nail set", aspect: "square" },   // 20 → col2
-  { file: "IMG_3468.JPG", alt: "Gel-X nail set", aspect: "square" },   // 21 → col0
-  { file: "IMG_3465.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 22
-  { file: "IMG_3467.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 23
-  { file: "IMG_3651.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 24
-  { file: "IMG_5043.JPG", alt: "Gel-X nail set", aspect: "square" },   // 25 → col1
-  { file: "IMG_3777.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 26
-  { file: "IMG_5068.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 27
-  { file: "IMG_5238.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 28
-  { file: "IMG_7382.JPG", alt: "Gel-X nail set", aspect: "square" },   // 29 → col2
-  { file: "IMG_9549.JPG", alt: "Gel-X nail set", aspect: "square" },   // 30 → col0
-  { file: "IMG_7764.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 31
-  { file: "IMG_8979.JPG", alt: "Gel-X nail set", aspect: "portrait" }, // 32
+  { file: "IMG_0621.JPG", alt: "Nude almond Gel-X nails outlined in gold wire with tiny pearl accents", aspect: "square" },   // 0  → col0
+  { file: "IMG_0512.JPG", alt: "Tortoiseshell brown French tips on nude almond Gel-X nails", aspect: "portrait" }, // 1
+  { file: "IMG_0617.JPG", alt: "Black almond Gel-X set mixing cat-eye, leopard print and gold 3D cross charms", aspect: "portrait" }, // 2
+  { file: "IMG_0626.JPG", alt: "Pearl white French tips with gold wire outlines and 3D gold bow charms", aspect: "portrait" }, // 3
+  { file: "IMG_0705.JPG", alt: "Milky white stiletto Gel-X nails with painted petal detail and gold bead accents", aspect: "portrait" }, // 4
+  { file: "IMG_0730.JPG", alt: "Long stiletto Gel-X nails with tiger stripe tips, 3D pink flowers and gold charms", aspect: "square" },   // 5  → col2
+  { file: "IMG_1019.JPG", alt: "Black polka dot French tips on long stiletto Gel-X nails with 3D pink flowers", aspect: "portrait" }, // 6
+  { file: "IMG_2135.JPG", alt: "Pink and cream swirl Gel-X nails with a 3D hibiscus and textured ombre accent", aspect: "square" },   // 7  → col1
+  { file: "IMG_1030.JPG", alt: "Sheer nude almond Gel-X nails with 3D pink bows, pearls and fine white linework", aspect: "portrait" }, // 8
+  { file: "IMG_2249.JPG", alt: "Burgundy abstract swirls on sheer stiletto Gel-X nails", aspect: "portrait" }, // 9
+  { file: "IMG_2585.JPG", alt: "Green marble and nude almond Gel-X nails finished with gold wire and chrome", aspect: "square" },   // 10 → col1
+  { file: "IMG_2306.jpg", alt: "Maximalist stiletto Gel-X set mixing gold chrome, lace filigree and 3D flowers", aspect: "portrait" }, // 11
+  { file: "IMG_2742.JPG", alt: "Navy and bronze Gel-X nails with hand-painted gold swirls and bead detail", aspect: "square" },   // 12 → col0
+  { file: "IMG_2607.JPG", alt: "Stiletto Gel-X set with tortoiseshell, hot pink ombre, zebra stripes and a 3D plumeria", aspect: "portrait" }, // 13
+  { file: "IMG_2735.JPG", alt: "Long coffin Gel-X nails with 3D pink and yellow sculpted flowers and pearls", aspect: "portrait" }, // 14
+  { file: "IMG_2763.JPG", alt: "Ornate stiletto Gel-X set with gold frames, gemstones and hand-painted wave art", aspect: "portrait" }, // 15
+  { file: "IMG_3115.JPG", alt: "Classic white French tips on long almond Gel-X extensions", aspect: "square" },   // 16 → col1
+  { file: "IMG_3102.JPG", alt: "Tropical stiletto Gel-X set with 3D plumeria, painted blue lilies and plaid tips", aspect: "portrait" }, // 17
+  { file: "IMG_3445.JPG", alt: "Short almond Gel-X nails in lime, orange and purple with glossy 3D jelly swirls", aspect: "portrait" }, // 18
+  { file: "IMG_3446.JPG", alt: "Multicoloured almond Gel-X set with raised jelly petal shapes on every nail", aspect: "portrait" }, // 19
+  { file: "IMG_3464.JPG", alt: "Long stiletto Gel-X nails with sculpted 3D frangipani and painted plaid tips", aspect: "square" },   // 20 → col2
+  { file: "IMG_3468.JPG", alt: "Red French tips, hot pink cow print and gold star charms on almond Gel-X nails", aspect: "square" },   // 21 → col0
+  { file: "IMG_3465.JPG", alt: "Short almond Gel-X nails in slate blue, sage and mustard with gold wire frames", aspect: "portrait" }, // 22
+  { file: "IMG_3467.JPG", alt: "Butter yellow French tips on long almond Gel-X nails with tiny crystal accents", aspect: "portrait" }, // 23
+  { file: "IMG_3651.JPG", alt: "Bright rainbow almond Gel-X nails with chrome droplet accents and painted starbursts", aspect: "portrait" }, // 24
+  { file: "IMG_5043.JPG", alt: "Sheer nude almond Gel-X nails with gold outlines, a 3D red hibiscus and gem accents", aspect: "square" },   // 25 → col1
+  { file: "IMG_3777.JPG", alt: "Autumn-toned stiletto Gel-X nails in green, mustard and rust with 3D swirls", aspect: "portrait" }, // 26
+  { file: "IMG_5068.JPG", alt: "Burnt orange and gold almond Gel-X nails with a 3D orchid charm and gem clusters", aspect: "portrait" }, // 27
+  { file: "IMG_5238.JPG", alt: "Stiletto Gel-X set with 3D chrome chain links, iridescent swirls and painted lilies", aspect: "portrait" }, // 28
+  { file: "IMG_7382.JPG", alt: "Pastel rainbow aura Gel-X nails with iridescent chrome and painted sparkle stars", aspect: "square" },   // 29 → col2
+  { file: "IMG_9549.JPG", alt: "Peach and orange almond Gel-X nails with 3D sculpted flowers and sunburst detail", aspect: "square" },   // 30 → col0
+  { file: "IMG_7764.JPG", alt: "Almond Gel-X nails with a 3D blue flower, gold chrome, leopard print and gold beads", aspect: "portrait" }, // 31
+  { file: "IMG_8979.JPG", alt: "Glossy black angular French tips on sheer pink square Gel-X nails", aspect: "portrait" }, // 32
 ];
 
 export const galleryItems: GalleryGridItem[] = _rawGallery.map((item, i) => ({

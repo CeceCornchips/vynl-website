@@ -3,10 +3,23 @@ import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { PrimaryButton } from "@/components/ui/Buttons";
 
+const PATH = "/contact";
+const TITLE = "Book a Gel-X Appointment in Cranebrook, Penrith";
+const DESCRIPTION =
+  "Book your Gel-X nail appointment at Vynl in Cranebrook, NSW, close to Penrith and Jordan Springs. Online booking only — pick your service and time, pay your deposit via Square.";
+
 export const metadata: Metadata = {
-  title: "Book an Appointment — Vynl",
-  description:
-    "Book your Gel-X nail appointment at Vynl online. Select your service, choose your time, and pay your deposit instantly via Square.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: PATH },
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: "Vynl",
+    url: PATH,
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 const SQUARE_URL = "https://vynl.square.site/s/appointments";
