@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { NailCatalogSection } from "@/components/sections/NailCatalogSection";
 import { GallerySection } from "@/components/sections/GallerySection";
@@ -7,7 +6,7 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { NailsApproachSection } from "@/components/sections/NailsApproachSection";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbSchema, faqSchema, serviceSchema } from "@/lib/seo";
+import { breadcrumbSchema, faqSchema, pageMetadata, serviceSchema } from "@/lib/seo";
 import { galleryItems, testimonials, nailsFAQs, nailServices, nailAddOns } from "@/data";
 
 const PATH = "/nails";
@@ -15,19 +14,7 @@ const TITLE = "Gel-X Nails Cranebrook & Penrith | Extensions & Nail Art";
 const DESCRIPTION =
   "Gel-X nail extensions and advanced nail art in Cranebrook, NSW — minutes from Penrith, Jordan Springs and Glenmore Park. Gel-X only, no acrylics. Book online.";
 
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: PATH },
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    siteName: "Vynl",
-    url: PATH,
-    title: TITLE,
-    description: DESCRIPTION,
-  },
-};
+export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION });
 
 export default function NailsPage() {
   return (
@@ -87,6 +74,7 @@ export default function NailsPage() {
         items={galleryItems}
         columns={3}
         layout="masonry"
+        pageSize={24}
       />
 
       {/* ── Testimonials ── */}

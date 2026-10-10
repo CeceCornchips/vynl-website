@@ -1,14 +1,16 @@
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'The Gel-X Retention Mastery Guide | Vynl Academy',
+export const metadata = pageMetadata({
+  path: '/gel-x-guide',
+  title: 'Free Gel-X Retention Guide for Nail Techs',
   description:
     'Download the complete professional guide to Gel-X nail application, covering prep, retention, and avoiding lifting for 3–4 week wear.',
-}
+})
 
 export default function GelXGuidePage() {
   return (
-    <main
+    <div
       className="min-h-screen flex flex-col"
       style={{ backgroundColor: '#FAFAF8', fontFamily: 'Helvetica, Arial, sans-serif' }}
     >
@@ -301,6 +303,6 @@ export default function GelXGuidePage() {
           © 2025 Vynl Academy. All rights reserved.
         </span>
       </footer>
-    </main>
+    </div>
   )
 }

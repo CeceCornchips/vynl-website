@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { BookingFlow } from "@/components/booking/BookingFlow";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Book an Appointment — Vynl",
+// Unlinked in-house booking flow — bookings go through Square (/contact), so
+// keep this out of the index rather than compete with /contact.
+export const metadata = pageMetadata({
+  path: "/book",
+  title: "Book an Appointment",
   description:
     "Book your nail appointment at Vynl online. Select your service, choose your time, and secure your booking with a deposit.",
-};
+  noindex: true,
+});
 
 export default function BookPage() {
   return (

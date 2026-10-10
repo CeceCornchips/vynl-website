@@ -2,10 +2,10 @@ import { Resend } from 'resend';
 import { getNotificationSetting } from '@/lib/notifications-migration';
 import { interpolateTemplate } from '@/lib/notification-template';
 import { getBusinessProfile } from '@/lib/business-profile';
+import { EMAIL_FROM, SUPPORT_EMAIL } from '@/lib/email-config';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_ADDRESS = 'Vynl Nail Studio <onboarding@resend.dev>';
 const FALLBACK_BUSINESS_NAME = 'Vynl';
 
 async function getBusinessName(): Promise<string> {
@@ -121,7 +121,7 @@ function buildEmailHtml(bodyText: string, businessName: string, manageButtonHtml
  * Fetches subject + body template for the given type, interpolates vars,
  * and sends via Resend. Returns early if the notification type is disabled.
  *
- * For admin_new_booking, sends to ADMIN_EMAIL env var instead of toEmail.
+ * For admin_new_booking, sends to SUPPORT_EMAIL instead of toEmail.
  */
 export async function sendNotificationEmail(
   type: string,
@@ -136,14 +136,15 @@ export async function sendNotificationEmail(
   const bodyText = interpolateTemplate(setting.body ?? '', vars);
 
   const recipient =
-    type === 'admin_new_booking' ? (process.env.ADMIN_EMAIL ?? toEmail) : toEmail;
+    type === 'admin_new_booking' ? SUPPORT_EMAIL : toEmail;
 
   const businessName = await getBusinessName();
   const html = buildEmailHtml(bodyText, businessName, options?.manageButtonHtml);
 
   await resend.emails.send({
-    from: FROM_ADDRESS,
+    from: EMAIL_FROM,
     to: recipient,
+    replyTo: SUPPORT_EMAIL,
     subject,
     html,
   });

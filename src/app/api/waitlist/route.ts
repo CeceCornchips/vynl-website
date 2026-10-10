@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
+import { EMAIL_FROM, SUPPORT_EMAIL } from "@/lib/email-config";
 
 export const runtime = "nodejs";
-
-const OWNER_EMAIL = "vynlau@gmail.com";
-const FROM = "onboarding@resend.dev";
 
 const VALID_TYPES = ["academy", "supply"] as const;
 type WaitlistType = (typeof VALID_TYPES)[number];
@@ -140,15 +138,16 @@ export async function POST(req: NextRequest) {
 
   const [ownerResult, userResult] = await Promise.allSettled([
     resend.emails.send({
-      from: FROM,
-      to: OWNER_EMAIL,
+      from: EMAIL_FROM,
+      to: SUPPORT_EMAIL,
       subject: `New Waitlist Signup — Vynl ${label}${cleanName ? ` — ${cleanName}` : ""}`,
       html: ownerHtml,
       replyTo: cleanEmail,
     }),
     resend.emails.send({
-      from: FROM,
+      from: EMAIL_FROM,
       to: cleanEmail,
+      replyTo: SUPPORT_EMAIL,
       subject: `You're on the Vynl ${label} waitlist!`,
       html: confirmationHtml,
     }),

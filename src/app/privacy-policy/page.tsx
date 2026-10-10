@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
+import { SUPPORT_EMAIL } from "@/lib/email-config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy — Vynl Nail Studio",
+export const metadata = pageMetadata({
+  path: "/privacy-policy",
+  title: "Privacy Policy",
   description:
     "Privacy Policy for Vynl Nail Studio. Learn how we collect, use, and protect your personal information in accordance with the Australian Privacy Act 1988.",
-};
+});
 
-const LAST_UPDATED = "28 May 2026";
-const CONTACT_EMAIL = "vynlau@gmail.com";
+const LAST_UPDATED = "10 October 2026";
+const CONTACT_EMAIL = SUPPORT_EMAIL;
 
 export default function PrivacyPolicyPage() {
   return (
@@ -159,6 +161,7 @@ export default function PrivacyPolicyPage() {
                     { label: "Payment processor (Stripe / Square)", detail: "To securely process payment card transactions. Your card details are transmitted directly to the payment processor and are not stored on our servers." },
                     { label: "Email / communication services", detail: "To send booking confirmations, reminders, and notifications." },
                     { label: "Website analytics", detail: "To understand how visitors use our website. Analytics data is aggregated and anonymised where possible." },
+                    { label: "Error monitoring (Sentry)", detail: "To detect and fix technical problems on our website. Error reports include technical details such as browser type and the page where the error occurred, but not your name, email or payment details." },
                   ].map((item) => (
                     <li key={item.label} className="flex items-start gap-3">
                       <span className="text-vynl-champagne text-xs mt-1 shrink-0">—</span>

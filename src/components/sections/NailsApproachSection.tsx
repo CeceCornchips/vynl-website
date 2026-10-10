@@ -108,10 +108,10 @@ export function NailsApproachSection() {
           >
             <motion.div style={{ y: imageY }}>
               <Image
-                src="/images/IMG_8527.png"
-                alt="Gel-X nail art set at Vynl Studio"
-                width={0}
-                height={0}
+                src="/images/gallery/gel-x-nail-art-vynl-studio.jpg"
+                alt="Almond Gel-X set with white French tips, pink 3D flowers and gold charms at Vynl Studio"
+                width={1200}
+                height={1600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
                 priority

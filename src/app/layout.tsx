@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { MotionProvider } from "@/components/ui/MotionProvider";
@@ -45,7 +46,9 @@ export const metadata: Metadata = {
     "nail course Australia",
     "Vynl Academy",
   ],
-  alternates: { canonical: "/" },
+  // No site-wide canonical: a canonical set here is inherited by every page that
+  // forgets its own, silently pointing it at the homepage. Each page declares
+  // its own `alternates.canonical` instead.
   openGraph: {
     type: "website",
     locale: "en_AU",
@@ -54,10 +57,10 @@ export const metadata: Metadata = {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
   },
+  // Title and description are left to fall back to each page's Open Graph
+  // tags. Setting them here would stamp the homepage title on every share card.
   twitter: {
     card: "summary_large_image",
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESCRIPTION,
   },
   robots: {
     index: true,
@@ -76,24 +79,27 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
-      <html lang="en-AU" className="scroll-smooth">
-        <head>
-          <JsonLd data={nailSalonSchema()} />
-          <JsonLd data={websiteSchema()} />
-        </head>
-        <body
-          className={`${playfair.variable} ${dmSans.variable} antialiased bg-vynl-white font-sans text-vynl-black`}
-        >
-          <MotionProvider>
-            <Navbar logoText="VYNL" items={navItems} cta={navCTA} />
-            <main>
-              <PageTransition>{children}</PageTransition>
-            </main>
-            <Footer data={footerData} />
-          </MotionProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en-AU" className="scroll-smooth">
+      <head>
+        <JsonLd data={nailSalonSchema()} />
+        <JsonLd data={websiteSchema()} />
+      </head>
+      <body
+        className={`${playfair.variable} ${dmSans.variable} antialiased bg-vynl-white font-sans text-vynl-black`}
+      >
+        <MotionProvider>
+          <Navbar logoText="VYNL" items={navItems} cta={navCTA} />
+          <main>
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer data={footerData} />
+        </MotionProvider>
+        {/* Vercel Web Analytics + Speed Insights (cookieless). Vercel serves their
+            scripts once both are enabled in the project dashboard; locally the
+            script requests 404 harmlessly and nothing is counted. */}
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
   );
 }

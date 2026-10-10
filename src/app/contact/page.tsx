@@ -1,26 +1,15 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { PrimaryButton } from "@/components/ui/Buttons";
+import { SUPPORT_EMAIL } from "@/lib/email-config";
+import { pageMetadata } from "@/lib/seo";
 
 const PATH = "/contact";
 const TITLE = "Book a Gel-X Appointment in Cranebrook, Penrith";
 const DESCRIPTION =
   "Book your Gel-X nail appointment at Vynl in Cranebrook, NSW, close to Penrith and Jordan Springs. Online booking only — pick your service and time, pay your deposit via Square.";
 
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: PATH },
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    siteName: "Vynl",
-    url: PATH,
-    title: TITLE,
-    description: DESCRIPTION,
-  },
-};
+export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION });
 
 const SQUARE_URL = "https://vynl.square.site/s/appointments";
 
@@ -130,11 +119,11 @@ export default function ContactPage() {
                     TikTok · @vynlacademy
                   </a>
                   <a
-                    href="mailto:vynlau@gmail.com"
+                    href={`mailto:${SUPPORT_EMAIL}`}
                     className="flex items-center gap-3 text-sm font-sans font-light text-vynl-gray-700 hover:text-vynl-black transition-colors"
                   >
                     <span className="text-vynl-champagne text-xs">→</span>
-                    vynlau@gmail.com
+                    {SUPPORT_EMAIL}
                   </a>
                 </div>
               </div>

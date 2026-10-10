@@ -9,6 +9,9 @@
  * and publish a private residence, so leave it out.
  */
 
+import type { Metadata } from "next";
+import { SUPPORT_EMAIL } from "@/lib/email-config";
+
 export const SITE_URL = "https://www.vynl.com.au";
 
 /** A single JSON-LD node, ready to be serialised into a script tag. */
@@ -39,7 +42,7 @@ export const BUSINESS = {
   /** Nearest well-known centre, used in copy and page titles. */
   nearestCentre: "Penrith",
 
-  email: "vynlau@gmail.com",
+  email: SUPPORT_EMAIL,
   /**
    * Intentionally undefined — the studio has no public phone line and takes
    * bookings online only. A placeholder number would break the LocalBusiness
@@ -79,6 +82,48 @@ const postalAddress = {
 };
 
 const areaServedPlaces = BUSINESS.areaServed.map((name) => ({ "@type": "Place", name }));
+
+/**
+ * Page-level metadata with the canonical and Open Graph URL pinned to `path`.
+ *
+ * Use this for every indexable page. Without an explicit canonical a page
+ * inherits whatever the nearest layout declares, and `title` must not repeat
+ * the brand: the root layout's "%s | Vynl" template already appends it.
+ */
+/** Matches src/app/opengraph-image.jpg (+ its .alt.txt), served at /opengraph-image.jpg. */
+const DEFAULT_OG_IMAGE = {
+  url: "/opengraph-image.jpg",
+  width: 1200,
+  height: 630,
+  alt: "The Vynl nail studio in Cranebrook, NSW: a neutral, curtained room with an arched full-length mirror and olive tree",
+};
+
+export function pageMetadata(input: {
+  path: string;
+  title: string;
+  description: string;
+  /** Opt a page out of the index (it still passes link equity). */
+  noindex?: boolean;
+}): Metadata {
+  const { path, title, description, noindex } = input;
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      locale: "en_AU",
+      siteName: BUSINESS.name,
+      url: path,
+      title,
+      description,
+      // Spelled out because a page-level `openGraph` replaces the parent's
+      // wholesale, dropping the file-based app/opengraph-image.jpg with it.
+      images: [DEFAULT_OG_IMAGE],
+    },
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 // ── Pricing helpers ───────────────────────────────────────────────────────
 // Catalogue prices are display strings ("A$60.00", "Starting from $100",
@@ -120,7 +165,11 @@ export function nailSalonSchema(): JsonLdObject {
     legalName: BUSINESS.legalName,
     description: BUSINESS.description,
     url: SITE_URL,
-    image: absoluteUrl("/hero-poster.jpg"),
+    logo: absoluteUrl("/icon.png"),
+    image: [
+      absoluteUrl("/hero-poster.jpg"),
+      absoluteUrl("/images/gallery/gel-x-nail-art-vynl-studio.jpg"),
+    ],
     email: BUSINESS.email,
     ...(BUSINESS.telephone ? { telephone: BUSINESS.telephone } : {}),
     address: postalAddress,

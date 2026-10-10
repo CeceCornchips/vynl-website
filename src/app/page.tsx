@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FeatureSection } from "@/components/sections/FeatureSection";
 import { GallerySection } from "@/components/sections/GallerySection";
@@ -15,6 +16,11 @@ import {
   testimonials,
   academyWaitlistConfig,
 } from "@/data";
+
+// Title, description and Open Graph come from the root layout defaults.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const homeGallery = galleryItems.slice(0, 12);

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-
-const TO = "vynlau@gmail.com";
-const FROM = "onboarding@resend.dev";
+import { EMAIL_FROM, SUPPORT_EMAIL } from "@/lib/email-config";
 
 export const runtime = "nodejs";
 
@@ -187,8 +185,8 @@ export async function POST(req: NextRequest) {
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: FROM,
-    to: TO,
+    from: EMAIL_FROM,
+    to: SUPPORT_EMAIL,
     subject,
     html,
     replyTo: clientEmail || undefined,

@@ -7,3 +7,6 @@ public/salon/
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Uncropped source photos (web versions live in public/images/gallery)
+/_original-photos/

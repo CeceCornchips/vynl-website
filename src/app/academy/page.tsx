@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
@@ -7,7 +6,7 @@ import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { ChampagneButton } from "@/components/ui/Buttons";
 import { WaitlistForm } from "@/components/forms/Forms";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbSchema, courseSchema, faqSchema } from "@/lib/seo";
+import { breadcrumbSchema, courseSchema, faqSchema, pageMetadata } from "@/lib/seo";
 import { academyWaitlistConfig, academyFAQs, academyModules } from "@/data";
 
 const PATH = "/academy";
@@ -15,19 +14,7 @@ const TITLE = "Nail Course Australia | Gel-X Training & Nail Education";
 const DESCRIPTION =
   "Online nail course for Australian nail artists. Gel-X application, advanced nail art, pricing and brand building from Vynl Academy. Join the waitlist for founding member pricing.";
 
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: PATH },
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    siteName: "Vynl",
-    url: PATH,
-    title: TITLE,
-    description: DESCRIPTION,
-  },
-};
+export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION });
 
 export default function AcademyPage() {
   return (

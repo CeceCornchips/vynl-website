@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
+import { SUPPORT_EMAIL } from "@/lib/email-config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions — Vynl Nail Studio",
+export const metadata = pageMetadata({
+  path: "/terms",
+  title: "Terms & Conditions",
   description:
     "Terms and Conditions for Vynl Nail Studio. Please read our booking, cancellation, payment, and health & safety policies before your appointment.",
-};
+});
 
 const LAST_UPDATED = "28 May 2026";
-const CONTACT_EMAIL = "vynlau@gmail.com";
+const CONTACT_EMAIL = SUPPORT_EMAIL;
 
 export default function TermsPage() {
   return (

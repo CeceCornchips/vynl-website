@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { GalleryGridItem, SectionMeta } from "@/types";
@@ -17,6 +18,12 @@ interface GallerySectionProps {
   id?: string;
   /** Optional CTA rendered top-right of the header */
   cta?: { label: string; href: string };
+  /**
+   * Render only this many images up front, with a "Load more" button for the
+   * rest. Keep it a multiple of `columns` so the masonry stays balanced.
+   * Omit to render everything.
+   */
+  pageSize?: number;
   className?: string;
 }
 
@@ -27,9 +34,13 @@ export function GallerySection({
   layout = "masonry",
   id,
   cta,
+  pageSize,
   className,
 }: GallerySectionProps) {
   const isDark = meta.colorScheme === "dark";
+  const [visibleCount, setVisibleCount] = useState(pageSize ?? items.length);
+  const visibleItems = items.slice(0, visibleCount);
+  const hasMore = visibleCount < items.length;
 
   return (
     <section
@@ -110,7 +121,29 @@ export function GallerySection({
       </Container>
 
       {/* ── Full-bleed grid ── */}
-      <GalleryGrid items={items} columns={columns} layout={layout} />
+      <GalleryGrid items={visibleItems} columns={columns} layout={layout} />
+
+      {hasMore && (
+        <Container>
+          <div className="pt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((n) => n + (pageSize ?? items.length))}
+              className={cn(
+                "group inline-flex items-center gap-3 px-8 py-4 border text-2xs font-sans font-medium tracking-ultra-wide uppercase transition-colors duration-300",
+                isDark
+                  ? "border-vynl-gray-700 text-vynl-white hover:border-vynl-champagne hover:text-vynl-champagne"
+                  : "border-vynl-gray-200 text-vynl-black hover:border-vynl-black"
+              )}
+            >
+              Load more work
+              <span className="tabular-nums opacity-60">
+                {visibleCount}/{items.length}
+              </span>
+            </button>
+          </div>
+        </Container>
+      )}
 
       {/* Bottom CTA bar (when cta is present) */}
       {cta && (

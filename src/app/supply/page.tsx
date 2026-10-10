@@ -1,26 +1,14 @@
-import type { Metadata } from "next";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/layout/Container";
 import { SupplyNotifyForm } from "@/components/forms/SupplyNotifyForm";
+import { pageMetadata } from "@/lib/seo";
 
 const PATH = "/supply";
 const TITLE = "Nail Supplies for Professionals — Coming Soon";
 const DESCRIPTION =
   "Nail supplies and tools curated by a working nail artist: Gel-X kits, tips, brushes and gels. Coming soon to Vynl Supply — join the list for early access.";
 
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: PATH },
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    siteName: "Vynl",
-    url: PATH,
-    title: TITLE,
-    description: DESCRIPTION,
-  },
-};
+export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION });
 
 export default function SupplyPage() {
   return (

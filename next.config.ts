@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs/config";
 
 // CSP is only enforced in production — in development Clerk/Stripe scripts
 // load from dynamic subdomains that are impossible to enumerate at build time.
@@ -20,8 +21,7 @@ const cspHeader = isProd
   connect-src 'self'
     https://api.stripe.com https://*.stripe.com
     https://*.clerk.com https://*.clerk.accounts.dev
-    https://touched-finch-50.clerk.accounts.dev
-    https://o160250.ingest.sentry.io;
+    https://touched-finch-50.clerk.accounts.dev;
   frame-src 'self'
     https://js.stripe.com https://hooks.stripe.com
     https://*.clerk.com https://*.clerk.accounts.dev
@@ -81,4 +81,17 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry: errors are sent to /monitoring on our own domain and forwarded from
+// there, so CSP needs no Sentry host and ad-blockers don't drop reports.
+// Source maps upload only when SENTRY_AUTH_TOKEN, SENTRY_ORG and
+// SENTRY_PROJECT are set in Vercel; without them the build still succeeds and
+// stack traces are just minified.
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  tunnelRoute: "/monitoring",
+  widenClientFileUpload: true,
+  sourcemaps: { deleteSourcemapsAfterUpload: true },
+});
