@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "@/components/ui/Typography";
-import { PolaroidCollage } from "@/components/ui/PolaroidCollage";
+import { BUSINESS } from "@/lib/seo";
 import type { MediaItem } from "@/types";
 
 // Shared easing — same spring Apple uses in marketing pages
@@ -20,20 +21,21 @@ const fadeUp = {
 
 
 const FEATURE_STATS = [
-  { value: "Gel-X", label: "Extensions only — no acrylic, no compromise" },
-  { value: "Level 1–3", label: "Nail art tiers for every style" },
-  { value: "100%", label: "By appointment only" },
+  { value: "Gel-X", label: "Extensions only. No acrylic, ever." },
+  { value: "Level 1–3", label: "Nail art tiers, from minimal to maximal." },
 ];
 
-const statRow = {
-  hidden: { opacity: 0, y: 24, x: 18 },
+const tile = {
+  hidden: { opacity: 0, y: 26, scale: 0.97 },
   show: {
     opacity: 1,
     y: 0,
-    x: 0,
-    transition: { duration: 0.78, ease: EASE },
+    scale: 1,
+    transition: { duration: 0.75, ease: EASE },
   },
 };
+
+const TILE_SHADOW = "shadow-[0_18px_40px_-24px_rgba(185,103,127,0.55)]";
 
 export function WhyVynlSection({ photos }: { photos?: MediaItem[] }) {
   return (
@@ -81,65 +83,85 @@ export function WhyVynlSection({ photos }: { photos?: MediaItem[] }) {
               </Subheading>
             </motion.div>
 
-            {photos?.length ? (
-              <motion.div variants={fadeUp} custom={3} className="pt-4 max-w-md">
-                <PolaroidCollage photos={photos} layout="row" sizes="(max-width: 1024px) 30vw, 150px" />
-              </motion.div>
-            ) : null}
-
           </motion.div>
 
-          {/* ── Animated stats column ── */}
-          <div className="relative flex flex-col justify-center overflow-hidden rounded-sm">
+          {/* ── Bento: photo + stat tiles ── */}
+          <motion.div
+            className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
+          >
+            {photos?.[0] && (
+              <motion.figure
+                variants={tile}
+                className={`relative row-span-2 aspect-[3/4] overflow-hidden rounded-[2rem] bg-vynl-petal ${TILE_SHADOW}`}
+              >
+                <Image
+                  src={photos[0].src}
+                  alt={photos[0].alt}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 300px"
+                  className="object-cover"
+                />
+                <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-white/90 backdrop-blur px-3 py-1 text-xs font-sans font-medium text-vynl-black">
+                  Hand-painted
+                </figcaption>
+              </motion.figure>
+            )}
 
-            {/* Slow-looping shimmer background */}
-            <motion.div
-              aria-hidden
-              className="absolute inset-0 pointer-events-none"
-              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-              transition={{ duration: 12, ease: "linear", repeat: Infinity }}
-              style={{
-                background:
-                  "linear-gradient(135deg, transparent 0%, rgba(212,175,120,0.04) 25%, rgba(212,175,120,0.09) 50%, rgba(212,175,120,0.04) 75%, transparent 100%)",
-                backgroundSize: "300% 300%",
-              }}
-            />
+            {FEATURE_STATS.map(({ value, label }) => (
+              <motion.div
+                key={value}
+                variants={tile}
+                className="flex flex-col justify-end rounded-[2rem] bg-vynl-smoke p-5 sm:p-6 md:p-7"
+              >
+                <div className="flex flex-col gap-2">
+                  <span className="font-display italic text-3xl sm:text-4xl md:text-5xl text-vynl-rose-deep leading-none">
+                    {value}
+                  </span>
+                  <span className="text-sm font-sans text-vynl-gray-600 leading-snug">{label}</span>
+                </div>
+              </motion.div>
+            ))}
 
             <motion.div
-              className="relative flex flex-col gap-0 py-2"
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.16, delayChildren: 0.08 } },
-              }}
+              variants={tile}
+              className="col-span-2 flex flex-col gap-6 rounded-[2rem] bg-gradient-to-br from-vynl-petal to-vynl-smoke p-6 md:p-8"
             >
-              {FEATURE_STATS.map(({ value, label }) => (
-                <motion.div
-                  key={value}
-                  className="flex flex-col gap-3 pt-7 pb-7"
-                  variants={statRow}
-                >
-                  {/* Thin rule above each stat */}
-                  <div className="w-full h-px bg-vynl-petal" />
+              <div className="flex items-center gap-5">
+                <span className="shrink-0 font-display italic text-5xl md:text-6xl text-vynl-rose-deep leading-none">100%</span>
+                <div className="flex flex-col gap-1">
+                  <span className="font-display text-xl text-vynl-black leading-tight">By appointment</span>
+                  <span className="text-sm font-sans text-vynl-gray-600 leading-snug">
+                    Private, one-on-one sessions in a calm studio.
+                  </span>
+                </div>
+              </div>
 
-                  <div className="flex flex-col gap-2">
-                    <span className="font-display italic text-5xl md:text-6xl lg:text-7xl text-vynl-rose-deep leading-none">
-                      {value}
-                    </span>
-                    <span className="text-2xs font-sans tracking-ultra-wide uppercase text-vynl-gray-400 max-w-xs">
-                      {label}
-                    </span>
+              <div className="flex items-center justify-between gap-4 pt-5 border-t border-white/70">
+                {photos && photos.length > 1 && (
+                  <div aria-hidden className="flex -space-x-3">
+                    {photos.slice(1, 3).map((photo) => (
+                      <span key={photo.src} className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-white">
+                        <Image src={photo.src} alt="" fill sizes="44px" className="object-cover" />
+                      </span>
+                    ))}
                   </div>
-                </motion.div>
-              ))}
-
-              {/* Closing rule */}
-              <div className="w-full h-px bg-vynl-petal" />
+                )}
+                <a
+                  href={BUSINESS.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full bg-vynl-black px-5 py-2.5 text-xs font-sans font-medium tracking-widest uppercase text-vynl-white hover:bg-vynl-rose-deep transition-colors"
+                >
+                  Book your set
+                  <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+                </a>
+              </div>
             </motion.div>
-
-          </div>
+          </motion.div>
 
         </div>
       </Container>

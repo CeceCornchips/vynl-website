@@ -81,7 +81,9 @@ const config: Config = {
           "gray-100": "#EDEBE7",
           "gray-200": "#D8D5CF",
           "gray-300": "#B5B1A9",
-          "gray-400": "#8E8A82",
+          // Darkened from #8E8A82 so small grey text reads on white (4.1:1) while
+          // keeping 4.8:1 on the black sections.
+          "gray-400": "#807C75",
           "gray-500": "#6A6660",
           "gray-600": "#4C4945",
           "gray-700": "#343230",
@@ -95,9 +97,11 @@ const config: Config = {
         serif: ["var(--font-display)", "Georgia", "serif"],
       },
       fontSize: {
-        "2xs": ["0.625rem", { lineHeight: "1rem", letterSpacing: "0.08em" }],
-        xs: ["0.75rem", { lineHeight: "1.125rem" }],
-        sm: ["0.875rem", { lineHeight: "1.5rem" }],
+        // Small sizes are bumped up from Tailwind's defaults for legibility:
+        // 2xs 12px (labels, nav, captions), xs 13px, sm 15px (card / list copy).
+        "2xs": ["0.75rem", { lineHeight: "1.125rem", letterSpacing: "0.08em" }],
+        xs: ["0.8125rem", { lineHeight: "1.25rem" }],
+        sm: ["0.9375rem", { lineHeight: "1.5rem" }],
         base: ["1rem", { lineHeight: "1.75rem" }],
         lg: ["1.125rem", { lineHeight: "1.875rem" }],
         xl: ["1.25rem", { lineHeight: "1.875rem" }],

@@ -93,7 +93,7 @@ export default function NailsPage() {
         title="Ready to wear"
         titleItalic="your best nails?"
         subtitle="All services are by online booking only. Select your service, choose a time, and pay your deposit instantly via Square."
-        primaryCTA={{ label: "Request an Appointment", href: "https://vynl.square.site/s/appointments", external: true }}
+        primaryCTA={{ label: "Book an Appointment", href: "https://vynl.square.site/s/appointments", external: true }}
         variant="petal"
         sidePhotos={sitePhotos.ctaSides}
       />

@@ -622,12 +622,13 @@ export const sitePhotos = {
     galleryPhoto("raspberry-pink-almond-gel-x-nails-ribbed-textured"),
     galleryPhoto("hand-painted-anime-inspired-almond-gel-x-set-black-spirit"),
     galleryPhoto("almond-gel-x-nails-sage-green-lilac-marble"),
-    galleryPhoto("bold-maximalist-almond-gel-x-set-blue-swirls"),
+    galleryPhoto("hand-painted-miniature-landscape-floral-scenes-short-almond"),
     galleryPhoto("pastel-almond-gel-x-set-3d-pink-flowers"),
     galleryPhoto("red-french-tips-pink-cow-print-gold"),
   ],
+  /** [0] fills a 3:4 tile, so it needs the nails centred; [1] and [2] are tiny avatars. */
   whyVynl: [
-    galleryPhoto("hand-painted-miniature-landscape-floral-scenes-short-almond"),
+    galleryPhoto("bold-maximalist-almond-gel-x-set-blue-swirls"),
     galleryPhoto("butter-yellow-french-tips-3d-flowers-gold"),
     galleryPhoto("almond-gel-x-set-teal-3d-swirls-painted"),
   ],
