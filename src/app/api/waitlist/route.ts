@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { EMAIL_FROM, SUPPORT_EMAIL } from "@/lib/email-config";
+import { addWaitlistContact, type WaitlistType } from "@/lib/waitlist-contacts";
 
 export const runtime = "nodejs";
 
-const VALID_TYPES = ["academy", "supply"] as const;
-type WaitlistType = (typeof VALID_TYPES)[number];
+const VALID_TYPES: readonly WaitlistType[] = ["academy", "supply"];
 
 function escapeHtml(s: string): string {
   return s
@@ -65,20 +66,43 @@ export async function POST(req: NextRequest) {
   const cleanType = type as WaitlistType;
   const label = cleanType === "academy" ? "Academy" : "Supply";
 
-  await ensureTable();
+  const resend = new Resend(apiKey);
 
+  // The signup is stored twice: in the database (the backup record, and how
+  // duplicates are detected) and as a Resend contact (the list she actually
+  // works from). Either one succeeding is enough; a signup is only rejected
+  // when both fail, so a database outage no longer loses people.
+  let savedToDb = false;
   try {
+    await ensureTable();
     await sql`
       INSERT INTO waitlist (name, email, type)
       VALUES (${cleanName}, ${cleanEmail}, ${cleanType})
     `;
+    savedToDb = true;
   } catch (err: unknown) {
     const pg = err as { code?: string };
     if (pg?.code === "23505") {
       return NextResponse.json({ error: "Already on waitlist." }, { status: 409 });
     }
     console.error("[waitlist] DB insert error:", err);
-    return NextResponse.json({ error: "Database error." }, { status: 500 });
+    Sentry.captureException(err, { tags: { waitlist: "db" } });
+  }
+
+  let savedToResend = false;
+  try {
+    await addWaitlistContact(resend, { email: cleanEmail, name: cleanName, type: cleanType });
+    savedToResend = true;
+  } catch (err: unknown) {
+    console.error("[waitlist] Resend contact error:", err);
+    Sentry.captureException(err, { tags: { waitlist: "resend" } });
+  }
+
+  if (!savedToDb && !savedToResend) {
+    return NextResponse.json(
+      { error: "We couldn't save your signup. Please try again in a moment." },
+      { status: 500 }
+    );
   }
 
   const timestamp = new Date().toLocaleString("en-AU", {
@@ -86,8 +110,6 @@ export async function POST(req: NextRequest) {
     dateStyle: "long",
     timeStyle: "short",
   });
-
-  const resend = new Resend(apiKey);
 
   const ownerHtml = `
 <!DOCTYPE html>
