@@ -113,7 +113,7 @@ export function ChampagneButton({
     <Wrap
       className={cn(
         base, sizeMap[size],
-        "bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude focus-visible:ring-vynl-champagne",
+        "bg-vynl-petal text-vynl-black hover:bg-vynl-rose focus-visible:ring-vynl-rose",
         fullWidth && "w-full",
         className
       )}

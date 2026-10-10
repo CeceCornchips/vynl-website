@@ -7,6 +7,7 @@ import { Container } from "../layout/Container";
 import { LabelText, Rule } from "../ui/Typography";
 import { PrimaryButton, GhostButton } from "../ui/Buttons";
 import { HeroMedia } from "../ui/Media";
+import { PolaroidCollage } from "../ui/PolaroidCollage";
 import { EASE } from "@/lib/animations";
 
 interface HeroSectionProps {
@@ -35,7 +36,7 @@ const textContainer = {
 };
 
 export function HeroSection({ data, className, variant = "full" }: HeroSectionProps) {
-  const { eyebrow, title, titleItalic, subtitle, primaryCTA, secondaryCTA, media } = data;
+  const { eyebrow, title, titleItalic, subtitle, primaryCTA, secondaryCTA, media, collage } = data;
   const isFull = variant === "full";
 
   return (
@@ -56,14 +57,27 @@ export function HeroSection({ data, className, variant = "full" }: HeroSectionPr
         <HeroMedia media={media} />
       </motion.div>
 
-      {/* Two-layer overlay for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-vynl-black via-vynl-black/50 to-transparent" />
+      {/* Two-layer overlay for text legibility, with a blush glow top-right */}
+      <div className="absolute inset-0 bg-gradient-to-t from-vynl-black via-vynl-black/40 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-vynl-black/70 to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_85%_20%,rgba(232,162,180,0.22),transparent)] pointer-events-none" />
+
+      {/* Floating photo collage — wide screens only, where it can sit clear of the headline */}
+      {collage?.length ? (
+        <motion.div
+          className="hidden xl:block absolute z-10 right-[5%] top-[16%] w-[30vw] max-w-[440px]"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.6 }}
+        >
+          <PolaroidCollage photos={collage} sizes="240px" priority />
+        </motion.div>
+      ) : null}
 
       <Container className="relative z-10 pb-20 md:pb-28 pt-40">
         {/* Staggered text reveal */}
         <motion.div
-          className="max-w-3xl flex flex-col gap-7"
+          className={cn("max-w-3xl flex flex-col gap-7", collage?.length && "xl:max-w-[44rem]")}
           variants={textContainer}
           initial="hidden"
           animate="show"
@@ -87,7 +101,7 @@ export function HeroSection({ data, className, variant = "full" }: HeroSectionPr
           >
             {title}{" "}
             {titleItalic && (
-              <span className="italic text-vynl-champagne-light">{titleItalic}</span>
+              <span className="italic text-vynl-petal">{titleItalic}</span>
             )}
           </motion.h1>
 
@@ -112,7 +126,7 @@ export function HeroSection({ data, className, variant = "full" }: HeroSectionPr
                   href={primaryCTA.href}
                   external={primaryCTA.external}
                   size="lg"
-                  className="bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none btn-shimmer"
+                  className="bg-vynl-petal text-vynl-black hover:bg-vynl-rose border-none btn-shimmer"
                 >
                   {primaryCTA.label}
                 </PrimaryButton>

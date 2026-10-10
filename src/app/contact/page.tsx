@@ -3,6 +3,8 @@ import { Heading, LabelText, BodyText, Rule } from "@/components/ui/Typography";
 import { PrimaryButton } from "@/components/ui/Buttons";
 import { SUPPORT_EMAIL } from "@/lib/email-config";
 import { pageMetadata } from "@/lib/seo";
+import { PolaroidCollage } from "@/components/ui/PolaroidCollage";
+import { sitePhotos } from "@/data";
 
 const PATH = "/contact";
 const TITLE = "Book a Gel-X Appointment in Cranebrook, Penrith";
@@ -40,27 +42,38 @@ export default function ContactPage() {
       <section className="py-20 md:py-28 bg-vynl-white">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-16 lg:gap-24">
-            {/* Booking card */}
-            <div className="border border-vynl-gray-100 p-8 md:p-12 flex flex-col gap-10">
-              <div className="flex flex-col gap-4">
-                <Heading as="h2" size="md">Ready to book?</Heading>
-                <BodyText className="text-vynl-gray-600">
-                  Choose your service and time directly through our Square booking
-                  page — your appointment is confirmed instantly with a deposit.
-                </BodyText>
+            <div className="flex flex-col gap-12">
+              {/* Booking card */}
+              <div className="rounded-3xl border border-vynl-petal bg-vynl-smoke/60 p-8 md:p-12 flex flex-col gap-10">
+                <div className="flex flex-col gap-4">
+                  <Heading as="h2" size="md">Ready to book?</Heading>
+                  <BodyText className="text-vynl-gray-600">
+                    Choose your service and time directly through our Square booking
+                    page — your appointment is confirmed instantly with a deposit.
+                  </BodyText>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <PrimaryButton
+                    href={SQUARE_URL}
+                    external
+                    fullWidth
+                  >
+                    Open Booking Page
+                  </PrimaryButton>
+                  <p className="text-xs font-sans font-light text-vynl-gray-400 text-center">
+                    You&apos;ll be taken to Square to complete your booking securely.
+                  </p>
+                </div>
               </div>
 
-              <div className="flex flex-col gap-4">
-                <PrimaryButton
-                  href={SQUARE_URL}
-                  external
-                  fullWidth
-                >
-                  Open Booking Page
-                </PrimaryButton>
-                <p className="text-xs font-sans font-light text-vynl-gray-400 text-center">
-                  You&apos;ll be taken to Square to complete your booking securely.
+              {/* Recent sets */}
+              <div className="flex flex-col gap-6">
+                <p className="font-display italic text-2xl text-vynl-rose-deep">
+                  <span aria-hidden className="not-italic text-vynl-rose mr-2">✿</span>
+                  Recent sets
                 </p>
+                <PolaroidCollage photos={sitePhotos.contact} layout="row" sizes="(max-width: 1024px) 30vw, 220px" />
               </div>
             </div>
 

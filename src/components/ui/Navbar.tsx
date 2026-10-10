@@ -92,7 +92,7 @@ function MobileMenu({ items, cta, isOpen, onClose }: MobileMenuProps) {
               external={cta.external}
               fullWidth
               onClick={onClose}
-              className="bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude"
+              className="bg-vynl-petal text-vynl-black hover:bg-vynl-rose"
             >
               {cta.label}
             </PrimaryButton>
@@ -189,7 +189,7 @@ export function Navbar({ logoText = "VYNL", items, cta }: NavbarProps) {
                 href={cta.href}
                 external={cta.external}
                 size="sm"
-                className="hidden md:inline-flex bg-vynl-champagne-light text-vynl-black hover:bg-vynl-nude border-none"
+                className="hidden md:inline-flex bg-vynl-petal text-vynl-black hover:bg-vynl-rose border-none"
               >
                 {cta.label}
               </PrimaryButton>

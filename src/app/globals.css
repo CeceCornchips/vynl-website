@@ -162,8 +162,38 @@
 .supply-blob-2 { animation: blob-drift-2 24s ease-in-out infinite; animation-delay: -7s; }
 .supply-blob-3 { animation: blob-drift-3 20s ease-in-out infinite; animation-delay: -13s; }
 
+/* ── Photo marquee: the track holds the photo list twice, so sliding it by
+   exactly half its width loops seamlessly. ── */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-x var(--marquee-duration, 60s) linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Gentle bob for the floating photo collages */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50%      { transform: translateY(-10px) rotate(var(--tilt, 0deg)); }
+}
+
+.float-soft {
+  animation: float-soft 7s ease-in-out infinite;
+}
+
 /* Respect prefers-reduced-motion for all CSS animations */
 @media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .float-soft {
+    animation: none;
+  }
+
   .btn-shimmer::after {
     animation: none;
   }

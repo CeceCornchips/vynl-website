@@ -5,6 +5,7 @@ import { GallerySection } from "@/components/sections/GallerySection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { WhyVynlSection } from "@/components/sections/WhyVynlSection";
+import { PhotoMarquee } from "@/components/sections/PhotoMarquee";
 import { Container } from "@/components/layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "@/components/ui/Typography";
 import { WaitlistForm } from "@/components/forms/Forms";
@@ -15,6 +16,7 @@ import {
   galleryItems,
   testimonials,
   academyWaitlistConfig,
+  sitePhotos,
 } from "@/data";
 
 // Title, description and Open Graph come from the root layout defaults.
@@ -27,7 +29,7 @@ export default function HomePage() {
   return (
     <>
       {/* ── Hero ── */}
-      <HeroSection data={heroData} variant="full" />
+      <HeroSection data={{ ...heroData, collage: sitePhotos.heroCollage }} variant="full" />
 
       {/* ── Brand statement ── */}
       <section className="py-20 md:py-28 bg-vynl-white">
@@ -47,6 +49,9 @@ export default function HomePage() {
         </Container>
       </section>
 
+      {/* ── Photo strip ── */}
+      <PhotoMarquee photos={sitePhotos.marquee} />
+
       {/* ── Brand Pillars ── */}
       <FeatureSection
         meta={{
@@ -55,7 +60,7 @@ export default function HomePage() {
           subtitle:
             "A studio. An academy. A supply shop. One obsession with quality.",
           align: "left",
-          colorScheme: "smoke",
+          colorScheme: "light",
         }}
         features={brandPillars}
         cardVariant="bordered"
@@ -78,7 +83,7 @@ export default function HomePage() {
       />
 
       {/* ── Specialist positioning ── */}
-      <WhyVynlSection />
+      <WhyVynlSection photos={sitePhotos.whyVynl} />
 
       {/* ── Testimonials ── */}
       <TestimonialsSection
@@ -137,7 +142,8 @@ export default function HomePage() {
         subtitle="Book a Gel-X appointment and experience what specialist means."
         primaryCTA={{ label: "Book an Appointment", href: "https://vynl.square.site/s/appointments", external: true }}
         secondaryCTA={{ label: "View Services", href: "/nails" }}
-        variant="black"
+        variant="petal"
+        sidePhotos={sitePhotos.ctaSides}
       />
     </>
   );

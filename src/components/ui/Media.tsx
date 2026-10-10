@@ -161,8 +161,8 @@ export function HeroMedia({ media, className, priority = true }: HeroMediaProps)
             type="video/mp4"
           />
         </video>
-        {/* Dark luxury overlay */}
-        <div className="absolute inset-0 bg-vynl-black/50" />
+        {/* Darkening overlay, kept light enough for the studio to read */}
+        <div className="absolute inset-0 bg-vynl-black/35" />
       </div>
     );
   }

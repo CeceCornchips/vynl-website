@@ -103,6 +103,8 @@ export interface HeroSectionData {
   primaryCTA?: CTALink;
   secondaryCTA?: CTALink;
   media?: MediaItem;
+  /** Two or three photos shown as a floating polaroid collage (xl screens up). */
+  collage?: MediaItem[];
   colorScheme?: ColorScheme;
 }
 

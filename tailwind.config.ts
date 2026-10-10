@@ -65,7 +65,13 @@ const config: Config = {
           black: "#0A0A0B",
           white: "#FFFFFF",
           offwhite: "#FAFAF8",
-          smoke: "#F4F2EF",
+          // Soft blush pink for alternating section backgrounds (was a warm grey).
+          smoke: "#FCF1F3",
+          // Girly accents: petal for fills and tints, rose for decorative marks,
+          // rose-deep for pink text on light backgrounds (large/italic type only).
+          petal: "#F8DCE3",
+          rose: "#E8A2B4",
+          "rose-deep": "#B9677F",
           champagne: "#C9A96E",
           "champagne-light": "#E8D5B0",
           "champagne-muted": "#A8873F",

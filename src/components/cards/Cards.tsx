@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type {
   FeatureCardData,
@@ -25,11 +26,23 @@ export function FeatureCard({ card, variant = "default", className }: FeatureCar
         "group flex flex-col gap-6 p-8",
         variant === "default" && "bg-vynl-smoke hover:bg-vynl-gray-100 transition-colors duration-300",
         variant === "minimal" && "bg-transparent",
-        variant === "bordered" && "border border-vynl-gray-200 hover:border-vynl-champagne/60 transition-colors duration-300",
+        variant === "bordered" && "rounded-3xl bg-white/80 border border-vynl-petal hover:border-vynl-rose hover:shadow-[0_18px_40px_-20px_rgba(185,103,127,0.45)] transition-all duration-300",
         variant === "dark" && "bg-vynl-gray-800 hover:bg-vynl-gray-700 transition-colors duration-300",
         className
       )}
     >
+      {card.media && (
+        <div className="relative -mx-2 -mt-2 aspect-[4/3] overflow-hidden rounded-2xl bg-vynl-petal">
+          <Image
+            src={card.media.src}
+            alt={card.media.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        </div>
+      )}
+
       {card.icon && (
         <span className={cn(
           "font-display text-sm tracking-widest",

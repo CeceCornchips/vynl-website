@@ -7,7 +7,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { NailsApproachSection } from "@/components/sections/NailsApproachSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema, faqSchema, pageMetadata, serviceSchema } from "@/lib/seo";
-import { galleryItems, testimonials, nailsFAQs, nailServices, nailAddOns } from "@/data";
+import { galleryItems, testimonials, nailsFAQs, nailServices, nailAddOns, sitePhotos } from "@/data";
 
 const PATH = "/nails";
 const TITLE = "Gel-X Nails Cranebrook & Penrith | Extensions & Nail Art";
@@ -94,7 +94,8 @@ export default function NailsPage() {
         titleItalic="your best nails?"
         subtitle="All services are by online booking only. Select your service, choose a time, and pay your deposit instantly via Square."
         primaryCTA={{ label: "Request an Appointment", href: "https://vynl.square.site/s/appointments", external: true }}
-        variant="black"
+        variant="petal"
+        sidePhotos={sitePhotos.ctaSides}
       />
 
       {/* ── FAQ ── */}

@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { PhotoMarquee } from "@/components/sections/PhotoMarquee";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { Container } from "@/components/layout/Container";
@@ -7,7 +9,7 @@ import { ChampagneButton } from "@/components/ui/Buttons";
 import { WaitlistForm } from "@/components/forms/Forms";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema, courseSchema, faqSchema, pageMetadata } from "@/lib/seo";
-import { academyWaitlistConfig, academyFAQs, academyModules } from "@/data";
+import { academyWaitlistConfig, academyFAQs, academyModules, sitePhotos } from "@/data";
 
 const PATH = "/academy";
 const TITLE = "Nail Course Australia | Gel-X Training & Nail Education";
@@ -50,6 +52,13 @@ export default function AcademyPage() {
         variant="compact"
       />
 
+      {/* ── Photo strip ── */}
+      <PhotoMarquee
+        photos={[...sitePhotos.marquee].reverse()}
+        label="Learn to create sets like these"
+        reverse
+      />
+
       {/* ── The Outcome ── */}
       <section className="py-24 md:py-32 bg-vynl-white">
         <Container>
@@ -61,7 +70,7 @@ export default function AcademyPage() {
               </div>
               <Heading as="h2" size="2xl">
                 From learning to{" "}
-                <span className="italic text-vynl-champagne">fully booked.</span>
+                <span className="italic text-vynl-rose-deep">fully booked.</span>
               </Heading>
               <div className="flex flex-col gap-5">
                 <BodyText className="text-vynl-gray-600">
@@ -120,7 +129,7 @@ export default function AcademyPage() {
               The academy is for you if…
             </Heading>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-vynl-gray-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {[
               {
                 title: "You're brand new",
@@ -134,8 +143,17 @@ export default function AcademyPage() {
                 title: "You want to build a brand",
                 body: "You're not just here for the technique. You want to build something real, with your name on it.",
               },
-            ].map(({ title, body }) => (
-              <div key={title} className="bg-vynl-smoke p-10 flex flex-col gap-4">
+            ].map(({ title, body }, i) => (
+              <div key={title} className="group bg-white rounded-3xl border border-vynl-petal p-6 md:p-7 flex flex-col gap-4">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-vynl-petal">
+                  <Image
+                    src={sitePhotos.academyAudience[i].src}
+                    alt={sitePhotos.academyAudience[i].alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  />
+                </div>
                 <Heading as="h3" size="sm">{title}</Heading>
                 <BodyText size="sm" muted>{body}</BodyText>
               </div>
@@ -181,7 +199,8 @@ export default function AcademyPage() {
         titleItalic="starts here."
         subtitle="Join the waitlist to secure your free course, early access, and founding member pricing."
         primaryCTA={{ label: "Join the Waitlist", href: "#waitlist" }}
-        variant="black"
+        variant="petal"
+        sidePhotos={sitePhotos.ctaSides}
       />
 
       {/* ── FAQ ── */}

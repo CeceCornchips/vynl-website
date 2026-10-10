@@ -162,6 +162,9 @@ export function nailSalonSchema(): JsonLdObject {
     "@type": "NailSalon",
     "@id": STUDIO_ID,
     name: BUSINESS.name,
+    // Disambiguates the brand from the many "VNYL"/vinyl businesses and
+    // matches how clients actually search for her.
+    alternateName: ["Vynl Nails", "Vynl Nail Studio", "Vynl Penrith", "au.vynl"],
     legalName: BUSINESS.legalName,
     description: BUSINESS.description,
     url: SITE_URL,

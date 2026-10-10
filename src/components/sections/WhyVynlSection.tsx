@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Heading, Subheading, LabelText, Rule } from "@/components/ui/Typography";
+import { PolaroidCollage } from "@/components/ui/PolaroidCollage";
+import type { MediaItem } from "@/types";
 
 // Shared easing — same spring Apple uses in marketing pages
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -33,7 +35,7 @@ const statRow = {
   },
 };
 
-export function WhyVynlSection() {
+export function WhyVynlSection({ photos }: { photos?: MediaItem[] }) {
   return (
     <section className="py-24 md:py-32 bg-vynl-white overflow-hidden">
       <Container>
@@ -58,7 +60,7 @@ export function WhyVynlSection() {
             <motion.div variants={fadeUp} custom={1}>
               <Heading as="h2" size="2xl" className="max-w-lg">
                 We do one thing.{" "}
-                <span className="italic text-vynl-champagne">Exceptionally well.</span>
+                <span className="italic text-vynl-rose-deep">Exceptionally well.</span>
               </Heading>
             </motion.div>
 
@@ -78,6 +80,12 @@ export function WhyVynlSection() {
                 Emu Plains, St Marys and across Western Sydney.
               </Subheading>
             </motion.div>
+
+            {photos?.length ? (
+              <motion.div variants={fadeUp} custom={3} className="pt-4 max-w-md">
+                <PolaroidCollage photos={photos} layout="row" sizes="(max-width: 1024px) 30vw, 150px" />
+              </motion.div>
+            ) : null}
 
           </motion.div>
 
@@ -114,10 +122,10 @@ export function WhyVynlSection() {
                   variants={statRow}
                 >
                   {/* Thin rule above each stat */}
-                  <div className="w-full h-px bg-vynl-gray-100" />
+                  <div className="w-full h-px bg-vynl-petal" />
 
                   <div className="flex flex-col gap-2">
-                    <span className="font-display italic text-5xl md:text-6xl lg:text-7xl text-vynl-champagne leading-none">
+                    <span className="font-display italic text-5xl md:text-6xl lg:text-7xl text-vynl-rose-deep leading-none">
                       {value}
                     </span>
                     <span className="text-2xs font-sans tracking-ultra-wide uppercase text-vynl-gray-400 max-w-xs">
@@ -128,7 +136,7 @@ export function WhyVynlSection() {
               ))}
 
               {/* Closing rule */}
-              <div className="w-full h-px bg-vynl-gray-100" />
+              <div className="w-full h-px bg-vynl-petal" />
             </motion.div>
 
           </div>

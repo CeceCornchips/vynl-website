@@ -24,11 +24,11 @@ export default function SupplyPage() {
             filter: "blur(72px)",
           }}
         />
-        {/* Bottom-right warm glow */}
+        {/* Bottom-right blush glow */}
         <div
           className="supply-blob-2 absolute -bottom-60 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.08]"
           style={{
-            background: "radial-gradient(circle, rgba(201,169,110,1) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(232,162,180,1) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
