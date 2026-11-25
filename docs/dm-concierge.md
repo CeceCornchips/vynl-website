@@ -29,8 +29,10 @@ message with the address.
 ### 1. Instagram
 
 1. Make sure @au.vynl is a professional account (Business or Creator).
-2. In the Instagram app: **Settings → Messages and story replies → Message
-   controls → Connected tools**, and turn on **Allow access to messages**.
+2. In the Instagram app: **Settings and activity → Account type and tools →
+   Messaging tools → Message controls**, and under **Connected tools** turn on
+   **Allow access to messages**. (Older instructions say Messages and story
+   replies, but it's no longer there.)
 3. If you're trying Meta Business Agent or ManyChat, switch them off first:
    only one automated tool should answer the inbox.
 
