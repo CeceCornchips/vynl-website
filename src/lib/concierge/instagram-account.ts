@@ -220,6 +220,13 @@ export async function completeInstagramLogin(code: string, redirectUri: string):
     throw new Error(`Connected, but couldn't turn on DM notifications: ${subJson.error?.message ?? `HTTP ${sub.status}`}`);
   }
 
+  // Meta only starts sending a creator account's DMs after one Conversations
+  // API call. Harmless for business accounts, so always make it.
+  await fetch(`${base}/${encodeURIComponent(account.id)}/conversations?limit=1`, {
+    headers: auth,
+    signal: AbortSignal.timeout(10_000),
+  }).catch(() => null);
+
   await saveInstagramConnection({
     api: 'facebook',
     accessToken: token,

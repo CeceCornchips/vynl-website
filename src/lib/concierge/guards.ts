@@ -24,8 +24,10 @@ export async function findBlockedContent(
   text: string,
   { aiWritten }: { aiWritten: boolean },
 ): Promise<string | null> {
-  if (text.length > CONCIERGE.maxReplyChars) {
-    return `It's longer than Instagram allows (${text.length} of ${CONCIERGE.maxReplyChars} characters).`;
+  // Instagram counts bytes, not letters: emoji and accented letters use several.
+  const size = Buffer.byteLength(text, 'utf8');
+  if (size > CONCIERGE.maxReplyChars) {
+    return `It's too long for one Instagram message (${size} of ${CONCIERGE.maxReplyChars}; emoji count as several). Shorten it a little.`;
   }
 
   // The studio's street address (from Square) never goes out in chat.

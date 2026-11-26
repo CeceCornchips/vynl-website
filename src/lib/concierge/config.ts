@@ -27,7 +27,7 @@ export const CONCIERGE = {
   maxImages: 4,
   /** Safety cap on model calls per draft. */
   maxAgentIterations: 6,
-  /** Instagram rejects longer text messages. */
+  /** Instagram rejects text messages over 1,000 bytes of UTF-8 (emoji count as several). */
   maxReplyChars: 1000,
 } as const;
 

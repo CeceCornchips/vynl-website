@@ -8,6 +8,7 @@ import {
   setConversationProfile,
   type StoredAttachment,
 } from '@/lib/concierge/store';
+import { noteWebhookDelivery, noteWebhookRejected } from '@/lib/concierge/webhook-health';
 import {
   getInstagramProfile,
   instagramVerifyToken,
@@ -45,7 +46,10 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
   const raw = Buffer.from(await request.arrayBuffer());
-  if (!verifyInstagramSignature(raw, request.headers.get('x-hub-signature-256'))) {
+  const signature = request.headers.get('x-hub-signature-256');
+  if (!verifyInstagramSignature(raw, signature)) {
+    // Signed but wrong usually means the app secret on the site doesn't match Meta's.
+    if (signature) after(() => noteWebhookRejected());
     return new Response('Invalid signature', { status: 401 });
   }
 
@@ -56,6 +60,8 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: 'Invalid JSON.' }, { status: 400 });
   }
   const events = messagingEvents(payload);
+  // Count actual messages (yours and clients'), not read receipts or reactions.
+  after(() => noteWebhookDelivery(events.filter((e) => e.message?.mid).length));
   if (events.length === 0) {
     // Log the shape (never the content) so unexpected formats show up in Vercel logs.
     console.log('[instagram webhook] no DM events in delivery', {
