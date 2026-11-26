@@ -130,6 +130,21 @@ export function canConnectInstagram(): boolean {
   return Boolean(metaAppId() && loginConfigId() && process.env.INSTAGRAM_APP_SECRET);
 }
 
+/** The studio's Instagram username. Only this account can be connected. */
+export function studioInstagramUsername(): string {
+  return (process.env.INSTAGRAM_USERNAME?.trim() || 'au.vynl').replace(/^@/, '').toLowerCase();
+}
+
+/** Thrown when the Meta login shared accounts, but not the studio's. */
+export class WrongInstagramAccountError extends Error {
+  constructor(shared: string[]) {
+    super(
+      `Meta shared ${shared.map((u) => `@${u}`).join(', ') || 'no named account'}, not @${studioInstagramUsername()}.`,
+    );
+    this.name = 'WrongInstagramAccountError';
+  }
+}
+
 /** Where Meta sends you back after logging in. Must be registered on the login configuration. */
 export function instagramRedirectUri(requestOrigin: string): string {
   const base = process.env.CONCIERGE_SITE_URL?.trim() || requestOrigin;
@@ -154,8 +169,8 @@ async function graphJson<T>(res: Response): Promise<T & { error?: { message?: st
 }
 
 /**
- * Swaps the login code for a system-user token, finds the Instagram account
- * it was given, and turns on DM webhooks for that account.
+ * Swaps the login code for a system-user token, finds the studio's Instagram
+ * account among the ones shared, and turns on DM webhooks for it.
  */
 export async function completeInstagramLogin(code: string, redirectUri: string): Promise<{ username: string | null }> {
   const appId = metaAppId();
@@ -187,8 +202,11 @@ export async function completeInstagramLogin(code: string, redirectUri: string):
       `No Instagram account was shared during login: ${accountsJson.error?.message ?? 'pick the studio account when asked'}`,
     );
   }
-  const wanted = process.env.INSTAGRAM_USERNAME?.trim().replace(/^@/, '').toLowerCase();
-  const account = (wanted && accounts.find((a) => a.username?.toLowerCase() === wanted)) || accounts[0];
+  // Logging in also signs you in to the DM inbox, so only the studio's own
+  // account is accepted: proving you can share it is the sign-in.
+  const wanted = studioInstagramUsername();
+  const account = accounts.find((a) => a.username?.toLowerCase() === wanted);
+  if (!account) throw new WrongInstagramAccountError(accounts.map((a) => a.username ?? '').filter(Boolean));
 
   // Without this subscription Meta doesn't send the account's DMs to the webhook.
   const sub = await fetch(`${base}/${encodeURIComponent(account.id)}/subscribed_apps`, {

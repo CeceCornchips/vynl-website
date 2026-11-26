@@ -59,9 +59,11 @@ login" setup isn't offered to new apps).
 3. Under **Configure webhooks**: callback URL
    `https://YOUR-SITE/api/webhooks/instagram`, verify token `vynl-dm-concierge`
    (or your `INSTAGRAM_VERIFY_TOKEN`), and subscribe to **messages**.
-4. In the DM inbox, tap **Connect Instagram**, log in, and share the studio's
-   Instagram account. The site stores the token (encrypted) and subscribes the
-   account to DM webhooks. No token copying needed.
+4. Open the DM inbox and tap **Continue with Instagram** (or **Connect
+   Instagram** once signed in), log in, and share the studio's Instagram
+   account. The site stores the token (encrypted), subscribes the account to
+   DM webhooks and signs you in. No token copying needed. Only the studio
+   account (`INSTAGRAM_USERNAME`, default `au.vynl`) is accepted.
 
 Meta notes that message webhooks can be unreliable for Instagram accounts that
 aren't linked to a Facebook Page; if DMs don't arrive, link @au.vynl to a Vynl
@@ -82,6 +84,7 @@ Create a key at console.anthropic.com and set a monthly spend limit there.
 | `CONCIERGE_SITE_URL` | the site's public address, e.g. `https://vynl-website.vercel.app` |
 | `DM_INBOX_EMAIL` | optional: where inbox sign-in links go (default `SUPPORT_EMAIL`) |
 | `DM_INBOX_PASSWORD` | optional: a password sign-in as well (falls back to `ADMIN_PASSWORD`) |
+| `INSTAGRAM_USERNAME` | optional: the studio account to connect (default `au.vynl`) |
 | `INSTAGRAM_VERIFY_TOKEN` | optional: webhook handshake value (default `vynl-dm-concierge`) |
 | `INSTAGRAM_ACCESS_TOKEN` | optional: only if not using Connect Instagram |
 | Square settings | already used by the site: `SQUARE_ACCESS_TOKEN`, `NEXT_PUBLIC_SQUARE_ENV`, `NEXT_PUBLIC_SQUARE_LOCATION_ID`, `SQUARE_TEAM_MEMBER_ID` |
@@ -100,8 +103,9 @@ Optional:
 Redeploy after adding them, then press **Verify and save** on the webhook in
 the Meta dashboard.
 
-Signing in: the inbox emails a one-tap sign-in link to the studio inbox (valid
-15 minutes). A signed-in browser stays signed in for 14 days.
+Signing in: **Continue with Instagram** (the Meta login above, which only
+accepts the studio account), or a one-tap link emailed to the studio inbox
+(valid 15 minutes). A signed-in browser stays signed in for 14 days.
 
 ## Trying it locally
 
