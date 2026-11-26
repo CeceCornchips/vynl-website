@@ -30,6 +30,9 @@ the inbox has its own sign-in and doesn't use Clerk.
   Instagram chats for messages the webhook missed (Meta's Conversations API)
   and saves them. Chats with a new client message from the last 24 hours get a
   draft. This also brings in chats Meta won't send to the webhook yet.
+- Emails the studio inbox when replies are ready to approve: at most one
+  email every 10 minutes, listing everything waiting. Chats that need you
+  personally get their own email instead.
 - **Copy** puts a reply on the clipboard so you can send it from the Instagram
   app, for example while Meta only lets the app message testers.
 - **Check connection** (once Instagram is connected) shows whether the Meta
@@ -108,6 +111,7 @@ Optional:
 | `CONCIERGE_DEBOUNCE_MS` | `6000` | wait before drafting |
 | `CONCIERGE_OWNER_NAME` | `Cece` | name used in the opening line |
 | `CONCIERGE_BOOKING_URL` | your Square booking site | link sent to book |
+| `CONCIERGE_DRAFT_EMAILS` | on | `off` stops the "replies ready to approve" emails |
 
 Redeploy after adding them, then press **Verify and save** on the webhook in
 the Meta dashboard.
