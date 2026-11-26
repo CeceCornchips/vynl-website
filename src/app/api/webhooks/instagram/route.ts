@@ -10,6 +10,7 @@ import {
 } from '@/lib/concierge/store';
 import {
   getInstagramProfile,
+  instagramVerifyToken,
   verifyInstagramSignature,
   type IgWebhookPayload,
 } from '@/lib/instagram';
@@ -23,7 +24,7 @@ export const maxDuration = 60;
 /** Meta's one-time check when you subscribe the webhook in the App Dashboard. */
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const expected = process.env.INSTAGRAM_VERIFY_TOKEN;
+  const expected = instagramVerifyToken();
   const challenge = url.searchParams.get('hub.challenge');
   if (
     url.searchParams.get('hub.mode') === 'subscribe' &&

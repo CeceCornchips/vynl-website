@@ -1,4 +1,5 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'crypto';
+import { getInstagramAccessToken } from '@/lib/concierge/instagram-account';
 
 /**
  * Instagram API with Instagram Login: webhook checks and the Send API.
@@ -65,14 +66,23 @@ export class InstagramSendError extends Error {
 
 /**
  * Without an access token, local development "sends" nothing and returns a
- * made-up message id, so the inbox can be tried before the Meta app exists.
+ * made-up message id, so the inbox can be tried before Instagram is connected.
  */
-function dryRun(): boolean {
-  return !process.env.INSTAGRAM_ACCESS_TOKEN && process.env.NODE_ENV !== 'production';
+async function dryRun(): Promise<boolean> {
+  return process.env.NODE_ENV !== 'production' && !(await getInstagramAccessToken());
 }
 
-export function instagramIsDryRun(): boolean {
+export async function instagramIsDryRun(): Promise<boolean> {
   return dryRun();
+}
+
+/**
+ * The webhook handshake value Meta sends back when you subscribe. It isn't a
+ * secret (every webhook is still checked against the app secret), so a fixed
+ * default works; INSTAGRAM_VERIFY_TOKEN overrides it.
+ */
+export function instagramVerifyToken(): string {
+  return process.env.INSTAGRAM_VERIFY_TOKEN?.trim() || 'vynl-dm-concierge';
 }
 
 /**
@@ -85,11 +95,11 @@ export async function sendInstagramText(
   text: string,
   options: { humanAgentTag?: boolean } = {},
 ): Promise<{ messageId: string; dryRun: boolean }> {
-  if (dryRun()) {
+  if (await dryRun()) {
     return { messageId: `dryrun_${randomBytes(8).toString('hex')}`, dryRun: true };
   }
-  const token = process.env.INSTAGRAM_ACCESS_TOKEN;
-  if (!token) throw new InstagramSendError('INSTAGRAM_ACCESS_TOKEN is not set.', 500);
+  const token = await getInstagramAccessToken();
+  if (!token) throw new InstagramSendError('Instagram isn’t connected yet (use Connect Instagram in the inbox).', 500);
 
   const body: Record<string, unknown> = {
     recipient: { id: recipientId },
@@ -123,7 +133,7 @@ export async function sendInstagramText(
 export async function getInstagramProfile(
   igsid: string,
 ): Promise<{ name: string | null; username: string | null } | null> {
-  const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+  const token = await getInstagramAccessToken();
   if (!token) return null;
   try {
     const res = await fetch(

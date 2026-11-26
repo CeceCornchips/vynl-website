@@ -1,11 +1,12 @@
-import { timingSafeEqual } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 import { cookies } from 'next/headers';
 import { createSession, verifySession } from '@/lib/session';
 
 /**
  * Sign-in for the DM inbox. The rest of the admin area is switched off, so the
- * inbox has its own password: DM_INBOX_PASSWORD, or ADMIN_PASSWORD if that
- * isn't set. Sessions are signed cookies (see src/lib/session.ts).
+ * inbox has its own sign-in: an emailed link sent only to the studio inbox
+ * (DM_INBOX_EMAIL, else SUPPORT_EMAIL), or a password (DM_INBOX_PASSWORD, else
+ * ADMIN_PASSWORD). Sessions are signed cookies (see src/lib/session.ts).
  */
 
 export const INBOX_COOKIE = 'vynl_dm_inbox';
@@ -22,7 +23,47 @@ function inboxPassword(): string {
 }
 
 export function inboxLoginConfigured(): boolean {
-  return Boolean(inboxPassword() && sessionSecret());
+  return Boolean(sessionSecret());
+}
+
+export function inboxPasswordEnabled(): boolean {
+  return Boolean(inboxPassword());
+}
+
+function sign(payload: string): string {
+  return createHmac('sha256', sessionSecret()).update(payload).digest('base64url');
+}
+
+function safeEqual(a: string, b: string): boolean {
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
+  return x.length === y.length && timingSafeEqual(x, y);
+}
+
+/** A sign-in token for an emailed link, valid for 15 minutes. */
+export function newEmailLinkToken(): string {
+  const exp = Date.now() + 15 * 60_000;
+  return `${exp}.${sign(`email-link:${exp}`)}`;
+}
+
+export function emailLinkTokenValid(token: string): boolean {
+  const [expRaw, sig] = token.split('.');
+  const exp = Number(expRaw);
+  if (!sessionSecret() || !sig || !Number.isFinite(exp) || exp < Date.now()) return false;
+  return safeEqual(sig, sign(`email-link:${exp}`));
+}
+
+/** Signed state for the Instagram login round trip, valid for 15 minutes. */
+export function newOAuthState(): string {
+  const exp = Date.now() + 15 * 60_000;
+  return `${exp}.${sign(`ig-oauth:${exp}`)}`;
+}
+
+export function oauthStateValid(state: string): boolean {
+  const [expRaw, sig] = state.split('.');
+  const exp = Number(expRaw);
+  if (!sessionSecret() || !sig || !Number.isFinite(exp) || exp < Date.now()) return false;
+  return safeEqual(sig, sign(`ig-oauth:${exp}`));
 }
 
 export function passwordMatches(given: string): boolean {
