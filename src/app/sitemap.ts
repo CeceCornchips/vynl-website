@@ -47,6 +47,7 @@ const routes: Array<{
   { path: "/supply", updated: "2026-10-10", changeFrequency: "monthly", priority: 0.5 },
   { path: "/gel-x-guide", updated: "2026-10-10", changeFrequency: "monthly", priority: 0.5 },
   { path: "/privacy-policy", updated: "2026-10-10", changeFrequency: "yearly", priority: 0.2 },
+  { path: "/data-deletion", updated: "2026-11-26", changeFrequency: "yearly", priority: 0.1 },
   { path: "/terms", updated: "2026-10-10", changeFrequency: "yearly", priority: 0.2 },
 ];
 
