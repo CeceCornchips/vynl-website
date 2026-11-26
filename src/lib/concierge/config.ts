@@ -34,21 +34,21 @@ export const CONCIERGE = {
 /** Owner name used in the opening line and holding replies. */
 export const OWNER_NAME = process.env.CONCIERGE_OWNER_NAME?.trim() || 'Cece';
 
-/** Where clients book. Defaults to this site's Book page. */
-export function bookingUrl(): string {
-  const explicit = process.env.CONCIERGE_BOOKING_URL?.trim();
-  if (explicit) return explicit;
+/** This site's address. An empty NEXT_PUBLIC_APP_URL counts as unset. */
+function siteBaseUrl(): string {
   const base =
-    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.NEXT_PUBLIC_APP_URL?.trim() ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-  return `${base.replace(/\/$/, '')}/book`;
+  return base.replace(/\/$/, '');
+}
+
+/** Where clients book. Set CONCIERGE_BOOKING_URL (e.g. your Square booking page); defaults to this site's Book page. */
+export function bookingUrl(): string {
+  return process.env.CONCIERGE_BOOKING_URL?.trim() || `${siteBaseUrl()}/book`;
 }
 
 export function adminInboxUrl(conversationId?: number): string {
-  const base =
-    process.env.NEXT_PUBLIC_APP_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-  const url = `${base.replace(/\/$/, '')}/admin/dm-inbox`;
+  const url = `${siteBaseUrl()}/admin/dm-inbox`;
   return conversationId ? `${url}?c=${conversationId}` : url;
 }
 
