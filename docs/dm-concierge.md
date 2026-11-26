@@ -110,7 +110,7 @@ Optional:
 | `CONCIERGE_PHOTO_MODEL` | `claude-sonnet-5-5` | model when a DM has a photo |
 | `CONCIERGE_PAUSE_HOURS` | `12` | how long it stays quiet after you reply |
 | `CONCIERGE_DEBOUNCE_MS` | `6000` | wait before drafting |
-| `CONCIERGE_OWNER_NAME` | `Cece` | name used in the opening line |
+| `CONCIERGE_OWNER_NAME` | `Sienna` | the name clients see in replies and hand-offs |
 | `CONCIERGE_BOOKING_URL` | `https://vynl.square.site/s/appointments` (the bio link) | link sent to book |
 | `CONCIERGE_DRAFT_EMAILS` | on | `off` stops the "replies ready to approve" emails |
 
