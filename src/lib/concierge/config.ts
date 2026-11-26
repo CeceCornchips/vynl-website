@@ -47,13 +47,15 @@ export function siteBaseUrl(): string {
 }
 
 /**
- * Where clients book: CONCIERGE_BOOKING_URL if set, otherwise the booking site
- * Square reports, otherwise this site's Book page.
+ * The booking page linked in the @au.vynl bio. Square's API reports the
+ * booking site as a square.site/book/... address that only redirects to the
+ * Square site's home page, so this direct link goes first.
  */
-export function bookingUrl(squareBookingSiteUrl: string | null): string {
-  return (
-    process.env.CONCIERGE_BOOKING_URL?.trim() || squareBookingSiteUrl || `${siteBaseUrl()}/book`
-  );
+const STUDIO_BOOKING_URL = 'https://vynl.square.site/s/appointments';
+
+/** Where clients book: CONCIERGE_BOOKING_URL if set, otherwise the studio's booking page. */
+export function bookingUrl(): string {
+  return process.env.CONCIERGE_BOOKING_URL?.trim() || STUDIO_BOOKING_URL;
 }
 
 export function inboxUrl(conversationId?: number): string {

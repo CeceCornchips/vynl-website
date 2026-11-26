@@ -111,7 +111,7 @@ Optional:
 | `CONCIERGE_PAUSE_HOURS` | `12` | how long it stays quiet after you reply |
 | `CONCIERGE_DEBOUNCE_MS` | `6000` | wait before drafting |
 | `CONCIERGE_OWNER_NAME` | `Cece` | name used in the opening line |
-| `CONCIERGE_BOOKING_URL` | your Square booking site | link sent to book |
+| `CONCIERGE_BOOKING_URL` | `https://vynl.square.site/s/appointments` (the bio link) | link sent to book |
 | `CONCIERGE_DRAFT_EMAILS` | on | `off` stops the "replies ready to approve" emails |
 
 Redeploy after adding them, then press **Verify and save** on the webhook in
