@@ -157,6 +157,10 @@ function StatusBadges({ c }: { c: ConversationRow }) {
   );
 }
 
+/** Instagram's limit is in bytes, so emoji and accents count as several. */
+const MAX_REPLY_BYTES = 1000;
+const byteLength = (s: string) => new TextEncoder().encode(s).length;
+
 const INSTAGRAM_NOTICES: Record<string, string> = {
   connected: 'Instagram is connected. New DMs will appear here.',
   cancelled: 'Instagram connection was cancelled.',
@@ -165,6 +169,71 @@ const INSTAGRAM_NOTICES: Record<string, string> = {
   'wrong-account': 'That login shared a different Instagram account. Try again and choose the studio account.',
   'not-configured': "The Instagram app details aren't set up on the site yet.",
 };
+
+interface ConnectionStatus {
+  ok: boolean;
+  connected: boolean;
+  checks?: Record<string, { ok: boolean; detail: string }>;
+  webhookActivity?: {
+    lastDeliveryAt: string | null;
+    lastDmAt: string | null;
+    lastRejectedAt: string | null;
+  };
+}
+
+const CHECK_LABELS: Record<string, string> = {
+  appWebhook: 'Meta app sends DMs to this site',
+  account: 'Instagram account readable',
+  webhooks: 'Account subscribed to DMs',
+  conversations: 'Chats readable',
+};
+
+/** Runs /api/dm/instagram/status and lists what's working. */
+function ConnectionCheck() {
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<ConnectionStatus | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function runCheck() {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/dm/instagram/status', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`The check didn't run (${res.status}).`);
+      setResult((await res.json()) as ConnectionStatus);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "The check didn't run.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const when = (iso: string | null | undefined) => (iso ? new Date(iso).toLocaleString('en-AU') : 'never');
+  const activity = result?.webhookActivity;
+  return (
+    <div className="space-y-1">
+      <button type="button" onClick={() => void runCheck()} disabled={busy} className="underline disabled:opacity-60">
+        {busy ? 'Checking…' : 'Check connection'}
+      </button>
+      {error && <p className="text-red-700">{error}</p>}
+      {result && (
+        <ul className="space-y-0.5 text-xs">
+          {Object.entries(result.checks ?? {}).map(([key, c]) => (
+            <li key={key}>
+              {c.ok ? '✓' : '✗'} {CHECK_LABELS[key] ?? key}: <span className="opacity-80">{c.detail}</span>
+            </li>
+          ))}
+          {activity && (
+            <li>
+              Last DM received: {when(activity.lastDmAt)} · last message from Meta: {when(activity.lastDeliveryAt)}
+              {activity.lastRejectedAt && ` · last rejected (app secret mismatch?): ${when(activity.lastRejectedAt)}`}
+            </li>
+          )}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function SetupBanner({ setup, instagramNotice }: { setup: Setup | null; instagramNotice: string | null }) {
   if (!setup) return null;
@@ -193,6 +262,7 @@ function SetupBanner({ setup, instagramNotice }: { setup: Setup | null; instagra
           </a>
         </p>
       )}
+      {setup.instagramUsername && <ConnectionCheck />}
       {showConnect && (
         <a
           href="/api/dm/instagram/connect"
@@ -442,7 +512,7 @@ function ChatView({
 
         <div className="flex flex-wrap items-center gap-2">
           <Button
-            disabled={busy != null || !text.trim()}
+            disabled={busy != null || !text.trim() || byteLength(text) > MAX_REPLY_BYTES}
             onClick={() =>
               run('send', { action: 'send', text, ...(draft ? { draftId: draft.id } : {}) }, (r) => {
                 if (r.dryRun) setNotice("Saved in test mode: it wasn't delivered to Instagram.");
@@ -470,7 +540,14 @@ function ChatView({
             {busy === 'redraft' ? <Loader2 className="animate-spin" /> : <RefreshCw />}
             {draft ? 'Redraft' : 'Draft a reply'}
           </Button>
-          <span className="ml-auto text-xs text-muted-foreground tabular-nums">{text.length}/1000</span>
+          <span
+            className={cn(
+              'ml-auto text-xs tabular-nums',
+              byteLength(text) > MAX_REPLY_BYTES ? 'text-red-700' : 'text-muted-foreground',
+            )}
+          >
+            {byteLength(text)}/{MAX_REPLY_BYTES}
+          </span>
         </div>
         {!draft && (
           <p className="text-xs text-muted-foreground">
