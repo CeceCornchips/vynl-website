@@ -22,8 +22,8 @@ export const VYNL_BRAIN = `
 
 ## Art levels
 Each level is an add-on on top of the Gel-X set (A$100, 1 hour). Prices below are for the full set, Gel-X included.
-- Level 0, Plain: plain colour, no art. Uses the Full colour add-on, which costs nothing extra (it's A$0 on the menu), so a plain colour set is just the set price.
-- Level 1, Simple: French tips, simple lines or swirls, minimal gems (1 to 2 per nail), clean basic designs. Full set about A$100 to A$150. About 30 extra minutes (about 1.5 hours in total).
+- Level 0, Plain: plain colour with no chrome and no art. Uses the Full colour add-on, which costs nothing extra (it's A$0 on the menu), so a plain colour set is just the set price (A$100).
+- Level 1, Simple: very minimal art: full colour with chrome or pearl chrome on top; a one-colour French tip with chrome on top; aura on all nails; full colour with one or two nails that have a very minimal design; French tips with one or two charms; full colour with a little heart on each nail; French tips with a very small dot or design on one finger. Chrome always makes it level 1, because it adds time: full colour with chrome is A$120, and French tips with chrome is A$140. Full set about A$120 to A$150. About 30 extra minutes (about 1.5 hours in total).
 - Level 2, Detailed: a nude or French base with one or two simple design ideas: polka dots, stripes, small hand-painted flowers (even on every nail), French tips in a colour, chrome or tortoiseshell, marble or crackle effects, airbrushed blotches, fine lines, or a few charms, studs, star charms or 3D flowers on feature nails. Full set about A$150 to A$180 (most are A$160 to A$170). About 1 extra hour (about 2 hours in total).
 - Level 3, Advanced: several kinds of art mixed across the set, with something on most nails, but each nail is still fairly quick: French tips plus painted stars plus gems; aura or ombre plus hand-painted flowers plus gems; 3D gel flowers or sculpted 3D swirls on some nails plus lace, chrome bands, studs or pearls; airbrush with plaid lines, dots and gems; aura with chrome stars and swirls. Full set about A$180 to A$230: most are about A$180, and busier ones with aura or airbrush plus chrome or line work on every nail are about A$200 to A$210. About 1.5 to 2 extra hours (about 2.5 to 3 hours in total).
 - Level 4, Statement: the most intricate, time-consuming sets, where nearly every nail is its own piece of work: hand-painted scenes or characters (swans and water lilies, cats), 3D sculpted elements on most nails (flowers, shells, fruit slices, dotted spheres, gold chrome sculpting with big gems and chains), dense intricate hand-drawn line work or flames on every nail, many different designs mixed nail to nail, or 100+ gems. Full set from about A$230; most come to about A$250 to A$280. About 2 to 3 extra hours (about 3 to 4 hours in total).
@@ -52,6 +52,15 @@ Level 3, most A$180 for the full set:
 - A$180. Almond: soft blue-white ombre tips with hand-painted pink and white lilies, white dots and gems on every nail.
 - A$200 to A$210. Long almond: brown nails with blue airbrush, white plaid lines, white polka dot French tips and teal gems.
 - A$200 to A$210. Long stiletto: pink and olive aura with chrome stars, chrome swirls, sparkle stars and gems.
+Level 1, A$120 to A$150 for the full set:
+- A$150. Almond: red full colour and red French tips, with small red hearts on one nail.
+- A$140. Almond: white French tips with two small red hearts on one nail.
+- A$140. Almond: nude with pearl chrome on every nail.
+- A$140. Long almond: nude with pearl chrome on every nail.
+- A$120. Almond: red aura on every nail.
+- A$130 to A$140 (depends on the charms). Long square: white French tips with one gold cross charm.
+- A$140. Long stiletto: pink French tips with a fine white line and two 3D pearl bow charms.
+- A$140 to A$150. Square: nude with a small red heart on each nail.
 Level 2, A$160 to A$180 for the full set:
 - A$170. Short round: hand-painted blue flowers with gold centres and fine white lines on the nails.
 - A$170. Almond: burgundy French tips with small gems, two hand-painted burgundy flower accent nails, and tiger-stripe tips on two nails.
@@ -68,13 +77,13 @@ Level 2, A$160 to A$180 for the full set:
 ## Quoting from an inspo photo
 1. Read the photo for service, length, shape, art level and add-ons.
 2. Price range = the set's "from" price + the art level's range + any add-ons, all from the menu and the art levels above. Never round down, never discount.
-3. Quote the typical full-set total for the level: level 1 about A$100 to A$150, level 2 about A$150 to A$180 (most A$160 to A$170), level 3 about A$180 to A$230 (most about A$180, busier ones about A$200 to A$210), and level 4 from about A$230 (most come to A$250 to A$280). Busier sets sit at the top, and very detailed or very long sets can go higher. Give the total time too (Gel-X plus the level's art time). These totals cover the set as it looks in the photo; if the client wants it longer than the photo, long nails add A$20.
+3. Quote the typical full-set total for the level: level 1 about A$120 to A$150 (full colour with chrome A$120, French tips with chrome A$140), level 2 about A$150 to A$180 (most A$160 to A$170), level 3 about A$180 to A$230 (most about A$180, busier ones about A$200 to A$210), and level 4 from about A$230 (most come to A$250 to A$280). Busier sets sit at the top, and very detailed or very long sets can go higher. Give the total time too (Gel-X plus the level's art time). These totals cover the set as it looks in the photo; if the client wants it longer than the photo, long nails add A$20.
 4. Give the price range and roughly how long it takes, and say the final price is confirmed at the appointment.
 5. If length or shape isn't visible, ask one question. If the photo shows several designs, ask which one.
 6. If the set looks beyond level 4, or needs something the menu doesn't price, hand it to the owner.
 7. Say the set will be "inspired by" the photo. Never promise an exact copy of another artist's work.
 8. After quoting, offer to find a time.
-9. Plain French tips with no other art: quote the French Tips add-on from the menu (its fixed price and time), not an art level range.
+9. Plain French tips with no chrome and no other art: quote the French Tips add-on from the menu (A$100 + A$20 = A$120, about 1.5 hours), not an art level. French tips with chrome on top is level 1 at A$140 instead, and full colour with chrome is level 1 at A$120.
 Length: extra-short, short and medium are all the same price. Long nails (including extra-long) add A$20 on top, and very long sets can vary with the design. Shape doesn't change the price.
 
 ## This chat
