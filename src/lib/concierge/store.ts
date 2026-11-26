@@ -203,7 +203,8 @@ export async function deleteOutgoingMessage(messageId: number): Promise<void> {
 /**
  * Handles Instagram's copy ("echo") of a message sent from your account.
  * Returns 'ours' for replies sent from the inbox, 'owner' when you replied in
- * the Instagram app, and 'duplicate' for repeats.
+ * the Instagram app, and 'duplicate' for repeats. `pause: false` saves an
+ * older reply (found by the chat sync) without pausing the assistant.
  */
 export async function recordEcho(input: {
   conversationId: number;
@@ -211,6 +212,7 @@ export async function recordEcho(input: {
   text: string | null;
   attachments: StoredAttachment[];
   sentAt: Date;
+  pause?: boolean;
 }): Promise<'ours' | 'owner' | 'duplicate'> {
   const known = (await sql`
     SELECT id FROM dm_messages WHERE ig_message_id = ${input.igMessageId} LIMIT 1
@@ -252,7 +254,7 @@ export async function recordEcho(input: {
         updated_at = NOW()
     WHERE id = ${input.conversationId}
   `;
-  await pauseConversation(input.conversationId, CONCIERGE.humanPauseHours);
+  if (input.pause !== false) await pauseConversation(input.conversationId, CONCIERGE.humanPauseHours);
   return 'owner';
 }
 

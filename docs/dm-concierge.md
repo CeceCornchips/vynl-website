@@ -26,6 +26,15 @@ the inbox has its own sign-in and doesn't use Clerk.
 - Goes quiet in a chat for 12 hours when you reply yourself in the Instagram
   app, or when you send your own message from the inbox. **Take over** and
   **Hand back** do the same by hand.
+- Every couple of minutes while the inbox is open, checks the 10 most recent
+  Instagram chats for messages the webhook missed (Meta's Conversations API)
+  and saves them. Chats with a new client message from the last 24 hours get a
+  draft. This also brings in chats Meta won't send to the webhook yet.
+- **Copy** puts a reply on the clipboard so you can send it from the Instagram
+  app, for example while Meta only lets the app message testers.
+- **Check connection** (once Instagram is connected) shows whether the Meta
+  app's webhook points at the site, the account is subscribed, chats can be
+  read, when the last DM arrived and when the last chat sync ran.
 
 Not built yet: quotes priced by code from an inspo photo, and replies that send
 on their own (everything waits for your approval for now).
