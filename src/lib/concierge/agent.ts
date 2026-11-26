@@ -7,7 +7,7 @@ import { fetchInstagramImage } from '@/lib/instagram';
 import { buildSystemPrompt } from '@/lib/concierge/brain';
 import { CONCIERGE, estimateCostUsd, OWNER_NAME } from '@/lib/concierge/config';
 import { findBlockedContent } from '@/lib/concierge/guards';
-import { alertOwner } from '@/lib/concierge/notify';
+import { alertOwner, notifyDraftsWaiting } from '@/lib/concierge/notify';
 import { findOpenSlots } from '@/lib/concierge/slots';
 import {
   createDraft,
@@ -471,6 +471,8 @@ async function runAgent(
       urgent: result.urgency === 'urgent',
       lastClientMessage: lastClient?.text ?? null,
     });
+  } else if (reply) {
+    await notifyDraftsWaiting();
   }
 
   return { draft, error: null };
