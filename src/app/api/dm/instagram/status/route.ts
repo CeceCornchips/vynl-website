@@ -6,6 +6,7 @@ import {
   graphBase,
   metaAppId,
 } from '@/lib/concierge/instagram-account';
+import { getLastSync } from '@/lib/concierge/sync';
 import { getWebhookHealth } from '@/lib/concierge/webhook-health';
 
 export const runtime = 'nodejs';
@@ -54,14 +55,15 @@ export async function GET() {
   const denied = await requireInboxSession();
   if (denied) return denied;
 
-  const [conn, creds, appWebhook, webhookActivity] = await Promise.all([
+  const [conn, creds, appWebhook, webhookActivity, lastSync] = await Promise.all([
     getInstagramConnection(),
     getInstagramCredentials(),
     appWebhookCheck(),
     getWebhookHealth(),
+    getLastSync(),
   ]);
   if (!creds) {
-    return NextResponse.json({ ok: false, connected: false, checks: { appWebhook }, webhookActivity });
+    return NextResponse.json({ ok: false, connected: false, checks: { appWebhook }, webhookActivity, lastSync });
   }
 
   const base = graphBase(creds.api);
@@ -101,5 +103,6 @@ export async function GET() {
     connectedAt: conn?.connectedAt ?? null,
     checks,
     webhookActivity,
+    lastSync,
   });
 }

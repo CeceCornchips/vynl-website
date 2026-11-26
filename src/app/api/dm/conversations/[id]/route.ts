@@ -148,7 +148,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
           });
         } catch (err) {
           await deleteOutgoingMessage(messageId);
-          const message = err instanceof InstagramSendError ? err.message : 'Instagram send failed.';
+          const message = `${err instanceof InstagramSendError ? err.message : 'Instagram send failed.'} You can tap Copy and send it from the Instagram app instead.`;
           console.error('[dm inbox] send failed:', err);
           return Response.json({ ok: false, error: message }, { status: 502 });
         }

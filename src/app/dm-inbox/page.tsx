@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   AlertTriangle,
   ArrowLeft,
+  Copy,
   Hand,
   Loader2,
   MessageCircle,
@@ -179,6 +180,7 @@ interface ConnectionStatus {
     lastDmAt: string | null;
     lastRejectedAt: string | null;
   };
+  lastSync?: { at: string; ok: boolean; conversations: number; newMessages: number; error?: string } | null;
 }
 
 const CHECK_LABELS: Record<string, string> = {
@@ -227,6 +229,14 @@ function ConnectionCheck() {
             <li>
               Last DM received: {when(activity.lastDmAt)} · last message from Meta: {when(activity.lastDeliveryAt)}
               {activity.lastRejectedAt && ` · last rejected (app secret mismatch?): ${when(activity.lastRejectedAt)}`}
+            </li>
+          )}
+          {result.lastSync && (
+            <li>
+              {result.lastSync.ok ? '✓' : '✗'} Last chat sync: {when(result.lastSync.at)} ·{' '}
+              {result.lastSync.ok
+                ? `${result.lastSync.conversations} chats checked, ${result.lastSync.newMessages} new messages`
+                : result.lastSync.error}
             </li>
           )}
         </ul>
@@ -539,6 +549,19 @@ function ChatView({
           >
             {busy === 'redraft' ? <Loader2 className="animate-spin" /> : <RefreshCw />}
             {draft ? 'Redraft' : 'Draft a reply'}
+          </Button>
+          <Button
+            variant="ghost"
+            disabled={!text.trim()}
+            onClick={() =>
+              void navigator.clipboard
+                .writeText(text)
+                .then(() => setNotice('Copied. Paste it into the chat in the Instagram app to send it yourself.'))
+                .catch(() => setNotice("Couldn't copy. Select the text and copy it instead."))
+            }
+          >
+            <Copy />
+            Copy
           </Button>
           <span
             className={cn(

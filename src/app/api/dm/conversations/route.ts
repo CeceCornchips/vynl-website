@@ -1,16 +1,28 @@
+import { after } from 'next/server';
 import { sql } from '@/lib/db';
 import { CONCIERGE } from '@/lib/concierge/config';
 import { ensureConciergeSchema } from '@/lib/concierge/schema';
 import { instagramIsDryRun } from '@/lib/instagram';
 import { canConnectInstagram, getInstagramConnection } from '@/lib/concierge/instagram-account';
 import { requireInboxSession } from '@/lib/concierge/inbox-auth';
+import { syncInstagramChats } from '@/lib/concierge/sync';
 
 export const dynamic = 'force-dynamic';
+// The chat sync (and any drafts it starts) runs after the list is sent.
+export const maxDuration = 60;
 
 /** The DM inbox list: every chat, newest first, with what it's waiting on. */
 export async function GET() {
   const denied = await requireInboxSession();
   if (denied) return denied;
+
+  // Picks up DMs the webhook missed; at most every couple of minutes, and the
+  // results show on the inbox's next refresh.
+  after(() =>
+    syncInstagramChats()
+      .then(() => undefined)
+      .catch((err) => console.error('[dm inbox] chat sync failed:', err)),
+  );
 
   try {
     await ensureConciergeSchema();
