@@ -100,6 +100,14 @@ export async function setConversationProfile(
   `;
 }
 
+/**
+ * Practice chats made for trying the inbox (ids starting test_ or sim_). They
+ * aren't real Instagram users, so replies are saved but never sent.
+ */
+export function isTestChat(igUserId: string): boolean {
+  return /^(test|sim)_/.test(igUserId);
+}
+
 export function isPaused(conversation: DmConversation, now = new Date()): boolean {
   return (
     conversation.bot_paused_until != null && new Date(conversation.bot_paused_until) > now

@@ -14,6 +14,7 @@ import {
   getPendingDraft,
   getRecentMessages,
   insertOutgoingMessage,
+  isTestChat,
   pauseConversation,
   resumeConversation,
   supersedePendingDrafts,
@@ -143,9 +144,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         });
         let result: { messageId: string; dryRun: boolean };
         try {
-          result = await sendInstagramText(conversation.ig_user_id, text, {
-            humanAgentTag: sinceClient > 24 * HOUR,
-          });
+          result = isTestChat(conversation.ig_user_id)
+            ? { messageId: `test_${Date.now()}_${messageId}`, dryRun: true }
+            : await sendInstagramText(conversation.ig_user_id, text, {
+                humanAgentTag: sinceClient > 24 * HOUR,
+              });
         } catch (err) {
           await deleteOutgoingMessage(messageId);
           const message = `${err instanceof InstagramSendError ? err.message : 'Instagram send failed.'} You can tap Copy and send it from the Instagram app instead.`;
