@@ -190,7 +190,7 @@ export function contextNote(conversation: DmConversation, messages: DmMessage[])
   return [
     'Context for this reply, from the Vynl system (not from the client):',
     `- Now: ${formatInTimeZone(now, BUSINESS_TIMEZONE, "EEEE d MMMM yyyy, h:mm a")} Sydney time. Today is ${formatInTimeZone(now, BUSINESS_TIMEZONE, 'yyyy-MM-dd')}.`,
-    `- New chat: ${newChat ? 'yes, so start with the opening line' : 'no, so skip the opening line'}.`,
+    `- New chat: ${newChat ? 'yes, so open with a short, warm greeting' : "no, so don't greet again"}.`,
     `- Client's Instagram name: ${who}.`,
     'Reply to the client\'s latest messages, then call submit_reply.',
   ].join('\n');

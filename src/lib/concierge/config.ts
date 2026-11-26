@@ -31,8 +31,8 @@ export const CONCIERGE = {
   maxReplyChars: 1000,
 } as const;
 
-/** Owner name used in the opening line and holding replies. */
-export const OWNER_NAME = process.env.CONCIERGE_OWNER_NAME?.trim() || 'Cece';
+/** The owner name clients see in replies and hand-offs. */
+export const OWNER_NAME = process.env.CONCIERGE_OWNER_NAME?.trim() || 'Sienna';
 
 /**
  * This site's public address, for links in emails. CONCIERGE_SITE_URL wins;
