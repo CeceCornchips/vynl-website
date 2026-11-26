@@ -34,9 +34,13 @@ export const CONCIERGE = {
 /** Owner name used in the opening line and holding replies. */
 export const OWNER_NAME = process.env.CONCIERGE_OWNER_NAME?.trim() || 'Cece';
 
-/** This site's address. An empty NEXT_PUBLIC_APP_URL counts as unset. */
-function siteBaseUrl(): string {
+/**
+ * This site's public address, for links in emails. CONCIERGE_SITE_URL wins;
+ * empty values count as unset.
+ */
+export function siteBaseUrl(): string {
   const base =
+    process.env.CONCIERGE_SITE_URL?.trim() ||
     process.env.NEXT_PUBLIC_APP_URL?.trim() ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
   return base.replace(/\/$/, '');

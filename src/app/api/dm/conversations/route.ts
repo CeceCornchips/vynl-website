@@ -2,6 +2,7 @@ import { sql } from '@/lib/db';
 import { CONCIERGE } from '@/lib/concierge/config';
 import { ensureConciergeSchema } from '@/lib/concierge/schema';
 import { instagramIsDryRun } from '@/lib/instagram';
+import { canConnectInstagram, getInstagramConnection } from '@/lib/concierge/instagram-account';
 import { requireInboxSession } from '@/lib/concierge/inbox-auth';
 
 export const dynamic = 'force-dynamic';
@@ -42,14 +43,17 @@ export async function GET() {
       LIMIT 200
     `;
 
+    const connection = await getInstagramConnection();
     return Response.json({
       ok: true,
       conversations,
       setup: {
         instagramConnected: Boolean(
-          process.env.INSTAGRAM_ACCESS_TOKEN && process.env.INSTAGRAM_APP_SECRET,
+          (connection || process.env.INSTAGRAM_ACCESS_TOKEN) && process.env.INSTAGRAM_APP_SECRET,
         ),
-        dryRun: instagramIsDryRun(),
+        instagramUsername: connection?.username ?? null,
+        canConnectInstagram: canConnectInstagram(),
+        dryRun: await instagramIsDryRun(),
         assistantKeySet: Boolean(process.env.ANTHROPIC_API_KEY),
         chatModel: CONCIERGE.chatModel,
         photoModel: CONCIERGE.photoModel,

@@ -39,6 +39,8 @@ interface ConversationRow {
 
 interface Setup {
   instagramConnected: boolean;
+  instagramUsername: string | null;
+  canConnectInstagram: boolean;
   dryRun: boolean;
   assistantKeySet: boolean;
   chatModel: string;
@@ -155,23 +157,49 @@ function StatusBadges({ c }: { c: ConversationRow }) {
   );
 }
 
-function SetupBanner({ setup }: { setup: Setup | null }) {
+const INSTAGRAM_NOTICES: Record<string, string> = {
+  connected: 'Instagram is connected. New DMs will appear here.',
+  cancelled: 'Instagram connection was cancelled.',
+  expired: 'That Instagram login took too long. Tap Connect Instagram to try again.',
+  failed: "Instagram couldn't be connected. Tap Connect Instagram to try again.",
+  'not-configured': "The Instagram app details aren't set up on the site yet.",
+};
+
+function SetupBanner({ setup, instagramNotice }: { setup: Setup | null; instagramNotice: string | null }) {
   if (!setup) return null;
   const notes: string[] = [];
+  if (instagramNotice && INSTAGRAM_NOTICES[instagramNotice]) notes.push(INSTAGRAM_NOTICES[instagramNotice]);
   if (setup.dryRun) {
     notes.push("Test mode: Instagram isn't connected, so Send saves the message here but doesn't deliver it.");
-  } else if (!setup.instagramConnected) {
+  } else if (!setup.instagramConnected && !setup.canConnectInstagram) {
     notes.push("Instagram isn't connected yet. DMs appear here once the Meta app is set up.");
   }
   if (!setup.assistantKeySet) {
     notes.push('No Claude API key is set, so the assistant may not be able to draft replies.');
   }
-  if (notes.length === 0) return null;
+  const showConnect = setup.canConnectInstagram && !setup.instagramUsername;
+  if (notes.length === 0 && !showConnect && !setup.instagramUsername) return null;
   return (
-    <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+    <div className="mb-4 space-y-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
       {notes.map((n) => (
         <p key={n}>{n}</p>
       ))}
+      {setup.instagramUsername && (
+        <p>
+          Connected to Instagram as <strong>@{setup.instagramUsername}</strong>.{' '}
+          <a href="/api/dm/instagram/connect" className="underline">
+            Reconnect
+          </a>
+        </p>
+      )}
+      {showConnect && (
+        <a
+          href="/api/dm/instagram/connect"
+          className="inline-flex items-center rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white"
+        >
+          Connect Instagram
+        </a>
+      )}
     </div>
   );
 }
@@ -455,10 +483,40 @@ function ChatView({
 
 // ── Sign-in ──────────────────────────────────────────────────────────────────
 
-function LoginForm({ onSignedIn }: { onSignedIn: () => void }) {
+function LoginForm({ onSignedIn, expired }: { onSignedIn: () => void; expired: boolean }) {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
+  const [options, setOptions] = useState<{ passwordEnabled: boolean; emailTo: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/dm/session', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((j: { passwordEnabled?: boolean; emailTo?: string }) =>
+        setOptions({ passwordEnabled: Boolean(j.passwordEnabled), emailTo: j.emailTo ?? 'the studio inbox' }),
+      )
+      .catch(() => setOptions({ passwordEnabled: false, emailTo: 'the studio inbox' }));
+  }, []);
+
+  async function emailLink() {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/dm/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'email' }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; sentTo?: string };
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Could not send the link.');
+      setSentTo(json.sentTo ?? options?.emailTo ?? 'your email');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send the link.');
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -484,7 +542,26 @@ function LoginForm({ onSignedIn }: { onSignedIn: () => void }) {
   return (
     <form onSubmit={submit} className="mx-auto max-w-sm space-y-3 rounded-xl border bg-background p-6">
       <h2 className="text-lg font-semibold">Sign in to the DM inbox</h2>
-      <p className="text-sm text-muted-foreground">Enter the inbox password to see your Instagram drafts.</p>
+      {expired && <p className="text-sm text-red-700">That sign-in link has expired. Send a new one.</p>}
+      {sentTo ? (
+        <p className="text-sm">
+          Sent! Open the email to <strong>{sentTo}</strong> on this device and tap the link.
+        </p>
+      ) : (
+        <>
+          <p className="text-sm text-muted-foreground">
+            We&apos;ll email a sign-in link to {options?.emailTo ?? 'the studio inbox'}.
+          </p>
+          <Button type="button" onClick={() => void emailLink()} disabled={busy} className="w-full">
+            {busy ? <Loader2 className="animate-spin" /> : null}
+            Email me a sign-in link
+          </Button>
+        </>
+      )}
+      {options?.passwordEnabled && (
+        <details className="pt-2 text-sm">
+          <summary className="cursor-pointer text-muted-foreground">Use a password instead</summary>
+          <div className="mt-2 space-y-2">
       <input
         type="password"
         autoComplete="current-password"
@@ -493,11 +570,13 @@ function LoginForm({ onSignedIn }: { onSignedIn: () => void }) {
         placeholder="Password"
         className="w-full rounded-lg border px-3 py-2 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
       />
-      {error && <p className="text-sm text-red-700">{error}</p>}
-      <Button type="submit" disabled={busy || !password} className="w-full">
-        {busy ? <Loader2 className="animate-spin" /> : null}
-        Sign in
+      <Button type="submit" variant="outline" disabled={busy || !password} className="w-full">
+        Sign in with password
       </Button>
+          </div>
+        </details>
+      )}
+      {error && <p className="text-sm text-red-700">{error}</p>}
     </form>
   );
 }
@@ -562,7 +641,7 @@ function Inbox() {
   }
 
   if (needsLogin) {
-    return <LoginForm onSignedIn={() => void loadList()} />;
+    return <LoginForm onSignedIn={() => void loadList()} expired={searchParams.get('signin') === 'expired'} />;
   }
 
   return (
@@ -579,7 +658,7 @@ function Inbox() {
         </Button>
       </div>
 
-      <SetupBanner setup={setup} />
+      <SetupBanner setup={setup} instagramNotice={searchParams.get('instagram')} />
       {error && <p className="text-sm text-red-700">{error}</p>}
 
       <div className="flex h-[calc(100vh-13rem)] min-h-[480px] overflow-hidden rounded-xl border bg-background">

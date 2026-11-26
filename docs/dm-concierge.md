@@ -47,19 +47,25 @@ booking tables.
 
 ### 2. Meta developer app
 
-1. At developers.facebook.com, create an app with the use case **Manage
-   messaging & content on Instagram**.
-2. Under **API setup with Instagram login**, add @au.vynl and generate an
-   access token. Copy the **Instagram app secret** from the same page.
-3. Under **Configure webhooks**, set:
-   - Callback URL: `https://YOUR-SITE/api/webhooks/instagram`
-   - Verify token: any long random text (the same value goes in
-     `INSTAGRAM_VERIFY_TOKEN` below)
-   - Subscribe to the **messages** field.
+New Meta apps use **Instagram API with Unified Login** (the older "Instagram
+login" setup isn't offered to new apps).
 
-An app used only for your own account should work on Standard Access without
-App Review. If Meta asks for review anyway, it's the "apps for your own
-business" path.
+1. At developers.facebook.com, create an app with the use case **Manage
+   messaging & content on Instagram** (done: "Vynl DM Concierge", app ID
+   1490303119908217). Meta asks for a business portfolio (done: "Vynl").
+2. Under **API setup with Unified login**: create a configuration (done:
+   ID 1854833062506686, system-user token that never expires) and register the
+   redirect URL `https://YOUR-SITE/api/dm/instagram/callback`.
+3. Under **Configure webhooks**: callback URL
+   `https://YOUR-SITE/api/webhooks/instagram`, verify token `vynl-dm-concierge`
+   (or your `INSTAGRAM_VERIFY_TOKEN`), and subscribe to **messages**.
+4. In the DM inbox, tap **Connect Instagram**, log in, and share the studio's
+   Instagram account. The site stores the token (encrypted) and subscribes the
+   account to DM webhooks. No token copying needed.
+
+Meta notes that message webhooks can be unreliable for Instagram accounts that
+aren't linked to a Facebook Page; if DMs don't arrive, link @au.vynl to a Vynl
+Facebook Page.
 
 ### 3. Claude API key
 
@@ -70,10 +76,14 @@ Create a key at console.anthropic.com and set a monthly spend limit there.
 | Name | Value |
 | --- | --- |
 | `ANTHROPIC_API_KEY` | your Claude API key |
-| `INSTAGRAM_APP_SECRET` | the Instagram app secret |
-| `INSTAGRAM_VERIFY_TOKEN` | the verify token you chose |
-| `INSTAGRAM_ACCESS_TOKEN` | the access token you generated |
-| `DM_INBOX_PASSWORD` | the password for `/dm-inbox` (if unset, `ADMIN_PASSWORD` is used) |
+| `META_APP_ID` | the Meta app ID (not secret) |
+| `INSTAGRAM_LOGIN_CONFIG_ID` | the Unified login configuration ID (not secret) |
+| `INSTAGRAM_APP_SECRET` | the Meta **App secret** (App settings → Basic) |
+| `CONCIERGE_SITE_URL` | the site's public address, e.g. `https://vynl-website.vercel.app` |
+| `DM_INBOX_EMAIL` | optional: where inbox sign-in links go (default `SUPPORT_EMAIL`) |
+| `DM_INBOX_PASSWORD` | optional: a password sign-in as well (falls back to `ADMIN_PASSWORD`) |
+| `INSTAGRAM_VERIFY_TOKEN` | optional: webhook handshake value (default `vynl-dm-concierge`) |
+| `INSTAGRAM_ACCESS_TOKEN` | optional: only if not using Connect Instagram |
 | Square settings | already used by the site: `SQUARE_ACCESS_TOKEN`, `NEXT_PUBLIC_SQUARE_ENV`, `NEXT_PUBLIC_SQUARE_LOCATION_ID`, `SQUARE_TEAM_MEMBER_ID` |
 
 Optional:
@@ -90,8 +100,8 @@ Optional:
 Redeploy after adding them, then press **Verify and save** on the webhook in
 the Meta dashboard.
 
-The Instagram access token lasts 60 days. Generate a new one in the Meta
-dashboard and update `INSTAGRAM_ACCESS_TOKEN` before it expires.
+Signing in: the inbox emails a one-tap sign-in link to the studio inbox (valid
+15 minutes). A signed-in browser stays signed in for 14 days.
 
 ## Trying it locally
 

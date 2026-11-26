@@ -1,13 +1,20 @@
 import { sql } from '@/lib/db';
 
-let migrationRan = false;
+let migration: Promise<void> | null = null;
 
 /**
  * Tables for the Instagram DM concierge. Only adds new tables; nothing
- * existing changes.
+ * existing changes. Concurrent callers share one run.
  */
-export async function ensureConciergeSchema(): Promise<void> {
-  if (migrationRan) return;
+export function ensureConciergeSchema(): Promise<void> {
+  migration ??= createTables().catch((err) => {
+    migration = null; // try again next time
+    throw err;
+  });
+  return migration;
+}
+
+async function createTables(): Promise<void> {
 
   await sql`
     CREATE TABLE IF NOT EXISTS dm_conversations (
@@ -89,5 +96,12 @@ export async function ensureConciergeSchema(): Promise<void> {
     )
   `;
 
-  migrationRan = true;
+  await sql`
+    CREATE TABLE IF NOT EXISTS dm_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+
 }
