@@ -131,3 +131,7 @@ needs `ANTHROPIC_API_KEY` and a working `DATABASE_URL` in `.env.local`.
 Each draft is logged in the `dm_agent_runs` table with tokens and an estimated
 cost. At about 20 chats a day, Haiku for text plus Sonnet for photos should
 come to roughly US$20–30 a month.
+
+## Going live
+
+Real clients' DMs need the app published, Business Verification and App Review. Steps and ready-to-paste answers: [dm-concierge-app-review.md](dm-concierge-app-review.md).
