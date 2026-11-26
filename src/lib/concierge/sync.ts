@@ -25,6 +25,10 @@ const MAX_CONVERSATIONS = 10;
 const MAX_MESSAGES = 20;
 /** Only chats with a client message this recent get an automatic draft. */
 const AUTO_DRAFT_WITHIN_MS = 24 * 60 * 60_000;
+/** Leaves fresh webhook DMs to the webhook's own drafting. */
+const WEBHOOK_GRACE_MS = 2 * 60_000;
+/** Drafts run side by side; this keeps a backlog inside the function's time limit. */
+const MAX_DRAFTS_PER_SYNC = 5;
 /** A synced message this close in time to a saved one with the same text is treated as the same message. */
 const SAME_MESSAGE_WINDOW_S = 30;
 
@@ -116,6 +120,31 @@ async function alreadySaved(
   return rows.length > 0;
 }
 
+/**
+ * Chats where the client spoke last within the past day and nothing has been
+ * drafted since: no pending draft and no assistant run (even a failed one,
+ * so errors aren't retried every few minutes; Redraft still works).
+ */
+async function chatsWaitingForDraft(now: Date): Promise<number[]> {
+  const at = now.toISOString();
+  const rows = (await sql`
+    SELECT c.id FROM dm_conversations c
+    WHERE c.status = 'open'
+      AND (c.bot_paused_until IS NULL OR c.bot_paused_until <= ${at}::timestamptz)
+      AND c.last_client_message_at > ${at}::timestamptz - make_interval(secs => ${AUTO_DRAFT_WITHIN_MS / 1000})
+      AND c.last_client_message_at < ${at}::timestamptz - make_interval(secs => ${WEBHOOK_GRACE_MS / 1000})
+      AND c.last_client_message_at >= COALESCE(c.last_message_at, c.last_client_message_at)
+      AND NOT EXISTS (SELECT 1 FROM dm_drafts d WHERE d.conversation_id = c.id AND d.status = 'pending')
+      AND NOT EXISTS (
+        SELECT 1 FROM dm_agent_runs r
+        WHERE r.conversation_id = c.id AND r.created_at >= c.last_client_message_at
+      )
+    ORDER BY c.last_client_message_at DESC
+    LIMIT ${MAX_DRAFTS_PER_SYNC}
+  `) as { id: number }[];
+  return rows.map((r) => r.id);
+}
+
 async function fetchConversations(base: string, igId: string, token: string): Promise<GraphConversation[]> {
   const fields = `participants,messages.limit(${MAX_MESSAGES}){id,created_time,from,to,message,attachments}`;
   const query = `fields=${encodeURIComponent(fields)}&limit=${MAX_CONVERSATIONS}`;
@@ -138,7 +167,8 @@ async function fetchConversations(base: string, igId: string, token: string): Pr
 
 /**
  * Saves messages from the account's recent chats that aren't in the inbox yet,
- * then drafts replies for chats with a new client message from the last day.
+ * then drafts replies (up to 5 at a time) for chats where a client has been
+ * waiting since some time in the last day.
  */
 export async function syncInstagramChats(options: { force?: boolean; now?: Date } = {}): Promise<SyncResult | null> {
   const now = options.now ?? new Date();
@@ -155,7 +185,6 @@ export async function syncInstagramChats(options: { force?: boolean; now?: Date 
     Boolean(u && (u.id === ownId || (ownUsername && u.username?.toLowerCase() === ownUsername)));
 
   const result: SyncResult = { at: now.toISOString(), ok: true, conversations: 0, newMessages: 0 };
-  const toDraft = new Set<number>();
   try {
     const chats = await fetchConversations(graphBase('facebook'), ownId, conn.accessToken);
     for (const chat of chats) {
@@ -201,9 +230,7 @@ export async function syncInstagramChats(options: { force?: boolean; now?: Date 
           attachments,
           sentAt,
         });
-        if (!saved) continue;
-        result.newMessages += 1;
-        if (now.getTime() - sentAt.getTime() < AUTO_DRAFT_WITHIN_MS) toDraft.add(conversation.id);
+        if (saved) result.newMessages += 1;
       }
     }
   } catch (err) {
@@ -214,9 +241,12 @@ export async function syncInstagramChats(options: { force?: boolean; now?: Date 
 
   await saveSyncResult(result).catch(() => undefined);
 
-  // draftReplyIfNeeded skips chats that are paused, already answered or waiting for you.
-  for (const id of toDraft) {
-    await draftReplyIfNeeded(id).catch((err) => console.error('[instagram sync] drafting failed:', err));
-  }
+  // Also covers chats from earlier syncs that didn't get a draft yet.
+  const waiting = await chatsWaitingForDraft(now).catch(() => [] as number[]);
+  await Promise.all(
+    waiting.map((id) =>
+      draftReplyIfNeeded(id).catch((err) => console.error('[instagram sync] drafting failed:', err)),
+    ),
+  );
   return result;
 }
