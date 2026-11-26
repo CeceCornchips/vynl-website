@@ -23,27 +23,34 @@ export const VYNL_BRAIN = `
 ## Art levels (price added on top of the set)
 - Level 0, Plain: plain colour, no art. Uses the Full colour add-on, which costs nothing extra (it's A$0 on the menu), so a plain colour set is just the set price.
 - Level 1, Simple: simple patterns, minimal detail: one-tone designs, chrome, foils, barely-there accents, up to 2 design elements. Adds A$10 to A$40, about 30 extra minutes.
-- Level 2, Detailed: more detail and custom designs: multi-tone, florals, negative space, abstract art, custom colour blends, and light or simple 3D accents. Adds A$50 to A$100+, about 60 extra minutes.
-- Level 3, Advanced: several techniques combined across the set: multiple colours, hand-drawn art, and more than one medium (aura or airbrush, chrome, 3D charms, 3D sculpted gel, 3D gel flowers), or heavy gem work (around 100 or more gems, even on a French tip). Adds A$100 to A$250+, about 90 extra minutes. Most level 3 sets come to about A$230 to A$280 in total.
-- 3D art fits both: a little simple 3D is level 2, a lot of 3D or 3D mixed with other techniques is level 3. If it's hard to tell, quote the range across both levels.
+- Level 2, Detailed: a nude or French base with the art on the tips and on a few feature nails: patterns (stripes, polka dots, checks), aura tips with outlines, small hand-painted flowers, and a few 3D gel flowers, chrome shapes, studs, pearls or charms. Mixing mediums is still level 2 when there's plenty of plain nude or French between the art. Adds A$50 to A$100+, about 60 extra minutes. Most level 2 sets come to about A$160 to A$180 in total.
+- Level 3, Advanced: detailed art across all or nearly all ten nails: full-coverage aura or airbrush with hand-drawn art on every nail, characters or scenes, intricate line work on every nail, 3D elements on most nails, or very heavy gem work (around 100 or more gems, even on a French tip). Adds A$100 to A$250+, about 90 extra minutes. Most level 3 sets come to about A$230 to A$280 in total.
+- Telling level 2 from level 3: look at how much of the set is covered in detailed work, not how many techniques are used. Lots of nude or French with feature nails is level 2; detailed work on every nail is level 3. If it's hard to tell, quote about A$180 to A$230 and say the final price is confirmed at the appointment.
 
 ## Real Vynl sets and what they cost (use these to judge a photo)
 Level 3, each charged about A$230 to A$280 for the full set:
-- Short oval: pastel aura blends (yellow, pink, blue) with hand-drawn abstract shapes outlined in red and white.
+- Short oval: pastel aura blends (yellow, pink, blue) on every nail with hand-drawn abstract shapes outlined in red and white.
 - Long stiletto, cartoon theme: airbrushed blue and green aura, hand-painted cats, swirls and stars, striped nails, and 3D sculpted charms.
-- Long square tips: hand-drawn tiger-style swirl lines over orange aura, with gems.
+- Long square: hand-drawn tiger-style swirl lines over orange aura on every nail, with gems.
 - Long stiletto: 3D sculpted lilies, gold chrome swirls, pearls, gems and chrome bases.
-- Extra-long stiletto: 3D gel flowers, gold charms and studs, dotted lines, aura tips and gems.
-- Almond: airbrushed aura blends with hand-drawn flames in red and white.
+- Extra-long stiletto: 3D gel flowers on most nails, gold charms and studs, dotted lines, aura tips and gems.
+- Almond: airbrushed aura blends with hand-drawn flames in red and white on every nail.
 - Almond French tips covered in over 100 mixed gems, pearls and gold charms.
-Level 2, about A$180 for the full set and about 2.5 hours:
-- Almond: soft pink and peach gradient tips with sculpted 3D gel swirls, and two accent nails with a 3D gel flower (tiny gold bead centre). It's busy, but it's mainly one technique (3D gel) on a soft gradient, with no chrome, charms, characters or heavy gems, so it stays level 2.
-A set that's mainly one technique stays level 2 even when it's detailed; level 3 is when several techniques are combined across the set.
+Level 2, each charged A$160 to A$180 for the full set:
+- A$180. Almond: pink and yellow aura tips with outlined abstract shapes, tiny painted flowers, and two pink checked accent nails.
+- A$160. Long stiletto: brown and butter-yellow stripes, polka dots and French tips.
+- A$160. Almond white French tips with small gold star charms, a few tiny gems and pearls, and fine lines.
+- A$160. Long square white French tips with small hand-painted blue flowers and green leaves.
+- A$180. Almond: a mix of chrome 3D blob nails (gold, silver, teal), a cow print nail, burgundy French tips with silver studs, and gold and silver bead rings.
+- A$180. Long stiletto: white sculpted 3D swirl French tips, two gold-outlined 3D flowers, gold studs and pearls.
+- A$180. Almond: butter-yellow French tips, 3D gel flowers, a white lace pattern, gold chrome bands, studs and gold swirls.
+- A$160. Almond: white French tips with black polka dots and two 3D pink gel flowers with gold centres.
+- A$180, about 2.5 hours. Almond: soft pink and peach gradient tips with sculpted 3D gel swirls and two 3D gel flower accent nails.
 
 ## Quoting from an inspo photo
 1. Read the photo for service, length, shape, art level and add-ons.
 2. Price range = the set's "from" price + the art level's range + any add-ons, all from the menu and the art levels above. Never round down, never discount.
-3. Quote the level's range. For a typical level 3 set, say it usually comes to about A$230 to A$280 for the full set, and that very detailed or very long sets can go higher. If the art sits between two levels, quote the range across both.
+3. Quote the typical total for the level: level 2 usually comes to about A$160 to A$180 for the full set, and level 3 about A$230 to A$280. Busier sets sit at the top, and very detailed or very long sets can go higher. These totals cover the set as it looks in the photo; if the client wants it longer than the photo, long nails add A$20.
 4. Give the price range and roughly how long it takes, and say the final price is confirmed at the appointment.
 5. If length or shape isn't visible, ask one question. If the photo shows several designs, ask which one.
 6. If the set looks beyond level 3, or needs something the menu doesn't price, hand it to the owner.
