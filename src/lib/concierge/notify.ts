@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
-import { EMAIL_FROM } from '@/lib/email-sender';
-import { adminInboxUrl } from '@/lib/concierge/config';
+import { EMAIL_FROM, SUPPORT_EMAIL } from '@/lib/email-config';
+import { inboxUrl } from '@/lib/concierge/config';
 
 function escapeHtml(s: string): string {
   return s
@@ -10,7 +10,7 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;');
 }
 
-/** Emails you (ADMIN_EMAIL) when a chat needs you personally. */
+/** Emails the studio inbox (SUPPORT_EMAIL) when a chat needs you personally. */
 export async function alertOwner(input: {
   conversationId: number;
   who: string;
@@ -19,10 +19,10 @@ export async function alertOwner(input: {
   lastClientMessage: string | null;
 }): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.ADMIN_EMAIL;
-  if (!apiKey || !to) return;
+  const to = SUPPORT_EMAIL;
+  if (!apiKey) return;
 
-  const link = adminInboxUrl(input.conversationId);
+  const link = inboxUrl(input.conversationId);
   const subject = `${input.urgent ? 'URGENT: ' : ''}Instagram DM needs you: ${input.who}`.slice(0, 180);
   const html = `
 <div style="font-family:system-ui,sans-serif;line-height:1.5;color:#111;max-width:520px">

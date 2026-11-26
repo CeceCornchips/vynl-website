@@ -119,7 +119,7 @@ const DM_TYPE_LABELS: Record<string, string> = {
 };
 
 async function postAction(id: number, body: Record<string, unknown>) {
-  const res = await fetch(`/api/admin/dm/conversations/${id}`, {
+  const res = await fetch(`/api/dm/conversations/${id}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -241,7 +241,7 @@ function ChatView({
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/dm/conversations/${id}`, { cache: 'no-store' });
+      const res = await fetch(`/api/dm/conversations/${id}`, { cache: 'no-store' });
       const json = (await res.json()) as { ok: boolean; error?: string } & Partial<Detail>;
       if (!res.ok || !json.ok) throw new Error(json.error ?? 'Could not load this chat.');
       const next = json as Detail;
@@ -453,6 +453,55 @@ function ChatView({
   );
 }
 
+// ── Sign-in ──────────────────────────────────────────────────────────────────
+
+function LoginForm({ onSignedIn }: { onSignedIn: () => void }) {
+  const [password, setPassword] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/dm/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Could not sign in.');
+      setPassword('');
+      onSignedIn();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not sign in.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form onSubmit={submit} className="mx-auto max-w-sm space-y-3 rounded-xl border bg-background p-6">
+      <h2 className="text-lg font-semibold">Sign in to the DM inbox</h2>
+      <p className="text-sm text-muted-foreground">Enter the inbox password to see your Instagram drafts.</p>
+      <input
+        type="password"
+        autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        className="w-full rounded-lg border px-3 py-2 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+      />
+      {error && <p className="text-sm text-red-700">{error}</p>}
+      <Button type="submit" disabled={busy || !password} className="w-full">
+        {busy ? <Loader2 className="animate-spin" /> : null}
+        Sign in
+      </Button>
+    </form>
+  );
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 function Inbox() {
@@ -466,10 +515,16 @@ function Inbox() {
   const [setup, setSetup] = useState<Setup | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'waiting'>('all');
+  const [needsLogin, setNeedsLogin] = useState(false);
 
   const loadList = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/dm/conversations', { cache: 'no-store' });
+      const res = await fetch('/api/dm/conversations', { cache: 'no-store' });
+      if (res.status === 401) {
+        setNeedsLogin(true);
+        return;
+      }
+      setNeedsLogin(false);
       const json = (await res.json()) as {
         ok: boolean;
         error?: string;
@@ -500,13 +555,28 @@ function Inbox() {
   );
   const waitingCount = (rows ?? []).filter((r) => r.has_draft || r.status === 'needs_owner').length;
 
+  async function signOut() {
+    await fetch('/api/dm/session', { method: 'DELETE' }).catch(() => null);
+    setRows(null);
+    setNeedsLogin(true);
+  }
+
+  if (needsLogin) {
+    return <LoginForm onSignedIn={() => void loadList()} />;
+  }
+
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">DM inbox</h1>
-        <p className="text-sm text-muted-foreground">
-          The assistant drafts a reply to each Instagram DM. Nothing is sent until you approve it.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">DM inbox</h1>
+          <p className="text-sm text-muted-foreground">
+            The assistant drafts a reply to each Instagram DM. Nothing is sent until you approve it.
+          </p>
+        </div>
+        <Button variant="ghost" size="sm" onClick={() => void signOut()}>
+          Sign out
+        </Button>
       </div>
 
       <SetupBanner setup={setup} />
@@ -584,8 +654,10 @@ function Inbox() {
 
 export default function DmInboxPage() {
   return (
-    <Suspense fallback={null}>
-      <Inbox />
-    </Suspense>
+    <section className="mx-auto max-w-6xl px-4 pt-28 pb-16 sm:px-6">
+      <Suspense fallback={null}>
+        <Inbox />
+      </Suspense>
+    </section>
   );
 }

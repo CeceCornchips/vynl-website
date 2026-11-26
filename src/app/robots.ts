@@ -16,6 +16,7 @@ export default function robots(): MetadataRoute.Robots {
           "/sign-in",
           "/book/success",
           "/monitoring",
+          "/dm-inbox",
         ],
       },
     ],

@@ -48,6 +48,7 @@ type SubmitReply = z.infer<typeof SubmitReplyInput>;
 
 const FindSlotsInput = z.object({
   service_id: z.string(),
+  add_on_ids: z.array(z.string()),
   date_from: z.string(),
   days: z.number(),
 });
@@ -56,20 +57,25 @@ const TOOLS: Anthropic.Beta.BetaTool[] = [
   {
     name: 'find_open_slots',
     description:
-      "Look up real open appointment start times in Vynl's booking calendar for one service. " +
-      'Call this before offering any time. Checks up to 14 days from date_from. ' +
+      "Look up real open appointment start times in Vynl's Square booking calendar for one service plus any add-ons. " +
+      'Call this before offering any time. Checks up to 31 days from date_from. ' +
       'Returns dates with open start times in Sydney time; an empty list means fully booked.',
     input_schema: {
       type: 'object',
       properties: {
-        service_id: { type: 'string', description: 'The service id from the live menu.' },
+        service_id: { type: 'string', description: 'The id of one service (not an add-on) from the live menu.' },
+        add_on_ids: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Ids of add-ons from the live menu the client wants (e.g. a soak-off or an art level). Empty if none.',
+        },
         date_from: {
           type: 'string',
           description: 'First date to check, YYYY-MM-DD. Use today if the client has no preference.',
         },
-        days: { type: 'integer', description: 'How many days to check, from 1 to 14.' },
+        days: { type: 'integer', description: 'How many days to check, from 1 to 31.' },
       },
-      required: ['service_id', 'date_from', 'days'],
+      required: ['service_id', 'add_on_ids', 'date_from', 'days'],
       additionalProperties: false,
     },
     strict: true,
@@ -239,7 +245,12 @@ async function runTool(name: string, input: unknown): Promise<{ content: string;
     if (name === 'find_open_slots') {
       const parsed = FindSlotsInput.safeParse(input);
       if (!parsed.success) return { content: 'Invalid input for find_open_slots.', ok: false };
-      const result = await findOpenSlots(parsed.data.service_id, parsed.data.date_from, parsed.data.days);
+      const result = await findOpenSlots(
+        parsed.data.service_id,
+        parsed.data.add_on_ids,
+        parsed.data.date_from,
+        parsed.data.days,
+      );
       return { content: JSON.stringify(result), ok: !('error' in result) };
     }
     return { content: `Unknown tool: ${name}`, ok: false };

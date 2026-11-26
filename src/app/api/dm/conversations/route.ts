@@ -1,15 +1,15 @@
-import { auth } from '@clerk/nextjs/server';
 import { sql } from '@/lib/db';
 import { CONCIERGE } from '@/lib/concierge/config';
 import { ensureConciergeSchema } from '@/lib/concierge/schema';
 import { instagramIsDryRun } from '@/lib/instagram';
+import { requireInboxSession } from '@/lib/concierge/inbox-auth';
 
 export const dynamic = 'force-dynamic';
 
 /** The DM inbox list: every chat, newest first, with what it's waiting on. */
 export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  const denied = await requireInboxSession();
+  if (denied) return denied;
 
   try {
     await ensureConciergeSchema();

@@ -1,5 +1,4 @@
 import { sql } from '@/lib/db';
-import { ensureClientsSchema } from '@/lib/clients-migration';
 
 let migrationRan = false;
 
@@ -10,15 +9,13 @@ let migrationRan = false;
 export async function ensureConciergeSchema(): Promise<void> {
   if (migrationRan) return;
 
-  await ensureClientsSchema();
-
   await sql`
     CREATE TABLE IF NOT EXISTS dm_conversations (
       id SERIAL PRIMARY KEY,
       ig_user_id TEXT NOT NULL UNIQUE,
       ig_username TEXT,
       display_name TEXT,
-      client_id INTEGER REFERENCES clients(id) ON DELETE SET NULL,
+      client_id INTEGER,
       status TEXT NOT NULL DEFAULT 'open',
       handoff_reason TEXT,
       bot_paused_until TIMESTAMPTZ,

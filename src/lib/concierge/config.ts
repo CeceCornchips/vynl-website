@@ -42,13 +42,18 @@ function siteBaseUrl(): string {
   return base.replace(/\/$/, '');
 }
 
-/** Where clients book. Set CONCIERGE_BOOKING_URL (e.g. your Square booking page); defaults to this site's Book page. */
-export function bookingUrl(): string {
-  return process.env.CONCIERGE_BOOKING_URL?.trim() || `${siteBaseUrl()}/book`;
+/**
+ * Where clients book: CONCIERGE_BOOKING_URL if set, otherwise the booking site
+ * Square reports, otherwise this site's Book page.
+ */
+export function bookingUrl(squareBookingSiteUrl: string | null): string {
+  return (
+    process.env.CONCIERGE_BOOKING_URL?.trim() || squareBookingSiteUrl || `${siteBaseUrl()}/book`
+  );
 }
 
-export function adminInboxUrl(conversationId?: number): string {
-  const url = `${siteBaseUrl()}/admin/dm-inbox`;
+export function inboxUrl(conversationId?: number): string {
+  const url = `${siteBaseUrl()}/dm-inbox`;
   return conversationId ? `${url}?c=${conversationId}` : url;
 }
 

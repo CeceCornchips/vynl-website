@@ -1,4 +1,3 @@
-import { auth } from '@clerk/nextjs/server';
 import { after } from 'next/server';
 import { z } from 'zod';
 import { sql } from '@/lib/db';
@@ -20,16 +19,13 @@ import {
   supersedePendingDrafts,
 } from '@/lib/concierge/store';
 import { InstagramSendError, sendInstagramText } from '@/lib/instagram';
+import { requireInboxSession } from '@/lib/concierge/inbox-auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 const HOUR = 60 * 60 * 1000;
 
-async function requireAdmin(): Promise<Response | null> {
-  const { userId } = await auth();
-  return userId ? null : Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
-}
 
 async function parseId(params: Promise<{ id: string }>): Promise<number | null> {
   const id = Number.parseInt((await params).id, 10);
@@ -38,7 +34,7 @@ async function parseId(params: Promise<{ id: string }>): Promise<number | null> 
 
 /** One chat: its messages, the waiting draft and the last drafting attempt. */
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const denied = await requireAdmin();
+  const denied = await requireInboxSession();
   if (denied) return denied;
   const id = await parseId(params);
   if (id == null) return Response.json({ ok: false, error: 'Invalid chat id.' }, { status: 400 });
@@ -85,7 +81,7 @@ const ActionBody = z.discriminatedUnion('action', [
  * take over (pause the assistant here), hand back, and redraft.
  */
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const denied = await requireAdmin();
+  const denied = await requireInboxSession();
   if (denied) return denied;
   const id = await parseId(params);
   if (id == null) return Response.json({ ok: false, error: 'Invalid chat id.' }, { status: 400 });

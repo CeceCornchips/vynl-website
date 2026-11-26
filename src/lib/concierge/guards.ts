@@ -1,5 +1,5 @@
-import { getBusinessProfile } from '@/lib/business-profile';
 import { CONCIERGE } from '@/lib/concierge/config';
+import { loadStudioAddressLines } from '@/lib/concierge/square';
 
 /**
  * Checks enforced in code on every reply before it can go to Instagram, so they
@@ -28,16 +28,16 @@ export async function findBlockedContent(
     return `It's longer than Instagram allows (${text.length} of ${CONCIERGE.maxReplyChars} characters).`;
   }
 
-  // The studio's street address never goes out in chat.
-  const profile = await getBusinessProfile().catch(() => null);
-  const line1 = profile?.address_line1 ? normalise(profile.address_line1) : '';
-  if (line1.length >= 4 && normalise(text).includes(line1)) {
-    return 'It contains the studio address, which only goes out in the booking confirmation.';
+  // The studio's street address (from Square) never goes out in chat.
+  const addressLines = await loadStudioAddressLines().catch(() => [] as string[]);
+  const said = normalise(text);
+  if (addressLines.some((line) => normalise(line).length >= 4 && said.includes(normalise(line)))) {
+    return 'It contains the studio address, which is never sent in a DM.';
   }
   if (!aiWritten) return null;
 
   if (STREET_TYPES.test(text)) {
-    return 'It looks like it contains a street address, which only goes out in the booking confirmation.';
+    return 'It looks like it contains a street address, which is never sent in a DM.';
   }
 
   // Card numbers never belong in a DM.

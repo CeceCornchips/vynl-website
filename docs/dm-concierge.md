@@ -1,28 +1,37 @@
 # Instagram DM concierge: draft mode
 
 The concierge reads each Instagram DM, writes a reply in Vynl's voice, and waits
-in **Admin → DM inbox** for you to approve it. Nothing is sent to a client
-until you tap **Approve and send**.
+in the **DM inbox** (`/dm-inbox` on the website, password protected) for you to
+approve it. Nothing is sent to a client until you tap **Approve and send**.
+
+The rest of the admin area is switched off (see `src/app/_admin/README.md`), so
+the inbox has its own sign-in and doesn't use Clerk.
 
 ## What it does now
 
 - Saves every DM sent to @au.vynl (each one once, even when Meta resends it).
 - Waits a few seconds so a burst like "hi" / "how much" / photo gets one reply.
-- Drafts a reply from the Vynl brain (`src/lib/concierge/vynl-brain.ts`) and
-  the live menu, deposit, hours and cancellation rules from your admin pages.
-- Looks up real open times in the booking calendar when someone asks about
-  availability, and sends your Book page link. It can't book or hold a time yet.
+- Drafts a reply from the Vynl brain (`src/lib/concierge/vynl-brain.ts`) plus
+  live data from **Square**: the bookable services and add-ons with prices and
+  times, and your booking policy (booking fee, 48-hour rule, guests, arrival).
+- Looks up real open times in your Square calendar when someone asks about
+  availability (including add-ons like a soak-off), and sends your Square
+  booking link. It can't book or hold a time itself.
 - Flags anything risky (lifting, pain, complaints, discounts, groups, collabs)
-  as **Needs you**, drafts a short holding reply, and emails `ADMIN_EMAIL`.
-- Blocks a send that contains the studio's street address (from your business
-  profile) or what looks like a card number. The AI is never given the address.
+  as **Needs you**, drafts a short holding reply, and emails the studio inbox
+  (`SUPPORT_EMAIL` in `src/lib/email-config.ts`).
+- Blocks a send that contains the studio's street address (read from your
+  Square location) or what looks like a card number. The AI is never given the
+  address.
 - Goes quiet in a chat for 12 hours when you reply yourself in the Instagram
   app, or when you send your own message from the inbox. **Take over** and
   **Hand back** do the same by hand.
 
-Not built yet (next step): quotes priced by code from an inspo photo, 15-minute
-holds, a deposit link for a specific slot, and the Instagram confirmation
-message with the address.
+Not built yet: quotes priced by code from an inspo photo, and replies that send
+on their own (everything waits for your approval for now).
+
+It needs only its own `dm_*` tables in the database; it doesn't use the old
+booking tables.
 
 ## Setup
 
@@ -64,7 +73,8 @@ Create a key at console.anthropic.com and set a monthly spend limit there.
 | `INSTAGRAM_APP_SECRET` | the Instagram app secret |
 | `INSTAGRAM_VERIFY_TOKEN` | the verify token you chose |
 | `INSTAGRAM_ACCESS_TOKEN` | the access token you generated |
-| `ADMIN_EMAIL` | already set; hand-off alerts go here |
+| `DM_INBOX_PASSWORD` | the password for `/dm-inbox` (if unset, `ADMIN_PASSWORD` is used) |
+| Square settings | already used by the site: `SQUARE_ACCESS_TOKEN`, `NEXT_PUBLIC_SQUARE_ENV`, `NEXT_PUBLIC_SQUARE_LOCATION_ID`, `SQUARE_TEAM_MEMBER_ID` |
 
 Optional:
 
@@ -75,7 +85,7 @@ Optional:
 | `CONCIERGE_PAUSE_HOURS` | `12` | how long it stays quiet after you reply |
 | `CONCIERGE_DEBOUNCE_MS` | `6000` | wait before drafting |
 | `CONCIERGE_OWNER_NAME` | `Cece` | name used in the opening line |
-| `CONCIERGE_BOOKING_URL` | your site's `/book` | link sent to book |
+| `CONCIERGE_BOOKING_URL` | your Square booking site | link sent to book |
 
 Redeploy after adding them, then press **Verify and save** on the webhook in
 the Meta dashboard.
@@ -89,7 +99,7 @@ Without `INSTAGRAM_ACCESS_TOKEN`, local sends are saved in the inbox but not
 delivered (the inbox says it's in test mode).
 
 ```bash
-INSTAGRAM_APP_SECRET=local-test-secret npm run dev
+INSTAGRAM_APP_SECRET=local-test-secret DM_INBOX_PASSWORD=pick-a-test-password npm run dev
 ```
 
 In a second terminal:
