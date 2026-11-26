@@ -419,7 +419,13 @@ async function runAgent(
   try {
     system = await buildSystemPrompt();
   } catch (err) {
-    const error = `Couldn't load the menu and settings: ${err instanceof Error ? err.message : String(err)}`;
+    const error = `Couldn't load the menu and booking policy from Square: ${err instanceof Error ? err.message : String(err)}`;
+    await saveRun(
+      conversation.id,
+      null,
+      { model, modelCalls: 0, input: 0, output: 0, cacheRead: 0, cacheWrite: 0, toolCalls: [], stopReason: null, error },
+      startedAt,
+    );
     return { draft: null, error };
   }
 

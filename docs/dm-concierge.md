@@ -47,20 +47,25 @@ booking tables.
 
 ### 2. Meta developer app
 
+New Meta apps use **Instagram API with Unified Login** (the older "Instagram
+login" setup isn't offered to new apps).
+
 1. At developers.facebook.com, create an app with the use case **Manage
-   messaging & content on Instagram** (done: "Vynl DM Concierge").
-2. Meta needs a business portfolio before Instagram setup; create one when asked.
-3. Under **API setup with Instagram login**: note the **Instagram app ID** and
-   **Instagram app secret**, and add this as an OAuth redirect URI under
-   Business login settings:
-   `https://YOUR-SITE/api/dm/instagram/callback`
-4. Under **Configure webhooks**, set the callback URL to
-   `https://YOUR-SITE/api/webhooks/instagram` and the verify token to
-   `vynl-dm-concierge` (or your `INSTAGRAM_VERIFY_TOKEN`), and subscribe to
-   **messages**.
-5. Then in the DM inbox, tap **Connect Instagram** and log in as @au.vynl. The
-   site stores the access token (encrypted) and renews it automatically, and
-   turns on DM notifications for the account. No token copying needed.
+   messaging & content on Instagram** (done: "Vynl DM Concierge", app ID
+   1490303119908217). Meta asks for a business portfolio (done: "Vynl").
+2. Under **API setup with Unified login**: create a configuration (done:
+   ID 1854833062506686, system-user token that never expires) and register the
+   redirect URL `https://YOUR-SITE/api/dm/instagram/callback`.
+3. Under **Configure webhooks**: callback URL
+   `https://YOUR-SITE/api/webhooks/instagram`, verify token `vynl-dm-concierge`
+   (or your `INSTAGRAM_VERIFY_TOKEN`), and subscribe to **messages**.
+4. In the DM inbox, tap **Connect Instagram**, log in, and share the studio's
+   Instagram account. The site stores the token (encrypted) and subscribes the
+   account to DM webhooks. No token copying needed.
+
+Meta notes that message webhooks can be unreliable for Instagram accounts that
+aren't linked to a Facebook Page; if DMs don't arrive, link @au.vynl to a Vynl
+Facebook Page.
 
 ### 3. Claude API key
 
@@ -71,8 +76,9 @@ Create a key at console.anthropic.com and set a monthly spend limit there.
 | Name | Value |
 | --- | --- |
 | `ANTHROPIC_API_KEY` | your Claude API key |
-| `INSTAGRAM_APP_ID` | the Instagram app ID (not secret) |
-| `INSTAGRAM_APP_SECRET` | the Instagram app secret |
+| `META_APP_ID` | the Meta app ID (not secret) |
+| `INSTAGRAM_LOGIN_CONFIG_ID` | the Unified login configuration ID (not secret) |
+| `INSTAGRAM_APP_SECRET` | the Meta **App secret** (App settings → Basic) |
 | `CONCIERGE_SITE_URL` | the site's public address, e.g. `https://vynl-website.vercel.app` |
 | `DM_INBOX_EMAIL` | optional: where inbox sign-in links go (default `SUPPORT_EMAIL`) |
 | `DM_INBOX_PASSWORD` | optional: a password sign-in as well (falls back to `ADMIN_PASSWORD`) |

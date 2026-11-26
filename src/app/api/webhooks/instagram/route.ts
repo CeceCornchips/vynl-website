@@ -11,6 +11,7 @@ import {
 import {
   getInstagramProfile,
   instagramVerifyToken,
+  messagingEvents,
   verifyInstagramSignature,
   type IgWebhookPayload,
 } from '@/lib/instagram';
@@ -54,7 +55,16 @@ export async function POST(request: Request) {
   } catch {
     return Response.json({ ok: false, error: 'Invalid JSON.' }, { status: 400 });
   }
-  if (payload.object !== 'instagram') return Response.json({ received: true });
+  const events = messagingEvents(payload);
+  if (events.length === 0) {
+    // Log the shape (never the content) so unexpected formats show up in Vercel logs.
+    console.log('[instagram webhook] no DM events in delivery', {
+      object: payload.object,
+      entryKeys: (payload.entry ?? []).map((e) => Object.keys(e)),
+      fields: (payload.entry ?? []).flatMap((e) => (e.changes ?? []).map((c) => c.field)),
+    });
+    return Response.json({ received: true });
+  }
 
   // conversation id -> newest client message saved in this delivery
   const toDraft = new Map<number, number>();
@@ -63,8 +73,8 @@ export async function POST(request: Request) {
   try {
     await ensureConciergeSchema();
 
-    for (const entry of payload.entry ?? []) {
-      for (const event of entry.messaging ?? []) {
+    {
+      for (const event of events) {
         const msg = event.message;
         // Reactions, read receipts and button taps aren't handled yet.
         if (!msg?.mid || msg.is_deleted || msg.is_unsupported) continue;

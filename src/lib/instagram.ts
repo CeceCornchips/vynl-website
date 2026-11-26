@@ -1,13 +1,12 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'crypto';
-import { getInstagramAccessToken } from '@/lib/concierge/instagram-account';
+import { getInstagramCredentials, graphBase } from '@/lib/concierge/instagram-account';
 
 /**
- * Instagram API with Instagram Login: webhook checks and the Send API.
- * Docs: https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login/messaging-api
+ * Instagram messaging: webhook checks and the Send API. Works with the
+ * Unified Login connection (graph.facebook.com, system-user token) and with an
+ * Instagram-login token (graph.instagram.com).
+ * Docs: https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-unified-login
  */
-
-const GRAPH_VERSION = process.env.INSTAGRAM_GRAPH_VERSION?.trim() || 'v24.0';
-const GRAPH_BASE = `https://graph.instagram.com/${GRAPH_VERSION}`;
 
 // ─── Webhook payload ──────────────────────────────────────────────────────────
 
@@ -35,7 +34,34 @@ export interface IgMessagingEvent {
 
 export interface IgWebhookPayload {
   object?: string;
-  entry?: { id: string; time: number; messaging?: IgMessagingEvent[] }[];
+  entry?: {
+    id: string;
+    time: number;
+    messaging?: IgMessagingEvent[];
+    /** Some setups deliver DMs as field changes instead of a messaging array. */
+    changes?: { field?: string; value?: Partial<IgMessagingEvent> }[];
+  }[];
+}
+
+/** All DM events in a webhook delivery, whichever of Meta's two shapes it uses. */
+export function messagingEvents(payload: IgWebhookPayload): IgMessagingEvent[] {
+  const events: IgMessagingEvent[] = [];
+  for (const entry of payload.entry ?? []) {
+    for (const event of entry.messaging ?? []) events.push(event);
+    for (const change of entry.changes ?? []) {
+      const v = change.value;
+      if (change.field === 'messages' && v?.sender?.id && v.recipient?.id) {
+        events.push({
+          sender: v.sender,
+          recipient: v.recipient,
+          timestamp: Number(v.timestamp) || Date.now(),
+          message: v.message,
+          postback: v.postback,
+        });
+      }
+    }
+  }
+  return events;
 }
 
 /**
@@ -69,7 +95,7 @@ export class InstagramSendError extends Error {
  * made-up message id, so the inbox can be tried before Instagram is connected.
  */
 async function dryRun(): Promise<boolean> {
-  return process.env.NODE_ENV !== 'production' && !(await getInstagramAccessToken());
+  return process.env.NODE_ENV !== 'production' && !(await getInstagramCredentials());
 }
 
 export async function instagramIsDryRun(): Promise<boolean> {
@@ -98,8 +124,11 @@ export async function sendInstagramText(
   if (await dryRun()) {
     return { messageId: `dryrun_${randomBytes(8).toString('hex')}`, dryRun: true };
   }
-  const token = await getInstagramAccessToken();
-  if (!token) throw new InstagramSendError('Instagram isn’t connected yet (use Connect Instagram in the inbox).', 500);
+  const creds = await getInstagramCredentials();
+  if (!creds) throw new InstagramSendError('Instagram isn’t connected yet (use Connect Instagram in the inbox).', 500);
+  const token = creds.accessToken;
+  // Unified Login sends from the account id; an Instagram-login token can use /me.
+  const sender = creds.igUserId ? encodeURIComponent(creds.igUserId) : 'me';
 
   const body: Record<string, unknown> = {
     recipient: { id: recipientId },
@@ -110,7 +139,7 @@ export async function sendInstagramText(
     body.tag = 'HUMAN_AGENT';
   }
 
-  const res = await fetch(`${GRAPH_BASE}/me/messages`, {
+  const res = await fetch(`${graphBase(creds.api)}/${sender}/messages`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -133,11 +162,12 @@ export async function sendInstagramText(
 export async function getInstagramProfile(
   igsid: string,
 ): Promise<{ name: string | null; username: string | null } | null> {
-  const token = await getInstagramAccessToken();
-  if (!token) return null;
+  const creds = await getInstagramCredentials();
+  if (!creds) return null;
+  const token = creds.accessToken;
   try {
     const res = await fetch(
-      `${GRAPH_BASE}/${encodeURIComponent(igsid)}?fields=name,username`,
+      `${graphBase(creds.api)}/${encodeURIComponent(igsid)}?fields=name,username`,
       { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(8_000) },
     );
     if (!res.ok) return null;
