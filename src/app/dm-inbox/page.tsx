@@ -162,6 +162,7 @@ const INSTAGRAM_NOTICES: Record<string, string> = {
   cancelled: 'Instagram connection was cancelled.',
   expired: 'That Instagram login took too long. Tap Connect Instagram to try again.',
   failed: "Instagram couldn't be connected. Tap Connect Instagram to try again.",
+  'wrong-account': 'That login shared a different Instagram account. Try again and choose the studio account.',
   'not-configured': "The Instagram app details aren't set up on the site yet.",
 };
 
@@ -483,20 +484,36 @@ function ChatView({
 
 // ── Sign-in ──────────────────────────────────────────────────────────────────
 
-function LoginForm({ onSignedIn, expired }: { onSignedIn: () => void; expired: boolean }) {
+function LoginForm({
+  onSignedIn,
+  expired,
+  instagramNotice,
+}: {
+  onSignedIn: () => void;
+  expired: boolean;
+  instagramNotice: string | null;
+}) {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
-  const [options, setOptions] = useState<{ passwordEnabled: boolean; emailTo: string } | null>(null);
+  const [options, setOptions] = useState<{
+    passwordEnabled: boolean;
+    instagramLogin: boolean;
+    emailTo: string;
+  } | null>(null);
 
   useEffect(() => {
     fetch('/api/dm/session', { cache: 'no-store' })
       .then((r) => r.json())
-      .then((j: { passwordEnabled?: boolean; emailTo?: string }) =>
-        setOptions({ passwordEnabled: Boolean(j.passwordEnabled), emailTo: j.emailTo ?? 'the studio inbox' }),
+      .then((j: { passwordEnabled?: boolean; instagramLogin?: boolean; emailTo?: string }) =>
+        setOptions({
+          passwordEnabled: Boolean(j.passwordEnabled),
+          instagramLogin: Boolean(j.instagramLogin),
+          emailTo: j.emailTo ?? 'the studio inbox',
+        }),
       )
-      .catch(() => setOptions({ passwordEnabled: false, emailTo: 'the studio inbox' }));
+      .catch(() => setOptions({ passwordEnabled: false, instagramLogin: false, emailTo: 'the studio inbox' }));
   }, []);
 
   async function emailLink() {
@@ -543,6 +560,23 @@ function LoginForm({ onSignedIn, expired }: { onSignedIn: () => void; expired: b
     <form onSubmit={submit} className="mx-auto max-w-sm space-y-3 rounded-xl border bg-background p-6">
       <h2 className="text-lg font-semibold">Sign in to the DM inbox</h2>
       {expired && <p className="text-sm text-red-700">That sign-in link has expired. Send a new one.</p>}
+      {instagramNotice && instagramNotice !== 'connected' && INSTAGRAM_NOTICES[instagramNotice] && (
+        <p className="text-sm text-red-700">{INSTAGRAM_NOTICES[instagramNotice]}</p>
+      )}
+      {options?.instagramLogin && (
+        <>
+          <a
+            href="/api/dm/instagram/connect"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white"
+          >
+            Continue with Instagram
+          </a>
+          <p className="text-xs text-muted-foreground">
+            Log in with Facebook and choose the studio&apos;s Instagram account. This also connects it.
+          </p>
+          <p className="pt-1 text-center text-xs text-muted-foreground">or</p>
+        </>
+      )}
       {sentTo ? (
         <p className="text-sm">
           Sent! Open the email to <strong>{sentTo}</strong> on this device and tap the link.
@@ -552,7 +586,13 @@ function LoginForm({ onSignedIn, expired }: { onSignedIn: () => void; expired: b
           <p className="text-sm text-muted-foreground">
             We&apos;ll email a sign-in link to {options?.emailTo ?? 'the studio inbox'}.
           </p>
-          <Button type="button" onClick={() => void emailLink()} disabled={busy} className="w-full">
+          <Button
+            type="button"
+            variant={options?.instagramLogin ? 'outline' : 'default'}
+            onClick={() => void emailLink()}
+            disabled={busy}
+            className="w-full"
+          >
             {busy ? <Loader2 className="animate-spin" /> : null}
             Email me a sign-in link
           </Button>
@@ -641,7 +681,13 @@ function Inbox() {
   }
 
   if (needsLogin) {
-    return <LoginForm onSignedIn={() => void loadList()} expired={searchParams.get('signin') === 'expired'} />;
+    return (
+      <LoginForm
+        onSignedIn={() => void loadList()}
+        expired={searchParams.get('signin') === 'expired'}
+        instagramNotice={searchParams.get('instagram')}
+      />
+    );
   }
 
   return (

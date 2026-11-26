@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { EMAIL_FROM, SUPPORT_EMAIL } from '@/lib/email-config';
 import { siteBaseUrl } from '@/lib/concierge/config';
+import { canConnectInstagram } from '@/lib/concierge/instagram-account';
 import {
   INBOX_COOKIE,
   INBOX_COOKIE_MAX_AGE,
@@ -42,6 +43,7 @@ export async function GET() {
     signedIn: await isInboxSignedIn(),
     configured: inboxLoginConfigured(),
     passwordEnabled: inboxPasswordEnabled(),
+    instagramLogin: inboxLoginConfigured() && canConnectInstagram(),
     emailTo: maskEmail(inboxEmail()),
   });
 }

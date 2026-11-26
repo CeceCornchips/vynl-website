@@ -4,9 +4,13 @@ import { createSession, verifySession } from '@/lib/session';
 
 /**
  * Sign-in for the DM inbox. The rest of the admin area is switched off, so the
- * inbox has its own sign-in: an emailed link sent only to the studio inbox
- * (DM_INBOX_EMAIL, else SUPPORT_EMAIL), or a password (DM_INBOX_PASSWORD, else
- * ADMIN_PASSWORD). Sessions are signed cookies (see src/lib/session.ts).
+ * inbox has its own sign-in:
+ * - "Continue with Instagram": the Meta login that connects the studio's
+ *   Instagram account also signs you in (only that account is accepted);
+ * - an emailed link sent only to the studio inbox (DM_INBOX_EMAIL, else
+ *   SUPPORT_EMAIL);
+ * - a password (DM_INBOX_PASSWORD, else ADMIN_PASSWORD).
+ * Sessions are signed cookies (see src/lib/session.ts).
  */
 
 export const INBOX_COOKIE = 'vynl_dm_inbox';
@@ -52,6 +56,9 @@ export function emailLinkTokenValid(token: string): boolean {
   if (!sessionSecret() || !sig || !Number.isFinite(exp) || exp < Date.now()) return false;
   return safeEqual(sig, sign(`email-link:${exp}`));
 }
+
+/** Holds the Instagram login state so the callback only completes in the browser that started it. */
+export const IG_STATE_COOKIE = 'vynl_ig_state';
 
 /** Signed state for the Instagram login round trip, valid for 15 minutes. */
 export function newOAuthState(): string {
