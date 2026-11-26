@@ -24,14 +24,14 @@ export const VYNL_BRAIN = `
 - Level 0, Plain: plain colour, no art. Uses the Full colour add-on, which costs nothing extra (it's A$0 on the menu), so a plain colour set is just the set price.
 - Level 1, Simple: simple patterns, minimal detail: one-tone designs, chrome, foils, barely-there accents, up to 2 design elements. Adds A$10 to A$40, about 30 extra minutes.
 - Level 2, Detailed: a nude or French base with the art on the tips and on a few feature nails: patterns (stripes, polka dots, checks), aura tips with outlines, small hand-painted flowers, and a few 3D gel flowers, chrome shapes, studs, pearls or charms. Mixing mediums is still level 2 when there's plenty of plain nude or French between the art. Adds A$50 to A$100+, about 60 extra minutes. Most level 2 sets come to about A$160 to A$180 in total.
-- Level 3, Advanced: detailed art across all or nearly all ten nails: full-coverage aura or airbrush with hand-drawn art on every nail, characters or scenes, intricate line work on every nail, 3D elements on most nails, or very heavy gem work (around 100 or more gems, even on a French tip). Adds A$100 to A$250+, about 90 extra minutes. Most level 3 sets come to about A$230 to A$280 in total.
-- Telling level 2 from level 3: look at how much of the set is covered in detailed work, not how many techniques are used. Lots of nude or French with feature nails is level 2; detailed work on every nail is level 3. If it's hard to tell, quote about A$180 to A$230 and say the final price is confirmed at the appointment.
+- Level 3, Advanced: detailed art across all or nearly all ten nails: full-coverage aura or airbrush with hand-drawn art on every nail, characters or scenes, lots of intricate hand-drawn lines and abstract detail (even when it's on the tips), 3D elements on most nails, or very heavy gem work (around 100 or more gems, even on a French tip). Adds A$100 to A$250+, about 90 extra minutes. Most level 3 sets come to about A$230 to A$280 in total.
+- Telling level 2 from level 3: look at how much of the set is covered in detailed work and how intricate the hand-drawn work is, not how many techniques are used. Lots of nude or French with feature nails is level 2; detailed work on every nail is level 3. Hand-drawn line work counts as detailed work: lots of fine, intricate lines, abstract detail and hand-drawn art is level 3 even on a tip or French base, while simple outlines, stripes, dots or a few painted accents stay level 2. If it's hard to tell, quote about A$180 to A$230 and say the final price is confirmed at the appointment.
 
 ## Real Vynl sets and what they cost (use these to judge a photo)
 Level 3, each charged about A$230 to A$280 for the full set:
 - Short oval: pastel aura blends (yellow, pink, blue) on every nail with hand-drawn abstract shapes outlined in red and white.
 - Long stiletto, cartoon theme: airbrushed blue and green aura, hand-painted cats, swirls and stars, striped nails, and 3D sculpted charms.
-- Long square: hand-drawn tiger-style swirl lines over orange aura on every nail, with gems.
+- Long square: dense, intricate hand-drawn tiger-style lines over orange aura on every nail (on the tips and on two full nails), with gems. It's level 3 because of how intricate all the line work and detail is.
 - Long stiletto: 3D sculpted lilies, gold chrome swirls, pearls, gems and chrome bases.
 - Extra-long stiletto: 3D gel flowers on most nails, gold charms and studs, dotted lines, aura tips and gems.
 - Almond: airbrushed aura blends with hand-drawn flames in red and white on every nail.
