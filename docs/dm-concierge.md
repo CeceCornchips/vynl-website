@@ -28,8 +28,9 @@ the inbox has its own sign-in and doesn't use Clerk.
   **Hand back** do the same by hand.
 - Every couple of minutes while the inbox is open, checks the 10 most recent
   Instagram chats for messages the webhook missed (Meta's Conversations API)
-  and saves them. Chats with a new client message from the last 24 hours get a
-  draft. This also brings in chats Meta won't send to the webhook yet.
+  and saves them. Any chat where a client has been waiting since some time in
+  the last 24 hours, with nothing drafted yet, gets a draft (up to 5 per sync).
+  This also brings in chats Meta won't send to the webhook yet.
 - Emails the studio inbox when replies are ready to approve: at most one
   email every 10 minutes, listing everything waiting. Chats that need you
   personally get their own email instead.
